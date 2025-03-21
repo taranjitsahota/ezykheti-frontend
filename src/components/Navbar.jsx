@@ -37,7 +37,7 @@ const Navbar = ({ theme, setTheme }) => {
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-opacity-80 transition-all duration-500 ease-in-out text-gray-900">
       {/* Top Bar */}
-      {/* <div className="bg-white text-gray-900 border-green-200 hidden xl:flex justify-between items-center py-1 px-12 border-b transition-all duration-300 text-xs">
+      <div className="bg-white text-gray-900 border-green-200 hidden xl:flex justify-between items-center py-1 px-12 border-b transition-all duration-300 text-xs">
     
         <div className="bg-green-100 text-gray-900 border-green-200 flex justify-between items-center tracking-wide rounded-md flex items-center space-x-4 py-0.2 px-8 border-b transition-all duration-300 text-xs hover:space-x-6 hover:py-1 hover:px-16 hover:scale-105 transform-gpu">
           <a
@@ -93,7 +93,7 @@ const Navbar = ({ theme, setTheme }) => {
             </a>
           ))}
         </div>
-      </div> */}
+      </div>
 
       {/* Navigation Bar */}
 
@@ -127,7 +127,7 @@ const Navbar = ({ theme, setTheme }) => {
           ))}
         </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="flex hidden xl:flex items-center gap-4">
           <button
             onClick={() => setModalOpen(true)}
             className="cursor-pointer px-5 py-2 border border-[#32cd32] text-green-400 rounded-md hover:bg-[#32cd32] hover:text-white transition-all duration-300"
