@@ -3,6 +3,10 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Registration from "./pages/Registration";
+import About from "./pages/About";
+import Services from "./pages/Service";
+import Pricing from "./pages/Pricing";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import SendOTP from "./pages/SendOtp";
@@ -12,6 +16,8 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import AOS from "aos";
+import Service from "./pages/Service";
 
 function App() {
   const navigate = useNavigate();
@@ -34,11 +40,24 @@ function App() {
     return () => clearInterval(interval); // Cleanup on unmount
   }, [navigate]);
 
+  useEffect(() => {
+    AOS.init({
+      offset: 100,
+      duration: 800,
+      easing: "ease-in-sine",
+      delay: 100,
+    });
+  }, []);
+
   return (
     <>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/registration" element={<Registration />} />
+        <Route path="/services" element={<Service />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/pricing" element={<Pricing />} />
         <Route path="/admin" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

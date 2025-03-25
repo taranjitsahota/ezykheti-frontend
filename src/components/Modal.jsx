@@ -1,187 +1,157 @@
-import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import emailjs from "emailjs-com";
+import { useState, useRef, useEffect } from "react";
+import { X } from "lucide-react";
+import tractor from "../assets/images/farmer.webp";
 
-const Modal = ({ isOpen, onClose }) => {
-  const [show, setShow] = useState(false);
+export default function ContactModal({ onClose }) {
+  const [formData, setFormData] = useState({
+    farmerName: "",
+    contactNumber: "",
+    email: "",
+    villageName: "",
+    areaOfLand: "",
+  });
 
-  useEffect(() => {
-    if (isOpen) {
-      setShow(true);
-      document.body.style.overflow = "hidden"; // Prevent background scroll
-    } else {
-      setTimeout(() => setShow(false), 8000); // Delay hiding for transition effect
-      document.body.style.overflow = "auto"; // Restore scroll
+  const modalRef = useRef();
+
+  const handleBackdropClick = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      onClose();
     }
-  }, [isOpen]);
-
-  useEffect(() => {
-    const handleEscape = (event) => {
-      if (event.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [onClose]);
-
-  if (!show) return null;
-
-  const sendEmail = (values, { resetForm }) => {
-    emailjs
-      .send(
-        "your_service_id", // Replace with EmailJS Service ID
-        "your_template_id", // Replace with EmailJS Template ID
-        values,
-        "your_user_id" // Replace with EmailJS User ID
-      )
-      .then(() => {
-        alert("Message sent successfully!");
-        resetForm();
-        onClose();
-      })
-      .catch((err) => console.error("Email send error:", err));
   };
 
-  return createPortal(
-    <>
-      {/* Transparent overlay with blur effect */}
-      <div
-        className={`fixed inset-0 bg-black/30 backdrop-blur-md flex justify-center items-center z-50 transition-opacity duration-500 ease-in-out ${
-          isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
-      ></div>
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [onClose]);
 
-      {/* Modal Content */}
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form Data Submitted:", formData);
+    // Add your API submit logic here
+    onClose(); // Close modal after submission
+  };
+
+  return (
+    <div
+      className="fixed inset-0 backdrop backdrop-blur backdrop-filter backdrop-brightness-40 backdrop bg-opacity-60 flex items-center justify-center z-50"
+      onClick={handleBackdropClick}
+    >
       <div
-        className={`fixed inset-0 flex justify-center items-center z-50 transition-opacity duration-500 ease-in-out ${
-          isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
-        onClick={onClose}
+        ref={modalRef}
+        className="bg-white rounded-3xl p-4 flex flex-col md:flex-row w-full max-w-3xl relative shadow-xl"
       >
-        <div
-          className={`bg-white p-6 rounded-lg shadow-xl w-full max-w-md relative transform transition-transform duration-500 ease-out ${
-            isOpen ? "scale-100 opacity-100" : "scale-90 opacity-0"
-          }`}
-          onClick={(e) => e.stopPropagation()}
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-4 text-gray-600 cursor-pointer hover:text-red-500 transition-colors focus:outline-none"
+          aria-label="Close Modal"
         >
-          {/* Close Button */}
-          <button
-            className="absolute top-2 right-2 text-gray-600 hover:text-black"
-            onClick={onClose}
-          >
-            ✕
-          </button>
+          <X size={30} />
+        </button>
 
-          {/* Modal Title */}
-          <h2 className="text-xl font-semibold mb-4">Book a Car</h2>
+        <div className="w-full py-6 px-6 md:w-1/2 md:pr-6 mb-4 md:mb-0">
+          <h2 className="text-xl font-bold mb-4 text-green-600">
+            Get in touch with us
+          </h2>
 
-          {/* Form inside the Modal */}
-          <Formik
-            initialValues={{
-              name: "",
-              email: "",
-              phone: "",
-              carType: "",
-              carName: "",
-              location: "",
-            }}
-            validationSchema={Yup.object({
-              name: Yup.string().required("Required"),
-              email: Yup.string().email("Invalid email").required("Required"),
-              phone: Yup.string()
-                .matches(/^\d{10}$/, "Invalid phone number")
-                .required("Required"),
-              carType: Yup.string().required("Required"),
-              carName: Yup.string().required("Required"),
-              location: Yup.string().required("Required"),
-            })}
-            onSubmit={sendEmail}
-          >
-            {({ isSubmitting }) => (
-              <Form className="flex flex-col space-y-3">
-                <Field
-                  name="name"
-                  placeholder="Your Name"
-                  className="border p-2 rounded"
-                />
-                <ErrorMessage
-                  name="name"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <div>
+              <label className="text-sm font-medium">Farmer Name *</label>
+              <input
+                name="farmerName"
+                value={formData.farmerName}
+                onChange={handleChange}
+                className="w-full border-b-2 border-green-500 focus:border-green-700 outline-none py-1"
+                required
+              />
+            </div>
 
-                <Field
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  className="border p-2 rounded"
-                />
-                <ErrorMessage
-                  name="email"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
+            <div>
+              <label className="text-sm font-medium">Contact Number *</label>
+              <input
+                name="contactNumber"
+                value={formData.contactNumber}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    contactNumber: e.target.value.replace(/\D/, ""),
+                  })
+                }
+                maxLength={10}
+                className="w-full border-b-2 border-green-500 focus:border-green-700 outline-none py-1"
+                required
+              />
+            </div>
 
-                <Field
-                  name="phone"
-                  placeholder="Phone Number"
-                  className="border p-2 rounded"
-                />
-                <ErrorMessage
-                  name="phone"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
+            <div>
+              <label className="text-sm font-medium">Email (Optional)</label>
+              <input
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full border-b border-gray-400 focus:border-green-700 outline-none py-1"
+              />
+            </div>
 
-                <Field
-                  name="carType"
-                  placeholder="Car Type (e.g. SUV, Sedan)"
-                  className="border p-2 rounded"
-                />
-                <ErrorMessage
-                  name="carType"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
+            <div>
+              <label className="text-sm font-medium">Village Name *</label>
+              <input
+                name="villageName"
+                value={formData.villageName}
+                onChange={handleChange}
+                className="w-full border-b-2 border-green-500 focus:border-green-700 outline-none py-1"
+                required
+              />
+            </div>
 
-                <Field
-                  name="carName"
-                  placeholder="Car Name (e.g. Toyota Camry)"
-                  className="border p-2 rounded"
+            <div className="w-full mb-6">
+              <label className="block text-sm font-medium">
+                Area of Land (in Kanal) *
+              </label>
+              <div className="flex flex-col md:flex-row gap-4 ">
+                <input
+                  name="areaOfLand"
+                  value={formData.areaOfLand}
+                  onChange={handleChange}
+                  className="w-full border-b-2 border-green-500 focus:border-green-700 outline-none py-1"
+                  required
                 />
-                <ErrorMessage
-                  name="carName"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
+                <select className="border-b-2 border-green-400 py-2 outline-none text-gray-700">
+                  <option>in Kanal</option>
+                  <option>in Acres</option>
+                  <option>in Hectares</option>
+                </select>
+              </div>
+            </div>
 
-                <Field
-                  name="location"
-                  placeholder="Pickup Location"
-                  className="border p-2 rounded"
-                />
-                <ErrorMessage
-                  name="location"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                >
-                  {isSubmitting ? "Submitting..." : "Submit"}
-                </button>
-              </Form>
-            )}
-          </Formik>
+            <button
+              type="submit"
+              className="w-full bg-green-500 text-white py-1.5 rounded-xl hover:bg-green-600 transition focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1"
+            >
+              SUBMIT
+            </button>
+          </form>
+        </div>
+        <div className="hidden md:block w-1/2 mt-8 relative overflow-hidden">
+          <img
+            src={tractor}
+            alt="Farm Equipment"
+            className="rounded-2xl w-full h-full object-cover"
+          />
+          <div className="absolute bottom-8 left-6 right-3 bg-green-500 text-white text-center py-2 w-80 rounded-xl text-xs">
+            Find your farming solution here.
+          </div>
         </div>
       </div>
-    </>,
-    document.body
+    </div>
   );
-};
-
-export default Modal;
+}

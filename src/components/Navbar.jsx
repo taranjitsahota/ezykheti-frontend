@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BiSolidSun, BiSolidMoon } from "react-icons/bi";
 import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
-import ResponsiveMenu from "../components/ResponsiveMenu";
+import ResponsiveMenu from "./ResponsiveMenu";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   FaFacebook,
@@ -14,17 +14,23 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import logo from "../assets/images/logogood.webp";
-import Modal from "./Modal";
+import ContactModal from "./Modal";
+import LearnMoreModal from "./LearnMoreModal";
+import { Typewriter } from "react-simple-typewriter";
+
 
 export const Navlinks = [
   { id: 1, name: "Home", link: "/" },
   { id: 3, name: "About Us", link: "/about" },
   { id: 2, name: "Services", link: "/services" },
-  { id: 4, name: "Technology", link: "/technology" },
+  { id: 4, name: "Pricing", link: "/pricing" },
   { id: 4, name: "Registration", link: "/registration" },
 ];
 
-const Navbar = ({ theme, setTheme }) => {
+const Navbar = () => {
+
+    const [showLearnMore, setShowLearnMore] = useState(false);
+
   const [isModalOpen, setModalOpen] = useState(false);
 
   const [showMenu, setShowMenu] = useState(false);
@@ -37,57 +43,58 @@ const Navbar = ({ theme, setTheme }) => {
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-opacity-80 transition-all duration-500 ease-in-out text-gray-900">
       {/* Top Bar */}
-      <div className="bg-white text-gray-900 border-green-200 hidden xl:flex justify-between items-center py-1 px-12 border-b transition-all duration-300 text-xs">
-    
-        <div className="bg-green-100 text-gray-900 border-green-200 flex justify-between items-center tracking-wide rounded-md flex items-center space-x-4 py-0.2 px-8 border-b transition-all duration-300 text-xs hover:space-x-6 hover:py-1 hover:px-16 hover:scale-105 transform-gpu">
+      <div className="hidden xl:flex justify-between items-center px-22 bg-white border-b border-gray-300 text-sm">
+        <div className="flex items-center space-x-6">
           <a
             href="tel:+918104535322"
-            className="flex items-center space-x-1 hover:text-blue-500 transition duration-300"
+            className="flex items-center space-x-1 text-gray-800 hover:text-blue-500 transition"
           >
-            <FaPhone className="text-blue-500 text-sm" />
+            <FaPhone />
             <span>+91 81045 35322</span>
           </a>
           <a
             href="mailto:info@rscarrentalgoa.com"
-            className="flex items-center space-x-1 hover:text-red-500 transition duration-300"
+            className="flex items-center space-x-1 text-gray-800 hover:text-red-500 transition"
           >
-            <FaEnvelope className="text-red-500 text-sm" />
-            <span>info@rscarrentalgoa.com</span>
+            <FaEnvelope />
+            <span>info@ezykheti.com</span>
           </a>
           <a
             href="https://wa.me/918104535322"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center space-x-1 hover:text-green-500 transition duration-300"
+            className="flex items-center space-x-1 text-gray-800 hover:text-green-500 transition"
           >
-            <FaWhatsapp className="text-green-500 text-sm" />
+            <FaWhatsapp />
             <span>WhatsApp</span>
           </a>
         </div>
-
-        <div className="max-w-sm w-ful">
-          <marquee
-            behavior="scroll"
-            direction="left"
-            className="bg-green-100 px-6  text-gray-900 border border-green-100 flex justify-between items-center tracking-wide rounded-md flex items-center space-x-4 py-0.2 px-8 border-b transition-all duration-300 text-xs hover:py-1 hover:px-[200px] hover:scale-105 transform-gpu"
-          >
-            🚜 Book Your Slot Now! Best & cheap Prices for farming related
-            services | Min 24 hours Prior Booking | Call: +91 12345 67890 🚜
-          </marquee>
+        <div className="max-w-md w-ful">
+          <Typewriter
+            words={[
+              "🚜 Best & Cheap Prices for farming services!",
+              "📞 Call: +91 12345 67890 for instant booking!",
+              "🌾 24 hours prior booking needed for smooth service!",
+            ]}
+            loop={true}
+            cursor
+            cursorStyle="|"
+            typeSpeed={50}
+            deleteSpeed={30}
+            delaySpeed={2000}
+          />
         </div>
-
-        
-        <div className="bg-green-100 px-4 text-gray-800 border border-green-100 flex justify-between items-center tracking-wide rounded-md flex items-center space-x-6 py-0.2 px-8 border-b transition-all duration-300 text-xs hover:space-x-8 hover:py-1 hover:px-16 hover:scale-105 transform-gpu">
+        <div className="flex items-center space-x-4">
           {[
-            { icon: FaFacebook, color: "text-blue-600" },
-            { icon: FaTwitter, color: "text-blue-400" },
+            { icon: FaFacebook, color: "text-blue-500" },
+            { icon: FaTwitter, color: "text-sky-400" },
             { icon: FaInstagram, color: "text-pink-500" },
-            { icon: FaYoutube, color: "text-red-600" },
-          ].map(({ icon: Icon, color }, index) => (
+            { icon: FaYoutube, color: "text-red-500" },
+          ].map(({ icon: Icon, color }, idx) => (
             <a
-              key={index}
+              key={idx}
               href="#"
-              className={`${color} text-sm rounded-full hover:scale-105 transition duration-300`}
+              className={`${color} text-lg hover:scale-110 transition-all duration-300 ease-in-out`}
             >
               <Icon />
             </a>
@@ -129,7 +136,7 @@ const Navbar = ({ theme, setTheme }) => {
 
         <div className="flex hidden xl:flex items-center gap-4">
           <button
-            onClick={() => setModalOpen(true)}
+               onClick={() => setShowLearnMore(true)}
             className="cursor-pointer px-5 py-2 border border-[#32cd32] text-green-400 rounded-md hover:bg-[#32cd32] hover:text-white transition-all duration-300"
           >
             Learn More
@@ -140,22 +147,12 @@ const Navbar = ({ theme, setTheme }) => {
           >
             Get Started
           </button>
-          <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+
+          {/* <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} /> */}
         </div>
 
-        {/* Mobile View (Hamburger Menu & Theme Toggle) */}
         <div className="flex items-center gap-4 md:hidden">
-          {theme === "dark" ? (
-            <BiSolidSun
-              onClick={() => setTheme("light")}
-              className="text-2xl cursor-pointer transition duration-300 hover:text-yellow-400"
-            />
-          ) : (
-            <BiSolidMoon
-              onClick={() => setTheme("dark")}
-              className="text-2xl cursor-pointer transition duration-300 hover:text-gray-600"
-            />
-          )}
+          
 
           {/* Hamburger Menu */}
           {showMenu ? (
@@ -173,14 +170,15 @@ const Navbar = ({ theme, setTheme }) => {
           )}
           {showMenu && (
             <ResponsiveMenu
-              theme={theme}
+              
               showMenu={showMenu}
               toggleMenu={toggleMenu}
             />
           )}
         </div>
       </div>
-      {/* </div> */}
+      {isModalOpen && <ContactModal onClose={() => setModalOpen(false)} />}
+      {showLearnMore && <LearnMoreModal onClose={() => setShowLearnMore(false)} />}
     </header>
   );
 };
