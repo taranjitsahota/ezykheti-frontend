@@ -2,7 +2,7 @@ import React from 'react'
 
 const Card = ({ image, title, description }) => {
     return (
-        <div className="bg-white rounded-2xl shadow-md overflow-hidden w-full sm:w-60 md:w-64 lg:w-72 transition-transform hover:scale-105">
+        <div className="bg-white rounded-4xl  overflow-hidden w-full border border-gray-300 sm:w-60 md:w-64 lg:w-72 transition-transform hover:scale-105">
         <img src={image} alt={title} className="w-full h-40 object-cover" />
         
         <div className="h-px bg-gray-300 w-full"></div>

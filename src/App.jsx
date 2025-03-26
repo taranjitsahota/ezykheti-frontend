@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation  } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Login from "./pages/Login";
@@ -49,9 +49,16 @@ function App() {
     });
   }, []);
 
+  const location = useLocation();
+
+  // Define routes where Navbar and Footer should be visible
+  const showHeaderFooterRoutes = ["/", "/registration", "/services", "/about", "/pricing"];
+
+  const showHeaderFooter = showHeaderFooterRoutes.includes(location.pathname);
+
   return (
     <>
-      <Navbar />
+       {showHeaderFooter && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/registration" element={<Registration />} />
@@ -73,7 +80,7 @@ function App() {
           }
         />
       </Routes>
-      <Footer />
+      {showHeaderFooter && <Footer />}
     </>
   );
 }

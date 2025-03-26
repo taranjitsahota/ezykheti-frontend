@@ -26,36 +26,29 @@ const Home = () => {
     <div>
       {/* Background video section */}
       <LoopingYoutube />
-      <div className="relative flex flex-col items-center justify-center text-center">
-        {/* Background image with opacity */}
-        <div
-          className="absolute inset-0 bg-center bg-no-repeat mb-25"
-          style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.7), rgba(255,255,255,1)), url(${greenlines})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            opacity: 0.8,
-            zIndex: -1,
-          }}
-        ></div>
- <div className="relative flex flex-col items-center justify-center text-center mt-12 mb-25">
-        <div data-aos="slide-up" className=" gap-4">
-          {/* Content */}
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-snug mb-6">
-            Empowering Farmers <br />
+      
+      <div className="relative flex flex-col items-center justify-center text-center mb-10 sm:mb-14 md:mb-20 lg:mb-25">
+              <div
+                className="h-full absolute inset-0 bg-center bg-no-repeat"
+                style={{
+                  backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.7), rgba(255,255,255,0.9)), url(${greenlines})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "bottom",
+                  // opacity: ,
+                  zIndex: -1,
+                }}
+              ></div>
+      
+              <div data-aos="slide-up" className=" gap-4">
+                {/* Content */}
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-snug mt-20 mb-6">
+                Empowering Farmers <br />
             with Affordable Agricultural <br />
             Solutions
-          </h1>
-
-          {/* <button className="bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition-all">
-            Contact Us
-          </button>
-          <button className="border border-gray-400 text-gray-900 px-6 py-3 rounded-full hover:bg-gray-100 transition-all">
-            Know More
-          </button> */}
-          <p className="text-md md:text-lg text-gray-700 max-w-3xl leading-relaxed mb-8 px-4">
+                </h1>
+                <p className="text-md md:text-lg text-gray-700 max-w-5xl leading-relaxed mb-8 px-4">
             Ezykheti Agri Services is dedicated to transforming agriculture in
-            Punjab by empowering farmers with innovative technology and high-end
+             by empowering farmers with innovative technology and high-end
             farm machinery. Our mission is to provide world-class solutions when
             finding farm labour is getting harder, hence enhance yields while
             promoting sustainable practices. We recognized the challenges faced
@@ -65,18 +58,16 @@ const Home = () => {
             heavy financial burdens, ultimately helping them thrive and
             sustainably feed the nation.
           </p>
-        </div>
 
-        <div className="flex hidden xl:flex items-center gap-4">
           <button
               onClick={() => navigate("/registration")}
             className="cursor-pointer rounded-full px-5 py-2 border border-gray-400 text-green-400  hover:bg-[#32cd32] hover:text-white transition-all duration-300"
           >
             Register Now
           </button>
-        </div>
-      </div>
-      </div>
+      
+              </div>
+            </div>
       {/* Cards section below the video */}
 
       <div
@@ -148,7 +139,7 @@ const Home = () => {
         }}
       >
         <div data-aos="fade-up" className="mt-10 py-10">
-          <h1 className="text-6xl text-white font-extrabold text-center -mt-28 mb-10 tracking-wide drop-shadow-2xl underline decoration-4 px-6 py-2 rounded-xl backdrop-blur-xl bg-[#2C2C2C]/80 w-fit mx-auto">
+          <h1 className="text-5xl text-white font-extrabold text-center -mt-28 mb-10 tracking-wide drop-shadow-2xl underline decoration-4 px-6 py-2 rounded-xl backdrop-blur-xl bg-[#2C2C2C]/80 w-fit mx-auto">
             Why Choose{" "}
             <span className="bg-gradient-to-r from-green-500 to-green-600 text-transparent bg-clip-text">
               E
