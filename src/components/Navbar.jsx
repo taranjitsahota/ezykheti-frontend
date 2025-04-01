@@ -92,19 +92,20 @@ const Navbar = () => {
             { icon: FaYoutube, color: "text-red-500" },
           ].map(({ icon: Icon, color }, idx) => (
             <a
-              key={idx}
-              href="#"
-              className={`${color} text-lg hover:scale-110 transition-all duration-300 ease-in-out`}
-            >
-              <Icon />
-            </a>
+  key={idx}
+  href="#"
+  className={`inline-flex ${color} text-lg hover:scale-110 transition-transform duration-300 ease-in-out`}
+>
+  <Icon className="w-4 h-4" />
+</a>
+
           ))}
         </div>
       </div>
 
       {/* Navigation Bar */}
 
-      <div className="bg-white flex justify-between items-center py-4 px-22 border-b border-gray-300">
+      <div className="bg-white flex justify-between items-center py-4 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 border-b border-gray-300">
         {/* Logo */}
         <div
           data-aos="zoom-in"

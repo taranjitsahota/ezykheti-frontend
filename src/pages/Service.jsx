@@ -169,25 +169,6 @@ const Service = () => {
             Our Services <br />
             <br />
           </h1>
-
-          {/* <button className="bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition-all">
-            Contact Us
-          </button>
-          <button className="border border-gray-400 text-gray-900 px-6 py-3 rounded-full hover:bg-gray-100 transition-all">
-            Know More
-          </button> */}
-          {/* <p className="text-md md:text-lg text-gray-700 max-w-3xl leading-relaxed mb-8 px-4">
-            Ezykheti Agri Services is dedicated to transforming agriculture in
-            Punjab by empowering farmers with innovative technology and high-end
-            farm machinery. Our mission is to provide world-class solutions when
-            finding farm labour is getting harder, hence enhance yields while
-            promoting sustainable practices. We recognized the challenges faced
-            by farmers and developed a state-of-the-art mobile app for easy
-            access to modern farming machinery. Our commitment to exceptional
-            service ensures that farmers can leverage advanced equipment without
-            heavy financial burdens, ultimately helping them thrive and
-            sustainably feed the nation.
-          </p> */}
         </div>
       </div>
 
@@ -197,22 +178,7 @@ const Service = () => {
         </p>
 
         <h2 className="px-12 text-3xl font-bold mb-5">Core Services for Users</h2>
-        {/* <Slider {...settings}>
-          {services.map((service, index) => (
-            <div key={index} className="p-3">
-              <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden h-full">
-                <img
-                  src={service.image}
-                  alt={service.title}
-                  className="w-full h-56 object-cover rounded-t-3xl"
-                />
-                <div className="p-4 text-left font-semibold text-xl">
-                  {service.title}
-                </div>
-              </div>
-            </div>
-          ))}
-        </Slider> */}
+        
         <ServiceSlider />
       </div>
       <div className="w-full flex flex-col justify-center items-center px-10 py-10 bg-white text-center gap-4">

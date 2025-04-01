@@ -44,27 +44,38 @@ const LoopingYouTube = () => {
   };
 
   return (
-
-        <div className="relative mt-10 w-screen h-[30vh] md:h-[75vh] overflow-hidden">
-          <YouTube
-            videoId="A-AjJYcxoYU"
-            opts={opts}
-            className="absolute w-full h-full"
-            style={{ transform: "scale(2.1)", transformOrigin: "center" }}
-            onReady={onPlayerReady}
-            onStateChange={onPlayerStateChange}
-          />
-          <div className="absolute inset-0 z-20" style={{ background: "transparent", pointerEvents: "all" }}></div>
-          {/* <div className="relative z-10 flex items-center h-full text-black text-left p-4"> */}
-          {/* <div className="p-6 rounded-xl max-w-3xl">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">
-              Ezykheti Agri Services
-            </h1>
-          </div> */}
-        {/* </div> */}
-        </div>
-      );
-      
+    <div className="relative mt-10 w-screen h-[30vh] md:h-[75vh] overflow-hidden">
+      <YouTube
+        videoId="A-AjJYcxoYU"
+        opts={opts}
+        className="absolute w-full h-full"
+        style={{ transform: "scale(2.1)", transformOrigin: "center" }}
+        onReady={onPlayerReady}
+        onStateChange={onPlayerStateChange}
+      />
+      <div
+        className="absolute inset-0 z-20"
+        style={{ background: "transparent", pointerEvents: "all" }}
+      ></div>
+    </div>
+    //   <div className="relative mt-10 w-screen overflow-hidden">
+    //   {/* Responsive aspect ratio for different screen sizes */}
+    //   <div className="relative w-full h-0 pb-[40vh] md:pb-[56.25%] lg:pb-[50vh] xl:pb-[45vh]">
+    //     <YouTube
+    //       videoId="A-AjJYcxoYU"
+    //       opts={opts}
+    //       className="absolute top-0 left-0 w-full h-full"
+    //       style={{ transform: "scale(1.5)", transformOrigin: "center" }} // Adjust zoom level if needed
+    //       onReady={onPlayerReady}
+    //       onStateChange={onPlayerStateChange}
+    //     />
+    //   </div>
+    //   <div
+    //     className="absolute inset-0 z-20"
+    //     style={{ background: "transparent", pointerEvents: "all" }}
+    //   ></div>
+    // </div>
+  );
 };
 
 export default LoopingYouTube;

@@ -12,7 +12,7 @@ export default function HowItWorks() {
       {/* Rotating circles with dots */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="relative w-full min-h-[500px] md:min-h-screen bg-gradient-to-br from-[#2C2F36] to-[#1E1F23] flex items-center justify-center">
-          <div className="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px]">
+          <div className="relative w-[250px] h-[250px] sm:w-[300px] sm:h-[300px] md:w-[450px] md:h-[450px]">
             {/* Circles */}
             {circles.map((circle, index) => (
               <div
@@ -43,7 +43,7 @@ export default function HowItWorks() {
                 <div
                   className="w-3 h-3 bg-green-400 rounded-full absolute"
                   style={{
-                    transform: `translate(${circle.radius}px, -50%) `,
+                    transform: `translate(${circle.radius}px, -50%)`,
                   }}
                 />
               </motion.div>
@@ -51,7 +51,7 @@ export default function HowItWorks() {
 
             {/* Center text */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <h2 className="text-white text-3xl font-bold text-center leading-snug">
+              <h2 className="text-white text-2xl sm:text-3xl font-bold text-center leading-snug">
                 How <br /> It Works
               </h2>
             </div>
@@ -89,7 +89,7 @@ export default function HowItWorks() {
         ].map((item, index) => (
           <div
             key={index}
-            className={`bg-gradient-to-br from-[#2C2F36] to-[#1E1F23] border border-green-500 border-opacity-80 rounded-2xl p-4 text-white shadow-md relative w-full max-w-[300px] h-36 ${item.pos}`}
+            className={`bg-gradient-to-br from-[#2C2F36] to-[#1E1F23] border border-green-500 border-opacity-80 rounded-2xl p-4 text-white shadow-md relative w-full max-w-full sm:max-w-[300px] h-36 ${item.pos}`}
           >
             <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
             <p className="text-gray-300 text-sm mb-3 leading-snug">
