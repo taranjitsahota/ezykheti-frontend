@@ -1,18 +1,18 @@
 import React from "react";
 import { FaUserCircle } from "react-icons/fa";
-
+import { useTranslation } from "react-i18next";
 import { Navlinks } from "./Navbar";
 
 const ResponsiveMenu = ({ showMenu }) => {
+  const { t } = useTranslation();
   return (
     <div
-  className={`
+      className={`
     ${showMenu ? "left-0" : "-left-[100%]"}
     fixed bottom-0 top-0 z-20 flex h-screen w-[75%] flex-col justify-between bg-white text-black
     px-8 pb-6 pt-16 transition-all duration-200 md:hidden rounded-r-xl shadow-md
   `}
->
-
+    >
       <div className="card">
         <div className="flex items-center justify-start gap-3">
           <FaUserCircle size={50} />
@@ -26,7 +26,7 @@ const ResponsiveMenu = ({ showMenu }) => {
             {Navlinks.map((data) => (
               <li>
                 <a href={data.link} className="mb-5 inline-block">
-                  {data.name}
+                {t(data.nameKey)}
                 </a>
               </li>
             ))}

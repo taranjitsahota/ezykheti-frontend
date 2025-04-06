@@ -179,7 +179,7 @@ const Navbar = () => {
           ))}
           
         </nav>
-          <div className="relative  sm:block" ref={dropdownRef}>
+          <div className="relative sm:block" ref={dropdownRef}>
             <button
               onClick={toggleDropdown}
               className="flex items-center gap-1 px-3 py-2 text-sm md:text-base border border-gray-300 rounded hover:bg-gray-100 transition-all"
