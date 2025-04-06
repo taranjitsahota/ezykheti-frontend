@@ -44,7 +44,7 @@ const LoopingYouTube = () => {
   };
 
   return (
-    <div className="relative w-screen h-[30vh] md:h-[40vh] lg:h-[50vh] xl:h-[65vh] overflow-hidden m-0 p-0">
+    <div className="relative w-screen h-[40vh] md:h-[40vh] lg:h-[50vh] xl:h-[65vh] overflow-hidden m-0 p-0">
       <div className="absolute inset-0 overflow-hidden">
         <YouTube
           videoId="A-AjJYcxoYU"

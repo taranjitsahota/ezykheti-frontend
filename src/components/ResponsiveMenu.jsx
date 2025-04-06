@@ -2,6 +2,7 @@ import React from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { Navlinks } from "./Navbar";
+import logo from "../assets/images/logo/ezykheti_logo-v2.png";
 
 const ResponsiveMenu = ({ showMenu }) => {
   const { t } = useTranslation();
@@ -15,11 +16,18 @@ const ResponsiveMenu = ({ showMenu }) => {
     >
       <div className="card">
         <div className="flex items-center justify-start gap-3">
-          <FaUserCircle size={50} />
-          <div>
-            <h1>Hello User</h1>
-            <h1 className="text-sm text-slate-500">Premium user</h1>
-          </div>
+          {/* <FaUserCircle size={50} /> */}
+           <div
+                    data-aos="zoom-in"
+                    className="transition duration-300 hover:scale-105"
+                  >
+                    <img
+                      src={logo}
+                      alt="RS Goa Car Rental Logo"
+                      className="max-w-[150px] md:max-w-[190px] h-auto transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+          
         </div>
         <nav className="mt-12">
           <ul className="space-y-4 text-xl">
