@@ -1,12 +1,14 @@
 import React from "react";
-import greenlines from "../assets/images/line_vector.png";
-import tractor from "../assets/images/tenweb_media_sfqvrggfb.webp";
+import greenlines from "../../assets/images/line_vector.png";
+import tractor from "../../assets/images/tenweb_media_sfqvrggfb.webp";
+import { useTranslation } from "react-i18next";
 
 const Registration = () => {
+  const { i18n, t } = useTranslation();
+
   return (
     <div>
       <div className="relative flex flex-col items-center justify-center text-center mt-10 mb-10 sm:mt-14 sm:mb-14 md:mt-20 md:mb-20 lg:mt-26 lg:mb-38">
-
         <div
           className="h-full absolute inset-0 bg-center bg-no-repeat"
           style={{
@@ -49,7 +51,7 @@ const Registration = () => {
         {/* Left side - Form and text */}
         <div className="w-full md:w-1/2 flex flex-col justify-center pr-8">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Get in touch with us to learn more about our services.
+            {t("get_in_touch")}
           </h2>
           <p className="text-md md:text-lg text-gray-700 mb-8">
             Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -61,41 +63,41 @@ const Registration = () => {
             <div>
               <input
                 type="text"
-                placeholder="Farmer Name *"
+                placeholder={t("farmer_name")}
                 className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
               />
             </div>
             <div>
               <input
                 type="text"
-                placeholder="Your Contact Number *"
+                placeholder={t("contact_number")}
                 className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
               />
             </div>
             <div>
               <input
                 type="email"
-                placeholder="Your Email (Optional)"
+                placeholder={t("email_optional")}
                 className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
               />
             </div>
             <div>
               <input
                 type="text"
-                placeholder="Village Name *"
+                placeholder={t("village_name")}
                 className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
               />
             </div>
             <div className="flex gap-4">
               <input
                 type="text"
-                placeholder="Area of Land *"
+                placeholder={t("area_of_land")}
                 className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
               />
               <select className="border-b-2 border-green-400 py-2 px-8 outline-none text-gray-700">
-                <option>in Kanal</option>
-                <option>in Acres</option>
-                <option>in Hectares</option>
+                <option>{t("in_kanal")}</option>
+                <option>{t("in_acres")}</option>
+                <option>{t("in_hectares")}</option>
               </select>
             </div>
             <button

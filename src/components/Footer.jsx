@@ -1,19 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/images/logogood.webp";
+import logo from "../assets/images/logo/ezykheti_logo.png";
 import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-200 text-black py-10">
+    <footer className="bg-gray-200 text-black py-2">
       <div
         data-aos="zoom-in"
-        className="px-6 py-8 transition duration-300 ease-in-out"
+        className="px-6 py-4 transition duration-300 ease-in-out"
       >
         <img
           src={logo}
           alt="RS Goa Car Rental Logo"
-          className="max-w-[150px] md:max-w-[190px] h-auto transition-transform duration-300 hover:scale-105"
+          className="max-w-[150px] md:max-w-[120px] h-auto transition-transform duration-300 hover:scale-105"
         />
       </div>
       <div className="container mx-auto px-4">

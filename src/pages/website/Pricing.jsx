@@ -1,7 +1,10 @@
 import React from "react";
-import greenlines from "../assets/images/line_vector.png";
+import greenlines from "../../assets/images/line_vector.png";
+import { useTranslation } from "react-i18next";
 
 const Pricing = () => {
+  const { i18n, t } = useTranslation();
+
   return (
     <div>
       <div className="relative flex flex-col items-center justify-center text-center mt-10 mb-10 sm:mt-14 sm:mb-14 md:mt-20 md:mb-20 lg:mt-26 lg:mb-38">
@@ -25,67 +28,101 @@ const Pricing = () => {
         </div>
       </div>
       <div
-  data-aos="fade-up"
-  className="bg-gray-100 flex flex-col items-center justify-center p-8 sm:p-12 md:p-16"
->
-  <h1 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4">
-    Annual Subscription Plans
-  </h1>
-  <p className="text-gray-600 text-sm sm:text-base md:text-lg xl:text-xl mb-2 sm:mb-4">
-    Ezykheti Agri Services
-  </p>
+        data-aos="fade-up"
+        className="bg-gray-100 flex flex-col items-center justify-center p-8 sm:p-12 md:p-16"
+      >
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4">
+          {t("annual_subscription_plans")}
+        </h1>
+        <p className="text-gray-600 text-sm sm:text-base md:text-lg xl:text-xl mb-2 sm:mb-4">
+          {t("ezykheti_agri_services")}
+        </p>
 
-  <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 xl:gap-12 py-8">
-    <div className="bg-white p-6 sm:p-8 border border-gray-400 rounded-2xl shadow-md overflow-hidden h-auto w-full transition-transform hover:scale-105">
-      <h1 className="mb-3 sm:mb-4 text-xl sm:text-2xl font-bold">Annual charge</h1>
-      <p className="font-semibold">
-        <span
-          className="inline-block w-2.5 h-2.5 rounded-full border-2 border-green-500 bg-transparent mr-2"
-        ></span>
-        Rs. <span className="text-green-500">18,000</span> per acre.
-      </p>
-    </div>
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 xl:gap-12 py-8">
+          <div className="bg-white p-6 sm:p-8 border border-gray-400 rounded-2xl shadow-md overflow-hidden h-auto w-full transition-transform hover:scale-105">
+            <h1 className="mb-3 sm:mb-4 text-xl sm:text-2xl font-bold">
+              {t("annual_charge")}
+            </h1>
+            <p className="font-semibold">
+              <span className="inline-block w-2.5 h-2.5 rounded-full border-2 border-green-500 bg-transparent mr-2"></span>
+              ₹ <span className="text-green-500">18,000</span>{" "}
+              {t("annual_charge_description")}
+            </p>
+          </div>
 
-    <div className="bg-white p-6 sm:p-8 border border-gray-400 rounded-2xl shadow-md overflow-hidden h-auto w-full transition-transform hover:scale-105">
-      <h1 className="mb-3 sm:mb-4 text-xl sm:text-2xl font-bold">Early Bird Discount</h1>
-      <p className="font-semibold">
-        <span className="inline-block w-2.5 h-2.5 rounded-full border-2 border-green-500 bg-transparent mr-2"></span>
-        Subscribe before <span className="text-green-500">1st June 2025</span> and get 
-        <span className="text-green-500"> 10%</span> off.
-      </p>
-    </div>
+          <div className="bg-white p-6 sm:p-8 border border-gray-400 rounded-2xl shadow-md overflow-hidden h-auto w-full transition-transform hover:scale-105">
+            <h1 className="mb-3 sm:mb-4 text-xl sm:text-2xl font-bold">
+              {t("early_bird_discount")}
+            </h1>
+            <p className="font-semibold">
+              <span className="inline-block w-2.5 h-2.5 rounded-full border-2 border-green-500 bg-transparent mr-2"></span>
+              {t("early_bird_discount_description1")}{" "}
+              <span className="text-green-500">
+                {t("early_bird_discount_description_punjabi_hindi1")}
+              </span>
+              <span className="text-green-500">
+                {t("early_bird_discount_description2")}
+              </span>
+              {t("early_bird_discount_description_punjabi_hindi2")}
+              {t("early_bird_discount_description3")}
+              <span className="text-green-500">
+                {t("early_bird_discount_description_punjabi_hindi3")}
+              </span>
+              {t("early_bird_discount_description_punjabi_hindi4")}
+              <span className="text-green-500">
+                {" "}
+                {t("early_bird_discount_description4")}
+              </span>{" "}
+              {t("early_bird_discount_description5")}
+            </p>
+          </div>
 
-    <div className="bg-white p-6 sm:p-8 border border-gray-400 rounded-2xl shadow-md overflow-hidden h-auto w-full transition-transform hover:scale-105">
-      <h1 className="mb-3 sm:mb-4 text-xl sm:text-2xl font-bold">Bulk Discount</h1>
-      <p className="font-semibold">
-        <span className="inline-block w-2.5 h-2.5 rounded-full border-2 border-green-500 bg-transparent mr-2"></span>
-        Additional <span className="text-green-500">5% discount</span> when subscribing for 3 acres or more.
-      </p>
-    </div>
+          <div className="bg-white p-6 sm:p-8 border border-gray-400 rounded-2xl shadow-md overflow-hidden h-auto w-full transition-transform hover:scale-105">
+            <h1 className="mb-3 sm:mb-4 text-xl sm:text-2xl font-bold">
+              Bulk Discount
+            </h1>
+            <p className="font-semibold">
+              <span className="inline-block w-2.5 h-2.5 rounded-full border-2 border-green-500 bg-transparent mr-2"></span>
+              {t("")}Additional{" "}
+              <span className="text-green-500">{t("")}5% discount</span> {t("")}
+              when subscribing for 3 acres or more.
+            </p>
+          </div>
 
-    <div className="bg-white p-6 sm:p-8 border border-gray-400 rounded-2xl shadow-md overflow-hidden h-auto w-full transition-transform hover:scale-105">
-      <h1 className="mb-3 sm:mb-4 text-xl sm:text-2xl font-bold">Payment Terms</h1>
-      <p className="font-semibold">
-        <span className="inline-block w-2.5 h-2.5 rounded-full border-2 border-green-500 bg-transparent mr-2"></span>
-        <span className="text-green-500">25%</span> of the total subscription amount is payable on the day of subscription.
-      </p>
-      <p className="font-semibold">
-        <span className="inline-block w-2.5 h-2.5 rounded-full border-2 border-green-500 bg-transparent mr-2"></span>
-        The remaining amount will be direct debited from your provided bank account or chosen payment method in equal monthly installments for the rest of the year.
-      </p>
-    </div>
-  </div>
-</div>
+          <div className="bg-white p-6 sm:p-8 border border-gray-400 rounded-2xl shadow-md overflow-hidden h-auto w-full transition-transform hover:scale-105">
+            <h1 className="mb-3 sm:mb-4 text-xl sm:text-2xl font-bold">
+              {t("")}Payment Terms
+            </h1>
+            <p className="font-semibold">
+              <span className="inline-block w-2.5 h-2.5 rounded-full border-2 border-green-500 bg-transparent mr-2"></span>
+              <span className="text-green-500">{t("")}25%</span> {t("")}of the
+              total
+              {t("")}
+              {t("")}subscription amount is payable on the day of subscription.
+            </p>
+            <p className="font-semibold">
+              <span className="inline-block w-2.5 h-2.5 rounded-full border-2 border-green-500 bg-transparent mr-2"></span>
+              {t("")}The remaining amount will be direct debited from your
+              provided bank account or chosen payment method in equal monthly
+              installments for the rest of the year.
+            </p>
+          </div>
+        </div>
+      </div>
 
       <div className="flex flex-col items-center justify-center p-16">
-        <h1 className="text-3xl font-bold mb-4">Pay-As-You-Go Price List</h1>
-        <h3 className="text-2xl font-bold mb-8">Cultivation Equipment</h3>
+        <h1 className="text-3xl font-bold mb-4">
+          {t("")}Pay-As-You-Go Price List
+        </h1>
+        <h3 className="text-2xl font-bold mb-8">
+          {t("")}Cultivation Equipment
+        </h3>
 
         <div className="w-full bg-gray-300 overflow-x-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 font-bold p-4 min-w-[500px]">
-            <div>Service/Equipment</div>
-            <div>Price</div>
-            <div>Conditions</div>
+            <div>{t("")}Service/Equipment</div>
+            <div>{t("")}Price</div>
+            <div>{t("")}Conditions</div>
           </div>
 
           {[

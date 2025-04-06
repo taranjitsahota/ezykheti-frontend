@@ -1,21 +1,24 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import video from "../assets/images/shaktiman-background-video.mp4";
-import tractor from "../assets/images/tractor.webp";
-import greenlines from "../assets/images/line_vector.png";
-import tractorcards from "../assets/images/image.jpg";
-import farmer from "../assets/images/farmer.webp";
-import packages from "../assets/images/packages.webp";
-import app from "../assets/images/App-image.png";
-import Testimonials from "../components/Testimonials";
-import HowItWorks from "../components/HowItWorks";
-import SubscriptionPlans from "../components/SubscriptionPlans";
-import LoopingYoutube from "../components/LoopingYouTube";
-import EzykhetiHero from "../components/EzykhetiHero";
+import tractor from "../../assets/images/tractor.webp";
+import greenlines from "../../assets/images/line_vector.png";
+import tractorcards from "../../assets/images/image.jpg";
+import farmer from "../../assets/images/farmer.webp";
+import packages from "../../assets/images/packages.webp";
+import app from "../../assets/images/App-image.png";
+import Testimonials from "../../components/Testimonials";
+import HowItWorks from "../../components/HowItWorks";
+import SubscriptionPlans from "../../components/SubscriptionPlans";
+import LoopingYoutube from "../../components/LoopingYouTube";
+import EzykhetiHero from "../../components/EzykhetiHero";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
+  const { i18n, t } = useTranslation();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,29 +44,22 @@ const Home = () => {
 
         <div data-aos="slide-up" className=" gap-4">
           {/* Content */}
+          {/* <h1>{t("Empowering")}</h1> */}
+
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-snug mt-20 mb-6">
-            Empowering Farmers <br />
-            with Affordable Agricultural <br />
-            Solutions
+            {t("empowering1")} <br />
+            {t("empowering2")} <br />
+            {t("empowering3")}
           </h1>
           <p className="text-md md:text-lg text-gray-700 max-w-5xl leading-relaxed mb-8 px-4">
-            Ezykheti Agri Services is dedicated to transforming agriculture in
-            by empowering farmers with innovative technology and high-end farm
-            machinery. Our mission is to provide world-class solutions when
-            finding farm labour is getting harder, hence enhance yields while
-            promoting sustainable practices. We recognized the challenges faced
-            by farmers and developed a state-of-the-art mobile app for easy
-            access to modern farming machinery. Our commitment to exceptional
-            service ensures that farmers can leverage advanced equipment without
-            heavy financial burdens, ultimately helping them thrive and
-            sustainably feed the nation.
+            {t("empowering_description")}
           </p>
 
           <button
             onClick={() => navigate("/registration")}
             className="cursor-pointer rounded-full px-5 py-2 border border-gray-400 text-green-400  hover:bg-[#32cd32] hover:text-white transition-all duration-300"
           >
-            Register Now
+            {t("register_now_link")}
           </button>
         </div>
       </div>
@@ -79,12 +75,8 @@ const Home = () => {
             alt="Easy App Access"
             className="w-full h-48 object-contain mb-4"
           />
-          <h2 className="text-xl font-bold mb-2">Easy App Access</h2>
-          <p className="text-sm">
-            Our mobile app provides farmers with seamless access to modern
-            farming machinery, right at their fingertips, simplifying the rental
-            process.
-          </p>
+          <h2 className="text-xl font-bold mb-2">{t("easy_app_access")}</h2>
+          <p className="text-sm">{t("easy_app_access_description")}</p>
         </div>
         <div className="text-center">
           <img
@@ -92,12 +84,8 @@ const Home = () => {
             alt="Modern Machinery"
             className="w-full h-48 object-cover mb-4"
           />
-          <h2 className="text-xl font-bold mb-2">Modern Machinery</h2>
-          <p className="text-sm">
-            EzyKheti offers access to a wide range of modern farming machinery,
-            enabling farmers to improve efficiency and productivity on their
-            farms.
-          </p>
+          <h2 className="text-xl font-bold mb-2">{t("modern_machinery")}</h2>
+          <p className="text-sm">{t("modern_machinery_description")}</p>
         </div>
         <div className="text-center">
           <img
@@ -105,12 +93,8 @@ const Home = () => {
             alt="Simple Booking"
             className="w-full h-48 object-cover mb-4"
           />
-          <h2 className="text-xl font-bold mb-2">Simple Booking</h2>
-          <p className="text-sm">
-            Our booking service makes renting machinery straightforward,
-            allowing farmers to quickly secure the equipment they need, when
-            they need it.
-          </p>
+          <h2 className="text-xl font-bold mb-2">{t("simple_booking")}</h2>
+          <p className="text-sm">{t("simple_booking_description")}</p>
         </div>
         <div className="text-center">
           <img
@@ -118,12 +102,8 @@ const Home = () => {
             alt="Subscription Plans"
             className="w-full h-48 object-contain mb-4"
           />
-          <h2 className="text-xl font-bold mb-2">Subscription Plans</h2>
-          <p className="text-sm">
-            EzyKheti's subscription plans provide cost-effective access to
-            farming machinery, helping farmers manage expenses and improve their
-            bottom line.
-          </p>
+          <h2 className="text-xl font-bold mb-2">{t("subscription_plans")}</h2>
+          <p className="text-sm">{t("subscription_plans_description")}</p>
         </div>
       </div>
       <Testimonials />
@@ -139,11 +119,15 @@ const Home = () => {
       >
         <div data-aos="fade-up" className="mt-10 py-6 md:py-10">
           <h1 className="text-4xl md:text-5xl text-white font-extrabold text-center -mt-20 md:-mt-28 mb-6 md:mb-10 tracking-wide drop-shadow-2xl underline decoration-4 px-4 py-2 rounded-xl backdrop-blur-xl bg-[#2C2C2C]/80 w-fit mx-auto">
-            Why Choose{" "}
             <span className="bg-gradient-to-r from-green-500 to-green-600 text-transparent bg-clip-text">
-              E
+              {t("e_punjabi_hindi")}
             </span>
-            zyKheti?
+            {t("zykheti_punjabi_hindi")}
+            {t("why_choose_punjabi_hindi")} {t("why_choose")}{" "}
+            <span className="bg-gradient-to-r from-green-500 to-green-600 text-transparent bg-clip-text">
+              {t("e")}
+            </span>
+            {t("zykheti")}
           </h1>
         </div>
 
@@ -186,7 +170,7 @@ const Home = () => {
         </div>
       </div>
 
-      <HowItWorks />
+      {/* <HowItWorks /> */}
       <EzykhetiHero />
       {/* <SubscriptionPlans /> */}
     </div>

@@ -26,7 +26,7 @@ const LoopingYouTube = () => {
   };
 
   const opts = {
-    height: "80%",
+    height: "70%",
     width: "100%",
     playerVars: {
       autoplay: 1,
@@ -44,12 +44,12 @@ const LoopingYouTube = () => {
   };
 
   return (
-    <div className="relative mt-10 w-screen h-[30vh] md:h-[75vh] overflow-hidden">
+    <div className="relative mt-10 w-screen h-[30vh] md:h-[60vh] lg:h-[63vh] xl:h-[85vh] overflow-hidden">
       <YouTube
         videoId="A-AjJYcxoYU"
         opts={opts}
         className="absolute w-full h-full"
-        style={{ transform: "scale(2.1)", transformOrigin: "center" }}
+        style={{ transform: "scale(2.2)", transformOrigin: "center" }}
         onReady={onPlayerReady}
         onStateChange={onPlayerStateChange}
       />

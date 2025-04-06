@@ -1,8 +1,11 @@
-import React from 'react';
-import greenlines from '../assets/images/line_vector.png';
-import keshav from '../assets/images/farmer.webp';
+import React from "react";
+import greenlines from "../../assets/images/line_vector.png";
+import keshav from "../../assets/images/farmer.webp";
+import { useTranslation } from "react-i18next";
 
 const About = () => {
+  const { i18n, t } = useTranslation();
+
   return (
     <div>
       {/* About Us Hero Section */}
@@ -19,7 +22,8 @@ const About = () => {
 
         <div data-aos="slide-up" className="gap-4">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-snug mt-20 mb-6">
-            About Us <br />
+            {t("about_us_header")}
+            <br />
           </h1>
         </div>
       </div>
@@ -27,15 +31,24 @@ const About = () => {
       {/* About Us Section */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <p className="text-gray-700 text-lg md:text-xl">
-          Welcome to <span className="bg-gradient-to-r from-green-500 to-green-600 text-transparent bg-clip-text">E</span>zykheti, where innovation meets excellence. 
-          We are dedicated to providing top-notch [industry] solutions, driven by passion and expertise. 
-          Our mission is to revolutionize [your field] by delivering high-quality services to our clients.
+          {t("about_us_description1")}
+          <span className="bg-gradient-to-r from-green-500 to-green-600 text-transparent bg-clip-text">
+            {t("about_us_description_punjabi_hindi1")}
+          </span>
+          <span className="bg-gradient-to-r from-green-500 to-green-600 text-transparent bg-clip-text">
+            {t("about_us_description2")}
+          </span>
+          {t("about_us_description3")}
+          {t("about_us_description_punjabi_hindi2")}
         </p>
       </div>
 
       {/* Team Members Section */}
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-10">Meet Our Team</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-10">
+          {t("meet_our_team")}
+        </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {[
@@ -70,14 +83,16 @@ const About = () => {
 
       {/* Why Choose Us Section */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-20">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-10">Why Choose Us?</h2>
-        
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-10">
+          {t("why_choose_us")}
+        </h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {[
-            "Innovative solutions tailored to your needs",
-            "Experienced and passionate team",
-            "Customer-first approach with dedicated support",
-            "Proven track record in [industry]",
+            t("why_choose_us1"),
+            t("why_choose_us2"),
+            t("why_choose_us3"),
+            t("why_choose_us4"),
           ].map((point, index) => (
             <div key={index} className="flex items-center space-x-3">
               <span className="text-green-500 text-xl">✔</span>

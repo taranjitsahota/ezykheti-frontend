@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { BiSolidSun, BiSolidMoon } from "react-icons/bi";
 import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
 import ResponsiveMenu from "./ResponsiveMenu";
 import { NavLink, useLocation } from "react-router-dom";
+import { Globe, ChevronDown } from "lucide-react";
 import {
   FaFacebook,
   FaTwitter,
@@ -13,23 +14,67 @@ import {
   FaMapMarkerAlt,
   FaWhatsapp,
 } from "react-icons/fa";
-import logo from "../assets/images/logogood.webp";
+import logo from "../assets/images/logo/ezykheti_logo-v2.png";
 import ContactModal from "./Modal";
 import LearnMoreModal from "./LearnMoreModal";
 import { Typewriter } from "react-simple-typewriter";
-
+import { useTranslation } from "react-i18next";
 
 export const Navlinks = [
-  { id: 1, name: "Home", link: "/" },
-  { id: 3, name: "About Us", link: "/about" },
-  { id: 2, name: "Services", link: "/services" },
-  { id: 4, name: "Pricing", link: "/pricing" },
-  { id: 4, name: "Registration", link: "/registration" },
+  { id: 1, nameKey: "home_link", link: "/" },
+  { id: 3, nameKey: "about_us_menu_link", link: "/about" },
+  { id: 2, nameKey: "services_menu_link", link: "/services" },
+  { id: 4, nameKey: "pricing_menu_link", link: "/pricing" },
+  { id: 4, nameKey: "registration_menu_link", link: "/registration" },
+];
+
+const languages = [
+  { code: "en", label: "EN" },
+  { code: "hi", label: "हिन्दी" },
+  { code: "pj", label: "ਪੰਜਾਬੀ" },
 ];
 
 const Navbar = () => {
+  const { i18n, t } = useTranslation();
+  const toggleDropdown = () => setOpen(!open);
 
-    const [showLearnMore, setShowLearnMore] = useState(false);
+  const handleSelect = (code) => {
+    i18n.changeLanguage(code);
+    setSelectedLang(code);
+    localStorage.setItem("language", code);
+    setOpen(false);
+  };
+
+  const [open, setOpen] = useState(false);
+  const [selectedLang, setSelectedLang] = useState(i18n.language);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // const changeLanguage = (event) => {
+  //   const selectedLang = event.target.value;
+  //   i18n.changeLanguage(selectedLang);
+
+  //   const changeLanguage = (lng) => {
+  //     i18n.changeLanguage(lng);
+  //     setSelectedLang(lng);
+  //     setOpen(false);
+  //   };
+
+  //   localStorage.setItem("language", selectedLang); // Save to localStorage
+  // };
+
+  const [showLearnMore, setShowLearnMore] = useState(false);
 
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -92,13 +137,12 @@ const Navbar = () => {
             { icon: FaYoutube, color: "text-red-500" },
           ].map(({ icon: Icon, color }, idx) => (
             <a
-  key={idx}
-  href="#"
-  className={`inline-flex ${color} text-lg hover:scale-110 transition-transform duration-300 ease-in-out`}
->
-  <Icon className="w-4 h-4" />
-</a>
-
+              key={idx}
+              href="#"
+              className={`inline-flex ${color} text-lg hover:scale-110 transition-transform duration-300 ease-in-out`}
+            >
+              <Icon className="w-4 h-4" />
+            </a>
           ))}
         </div>
       </div>
@@ -120,7 +164,7 @@ const Navbar = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-4">
-          {Navlinks.map(({ id, name, link }) => (
+          {Navlinks.map(({ id, nameKey, link }) => (
             <NavLink
               key={id}
               to={link}
@@ -130,31 +174,55 @@ const Navbar = () => {
                   : "hover:text-green-400"
               }`}
             >
-              {name}
+              {t(nameKey)}
             </NavLink>
           ))}
+          
         </nav>
+          <div className="relative  sm:block" ref={dropdownRef}>
+            <button
+              onClick={toggleDropdown}
+              className="flex items-center gap-1 px-3 py-2 text-sm md:text-base border border-gray-300 rounded hover:bg-gray-100 transition-all"
+            >
+              <Globe className="w-4 h-4" />
+              <span>
+                {languages.find((l) => l.code === selectedLang)?.label}
+              </span>
+              <ChevronDown className="w-4 h-4" />
+            </button>
+            {open && (
+              <ul className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-md z-10">
+                {languages.map(({ code, label }) => (
+                  <li
+                    key={code}
+                    onClick={() => handleSelect(code)}
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                  >
+                    {label}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
         <div className="flex hidden xl:flex items-center gap-4">
           <button
-               onClick={() => setShowLearnMore(true)}
+            onClick={() => setShowLearnMore(true)}
             className="cursor-pointer px-5 py-2 border border-[#32cd32] text-green-400 rounded-md hover:bg-[#32cd32] hover:text-white transition-all duration-300"
           >
-            Learn More
+            {t("learn_more_link")}
           </button>
           <button
             onClick={() => setModalOpen(true)}
             className="bg-[#32cd32] cursor-pointer text-white rounded-md px-5 py-2 shadow-lg "
           >
-            Get Started
+            {t("get_started_link")}
           </button>
 
           {/* <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} /> */}
         </div>
 
         <div className="flex items-center gap-4 md:hidden">
-          
-
           {/* Hamburger Menu */}
           {showMenu ? (
             <HiMenuAlt1
@@ -170,16 +238,14 @@ const Navbar = () => {
             />
           )}
           {showMenu && (
-            <ResponsiveMenu
-              
-              showMenu={showMenu}
-              toggleMenu={toggleMenu}
-            />
+            <ResponsiveMenu showMenu={showMenu} toggleMenu={toggleMenu} />
           )}
         </div>
       </div>
       {isModalOpen && <ContactModal onClose={() => setModalOpen(false)} />}
-      {showLearnMore && <LearnMoreModal onClose={() => setShowLearnMore(false)} />}
+      {showLearnMore && (
+        <LearnMoreModal onClose={() => setShowLearnMore(false)} />
+      )}
     </header>
   );
 };

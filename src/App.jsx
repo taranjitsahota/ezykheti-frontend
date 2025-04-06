@@ -1,26 +1,36 @@
 import { Routes, Route, useLocation  } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
-import Registration from "./pages/Registration";
-import About from "./pages/About";
-import Services from "./pages/Service";
-import Pricing from "./pages/Pricing";
-import Register from "./pages/Register";
-import ForgotPassword from "./pages/ForgotPassword";
-import SendOTP from "./pages/SendOtp";
-import VerifyOTP from "./pages/VerifyOtp";
-import ResetPassword from "./pages/ResetPassword";
-import Dashboard from "./pages/Dashboard";
+import Login from "./pages/adminportal/Login";
+import Home from "./pages/website/Home";
+import Registration from "./pages/website/Registration";
+import About from "./pages/website/About";
+import Pricing from "./pages/website/Pricing";
+import Register from "./pages/adminportal/Register";
+import ForgotPassword from "./pages/adminportal/ForgotPassword";
+import SendOTP from "./pages/adminportal/SendOtp";
+import VerifyOTP from "./pages/adminportal/VerifyOtp";
+import ResetPassword from "./pages/adminportal/ResetPassword";
+import Dashboard from "./pages/adminportal/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { useEffect } from "react";
+import { useEffect,Suspense  } from "react";
 import { useNavigate } from "react-router-dom";
 import AOS from "aos";
-import Service from "./pages/Service";
+import Service from "./pages/website/Service";
+import { useTranslation } from "react-i18next"; 
 
 function App() {
+
+  const { t,i18n  } = useTranslation();
+  
   const navigate = useNavigate();
+
+  
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("language") || "en"; // Default to "en" if null
+    i18n.changeLanguage(savedLanguage);
+  }, []); // Removed `i18n` from dependency to prevent unnecessary re-renders
+  
 
   useEffect(() => {
     const checkAutoLogout = () => {
@@ -58,6 +68,7 @@ function App() {
 
   return (
     <>
+     <Suspense fallback={<div>Loading...</div>}>
        {showHeaderFooter && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
@@ -81,6 +92,7 @@ function App() {
         />
       </Routes>
       {showHeaderFooter && <Footer />}
+      </Suspense>
     </>
   );
 }
