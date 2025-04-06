@@ -26,7 +26,7 @@ const LoopingYouTube = () => {
   };
 
   const opts = {
-    height: "70%",
+    height: "100%",
     width: "100%",
     playerVars: {
       autoplay: 1,
@@ -44,37 +44,28 @@ const LoopingYouTube = () => {
   };
 
   return (
-    <div className="relative mt-10 w-screen h-[30vh] md:h-[60vh] lg:h-[63vh] xl:h-[85vh] overflow-hidden">
-      <YouTube
-        videoId="A-AjJYcxoYU"
-        opts={opts}
-        className="absolute w-full h-full"
-        style={{ transform: "scale(2.2)", transformOrigin: "center" }}
-        onReady={onPlayerReady}
-        onStateChange={onPlayerStateChange}
-      />
+    <div className="relative w-screen h-[30vh] md:h-[40vh] lg:h-[50vh] xl:h-[65vh] overflow-hidden m-0 p-0">
+      <div className="absolute inset-0 overflow-hidden">
+        <YouTube
+          videoId="A-AjJYcxoYU"
+          opts={opts}
+          className="absolute w-full h-full"
+          style={{ 
+            transform: "scale(2.2)", 
+            transformOrigin: "center",
+            position: "absolute",
+            top: 0,
+            left: 0
+          }}
+          onReady={onPlayerReady}
+          onStateChange={onPlayerStateChange}
+        />
+      </div>
       <div
         className="absolute inset-0 z-20"
         style={{ background: "transparent", pointerEvents: "all" }}
       ></div>
     </div>
-    //   <div className="relative mt-10 w-screen overflow-hidden">
-    //   {/* Responsive aspect ratio for different screen sizes */}
-    //   <div className="relative w-full h-0 pb-[40vh] md:pb-[56.25%] lg:pb-[50vh] xl:pb-[45vh]">
-    //     <YouTube
-    //       videoId="A-AjJYcxoYU"
-    //       opts={opts}
-    //       className="absolute top-0 left-0 w-full h-full"
-    //       style={{ transform: "scale(1.5)", transformOrigin: "center" }} // Adjust zoom level if needed
-    //       onReady={onPlayerReady}
-    //       onStateChange={onPlayerStateChange}
-    //     />
-    //   </div>
-    //   <div
-    //     className="absolute inset-0 z-20"
-    //     style={{ background: "transparent", pointerEvents: "all" }}
-    //   ></div>
-    // </div>
   );
 };
 

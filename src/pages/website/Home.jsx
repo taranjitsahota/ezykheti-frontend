@@ -30,7 +30,7 @@ const Home = () => {
       {/* Background video section */}
       <LoopingYoutube />
 
-      <div className="relative flex flex-col items-center justify-center text-center mb-10 sm:mb-14 md:mb-20 lg:mb-25">
+      <div className="relative flex flex-col items-center justify-center mt-0 text-center mb-10 sm:mb-14 md:mb-20 lg:mb-25">
         <div
           className="h-full absolute inset-0 bg-center bg-no-repeat"
           style={{
