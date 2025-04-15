@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/images/logo/logo.png";
+import logo from "../assets/images/logo/Logo.png";
 import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
