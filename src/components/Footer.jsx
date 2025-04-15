@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/images/logo/ezykheti_logo.png";
+import logo from "../assets/images/logo/logo.png";
 import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+  const { i18n, t } = useTranslation();
   return (
     <footer className="bg-gray-200 text-black py-2">
       <div
@@ -20,17 +22,17 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="footer-section">
             <h3 className="text-lg font-semibold mb-4 border-b border-gray-600 pb-2">
-              Quick Links
+              {t("quick_links")}
             </h3>
             <ul className="list-none p-0">
               <li className="mb-2">
                 <Link to="/" className="text-black hover:text-green-500">
-                  Home
+                  {t("home_bottom_link")}
                 </Link>
               </li>
               <li className="mb-2">
                 <Link to="/about" className="text-black hover:text-green-500">
-                  About Us
+                  {t("about_us_bottom_link")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -38,7 +40,7 @@ const Footer = () => {
                   to="/services"
                   className="text-black hover:text-green-500"
                 >
-                  Services
+                  {t("services_bottom_link")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -46,7 +48,7 @@ const Footer = () => {
                   to="/technology"
                   className="text-black hover:text-green-500"
                 >
-                  Technology
+                  {t("technology_bottom_link")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -54,7 +56,7 @@ const Footer = () => {
                   to="/registration"
                   className="text-black hover:text-green-500"
                 >
-                  Registration
+                  {t("registration_bottom_link")}
                 </Link>
               </li>
             </ul>
@@ -62,16 +64,18 @@ const Footer = () => {
 
           <div className="footer-section">
             <h3 className="text-lg font-semibold mb-4 border-b border-gray-600 pb-2">
-              Contact Information
+              {t("contact_information")}
             </h3>
-            <p className="text-black mb-2">Adrress of punjab office</p>
-            <p className="text-black mb-2">Phone: +1 (555) 123-4567</p>
-            <p className="text-black">Email: info@carrental.com</p>
+            <p className="text-black mb-2">{t("address")}</p>
+            <p className="text-black mb-2">{t("address1")}</p>
+            <p className="text-black mb-2">{t("address2")}</p>
+            <p className="text-black mb-2">{t("phone")}</p>
+            <p className="text-black">{t("email")}</p>
           </div>
 
           <div className="footer-section">
             <h3 className="text-lg font-semibold mb-4 border-b border-gray-600 pb-2">
-              Follow Us
+              {t("follow_us")}
             </h3>
             <div className="flex items-center space-x-4">
               <a

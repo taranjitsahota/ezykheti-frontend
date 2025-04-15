@@ -39,6 +39,7 @@ const About = () => {
             {t("about_us_description2")}
           </span>
           {t("about_us_description3")}
+          {t("about_us_description4")}
           {t("about_us_description_punjabi_hindi2")}
         </p>
       </div>

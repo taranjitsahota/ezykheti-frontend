@@ -109,6 +109,8 @@
   "book": "Book",
   "book_description": "Schedule equipment use at your convenience through our app.",
 
+  "Footer": "*******************************************************************Footer Page*****************************************************************",
+
   "quick_links": "Quick Links",
 
   "home_bottom_link": "Home",
@@ -119,9 +121,11 @@
 
   "contact_information": "Contact Information",
 
-  "address": "Adrress of punjab office",
-  "phone": "Phone: +1 (555) 123-4567",
-  "email": "Email: info@carrental.com",
+  "address": "Ezykheti Agri Services PVT LTD,",
+  "address1": "VPO.Budhi Pind, District : Hoshiarpur-144212,",
+  "address2": "Punjab, India.",
+  "phone": "Phone: +91 6239007239",
+  "email": "Email: admin@ezykheti.com",
 
   "follow_us": "Follow Us",
 
@@ -131,7 +135,8 @@
 
   "about_us_description1": "Welcome to ",
   "about_us_description2": "E",
-  "about_us_description3": "zykheti, where innovation meets excellence. We are dedicated to providing top-notch [industry] solutions, driven by passion and expertise. Our mission is to revolutionize [your field] by delivering high-quality services to our clients.",
+  "about_us_description3": "zykheti, where innovation meets excellence. We are dedicated to providing top-notch Farming solutions, driven by passion and expertise. Our mission is to revolutionize Agriculture by delivering high-quality services to our clients.",
+  "about_us_description4": " One of the key benefits of modern agricultural technology is that it can significantly enhance the profitability and sustainability of agricultural practices. By adopting a business mindset, farmers can strategically plan their operations, streamline processes, and make data-driven decisions. This involves evaluating production costs, optimizing the use of resources like high-tech farm machinery and advanced irrigation systems, and minimizing waste. Ultimately, this leads to higher yields, reduced expenses, and more sustainable farming.",
 
   "about_us_description_punjabi_hindi1": "",
   "about_us_description_punjabi_hindi2": "",
@@ -158,7 +163,12 @@
   "our_services": "Our Services",
   "core_services": "Core Services for Users",
 
-  "our_equipments": "Our Equipments",
+  "crop_selection": "Crop Selection",
+
+  "our": "Our",
+  "equipments": "Equipments",
+
+  "our_equipments": "Our Equipments Available for Rent & Subscriptions",
 
   "cultivation_equipment": "Cultivation Equipment",
   "cultivation_equipment_description": "Super Seeders,Rotavators,Disc Harrows, Cultivators, Potato Planters,Pneumatic Planters,Automatic Paddy Planters",
@@ -185,7 +195,12 @@
   "early_bird_discount_description_punjabi_hindi4": "",
 
   "bulk_discount": "Bulk Discount",
-  "bulk_discount_description": "Additional 5% discount when subscribing for 3 acres or more.",
+  "bulk_discount_description1": "Additional",
+  "bulk_discount_description2": " 5% discount",
+  "bulk_discount_description3": "when subscribing for 3 acres or more.",
+
+  "bulk_discount_description_punjabi_hindi1": "",
+  "bulk_discount_description_punjabi_hindi2": "",
 
   "payment_terms": "Payment Terms",
   "payment_terms_description1": "25% of the total subscription amount is payable on the day of subscription.",
@@ -224,7 +239,7 @@
   "automatic_paddy_planter_conditions": "-",
 
   "trencher": "Trencher",
-  "trencher_price": "TBC",
+  "trencher_price": "Rs. 100 per Kanal",
   "trencher_conditions": "-",
 
   "automatic_boom_sprayer": "Automatic Boom Sprayer",
@@ -232,7 +247,7 @@
   "automatic_boom_sprayer_conditions": "-",
 
   "drone_sprayer": "Drone Sprayer",
-  "drone_sprayer_price": "TBC",
+  "drone_sprayer_price": "Rs. 800 per Acre",
   "drone_sprayer_conditions": "-",
 
   "harvesting_equipment_table": "Harvesting Equipment",
@@ -283,6 +298,8 @@
   "contact_number": "Contact Number *",
   "email_optional": "Email (Optional)",
   "village_name": "Village Name *",
+  "pincode": "Pin code *",
+  "District": "District *",
 
   "area_of_land": "Area of Land *",
   "in_kanal": "in Kanal",

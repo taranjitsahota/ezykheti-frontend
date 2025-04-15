@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import API_BASE_URL from "../../config/api";
+import API_BASE_URL from "../../api/axios";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -34,7 +34,7 @@ const Register = () => {
         try {
             await axios.post(`${API_BASE_URL}/register-superadmin-admin`, values);
             alert("Registration successful");
-            navigate("/");
+            // navigate("/admin");
         } catch (error) {
             alert(error.response?.data?.message || "Registration failed");
         }

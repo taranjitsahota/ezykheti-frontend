@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Phone, Mail } from "lucide-react";
+import { Loader } from "lucide-react";
 
 const ForgotPassword = () => {
+  const [loading, setLoading] = useState(false);
+
   const [otpType, setOtpType] = useState(null);
   const navigate = useNavigate();
 
@@ -11,36 +14,37 @@ const ForgotPassword = () => {
       alert("Please select an OTP type.");
       return;
     }
+    setLoading(true);
     navigate(`/send-otp?type=${otpType}`);
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
-      <div className="w-full max-w-md h-[600px] md:h-[520px] p-8 bg-gray-50 rounded-4xl border border-gray-300 shadow-md">
-        <div className="max-w-md mx-auto text-center mt-18">
-          <h2 className="text-3xl text-gray-800 font-bold">Forgot Password ?</h2>
-          <p className="text-gray-800 mt-2">
-            No Worries we will send you reset instructions
+    <div className="flex items-center justify-center min-h-screen  px-4">
+      <div className="w-full max-w-md h-[500px] md:h-[500px] p-4 px-12 rounded-4xl border border-gray-300">
+        <div className="max-w-md w-full mx-auto text-center mt-16">
+          <h2 className="text-3xl text-[#222222] font-bold">
+            Forgot Password ?
+          </h2>
+          <p className="text-[#222222]">
+            No Worries we will send you reset instructions.
           </p>
         </div>
 
         <div className="mt-10 space-y-4">
-          <p className="text-gray-800  text-xl font-semibold">
-            How you like?
-          </p>
+          <p className="text-[#222222]  text-xl font-semibold">How you like?</p>
 
           <div
             onClick={() => setOtpType("phone")}
             className="flex items-center gap-4 rounded cursor-pointer"
           >
             <div className="flex items-center gap-2">
-              <Phone className="text-gray-600" />
-              <span className="font-semibold text-gray-800">Phone :</span>
+              <Phone className="text-[#222222]" />
+              <span className="font-semibold text-[#222222]">Phone :</span>
             </div>
             <div
               className={`w-6 h-6 flex items-center justify-center rounded ${
                 otpType === "phone"
-                  ? "bg-gray-800 text-white"
+                  ? "bg-[#222222] text-white"
                   : "border border-gray-300"
               }`}
             >
@@ -60,16 +64,16 @@ const ForgotPassword = () => {
 
           <div
             onClick={() => setOtpType("email")}
-            className="flex items-center gap-5 rounded cursor-pointer"
+            className="flex items-center gap-5.5 rounded cursor-pointer"
           >
             <div className="flex items-center gap-2">
-              <Mail className="text-gray-600" />
-              <span className="font-semibold text-gray-800">Email :</span>
+              <Mail className="text-[#222222]" />
+              <span className="font-semibold text-[#222222]">Email :</span>
             </div>
             <div
               className={`w-6 h-6 flex items-center justify-center rounded ${
                 otpType === "email"
-                  ? "bg-gray-800 text-white"
+                  ? "bg-[#222222] text-white"
                   : "border border-gray-300"
               }`}
             >
@@ -89,11 +93,24 @@ const ForgotPassword = () => {
         </div>
 
         <button
-          className="w-full mt-4 px-3 py-2 bg-gray-800 text-white rounded-xl"
+          className="w-full cursor-pointer mt-12 px-3 py-2 bg-[#222222] text-white rounded-xl"
           onClick={handleNext}
         >
-          Submit
+          {loading ? (
+            <div className="flex items-center justify-center gap-2">
+              <Loader className="animate-spin" size={18} />
+              Submitting...
+            </div>
+          ) : (
+            "Submiit"
+          )}
         </button>
+        <div
+          className=" flex justify-center mt-4 text-center text-md text-gray-600 cursor-pointer hover:text-[#222222] flex items-center"
+          onClick={() => navigate("/admin")}
+        >
+          <span className="mr-1">←</span> Back to Login
+        </div>
       </div>
     </div>
   );

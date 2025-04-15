@@ -79,19 +79,25 @@ const Pricing = () => {
 
           <div className="bg-white p-6 sm:p-8 border border-gray-400 rounded-2xl shadow-md overflow-hidden h-auto w-full transition-transform hover:scale-105">
             <h1 className="mb-3 sm:mb-4 text-xl sm:text-2xl font-bold">
-              Bulk Discount
+              {t("bulk_discount")}
             </h1>
             <p className="font-semibold">
               <span className="inline-block w-2.5 h-2.5 rounded-full border-2 border-green-500 bg-transparent mr-2"></span>
-              {t("")}Additional{" "}
-              <span className="text-green-500">{t("")}5% discount</span> {t("")}
-              when subscribing for 3 acres or more.
+              {t("bulk_discount_description1")}
+              {t("bulk_discount_description_punjabi_hindi1")}
+              <span className="text-green-500">
+                {t("bulk_discount_description2")}
+              </span>{" "}
+              {t("bulk_discount_description3")}
+              <span className="text-green-500">
+                {t("bulk_discount_description_punjabi_hindi2")}{" "}
+              </span>{" "}
             </p>
           </div>
 
           <div className="bg-white p-6 sm:p-8 border border-gray-400 rounded-2xl shadow-md overflow-hidden h-auto w-full transition-transform hover:scale-105">
             <h1 className="mb-3 sm:mb-4 text-xl sm:text-2xl font-bold">
-              {t("")}Payment Terms
+              {t("payment_terms")}
             </h1>
             <p className="font-semibold">
               <span className="inline-block w-2.5 h-2.5 rounded-full border-2 border-green-500 bg-transparent mr-2"></span>
@@ -111,54 +117,65 @@ const Pricing = () => {
       </div>
 
       <div className="flex flex-col items-center justify-center p-16">
-        <h1 className="text-3xl font-bold mb-4">
-          {t("")}Pay-As-You-Go Price List
-        </h1>
+        <h1 className="text-3xl font-bold mb-4">{t("pay_as_you_go")}</h1>
         <h3 className="text-2xl font-bold mb-8">
-          {t("")}Cultivation Equipment
+          {t("cultivation_equipment_table")}
         </h3>
 
         <div className="w-full bg-gray-300 overflow-x-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 font-bold p-4 min-w-[500px]">
-            <div>{t("")}Service/Equipment</div>
-            <div>{t("")}Price</div>
-            <div>{t("")}Conditions</div>
+            <div>{t("service_equipment")}</div>
+            <div>{t("price")}</div>
+            <div>{t("conditions")}</div>
           </div>
 
           {[
             {
-              service: "Super Seeder (7 feet)",
-              price: "Rs. 250 per Kanal",
-              condition: "Minimum 4 Kanals",
+              service: t("super_seeder"),
+              price: t("super_seeder_price"),
+              condition: t("super_seeder_conditions"),
+            },
+
+            {
+              service: t("rotavator"),
+              price: t("rotavator_price"),
+              condition: t("rotavator_conditions"),
             },
             {
-              service: "Rotavator (7 feet)",
-              price: "Rs. 600 per 30 mins",
-              condition: "-",
+              service: t("cultivator"),
+              price: t("cultivator_price"),
+              condition: t("cultivator_conditions"),
             },
             {
-              service: "Cultivator",
-              price: "Rs. 90 per Kanal",
-              condition: "Minimum 4 Kanals",
+              service: t("potato_planter"),
+              price: t("potato_planter_price"),
+              condition: t("potato_planter_conditions"),
             },
             {
-              service: "Potato Planter",
-              price: "Rs. 250 per Kanal",
-              condition: "Minimum 4 Kanals",
+              service: t("pneumatic_planter"),
+              price: t("pneumatic_planter_price"),
+              condition: t("pneumatic_planter_conditions"),
             },
             {
-              service: "Pneumatic Planter",
-              price: "Rs. 160 per Kanal",
-              condition: "Minimum 4 Kanals",
+              service: t("automatic_paddy_planter"),
+              price: t("automatic_paddy_planter_price"),
+              condition: t("automatic_paddy_planter_conditions"),
             },
             {
-              service: "Automatic Paddy Planter",
-              price: "Rs. 200 per Kanal",
-              condition: "-",
+              service: t("trencher"),
+              price: t("trencher_price"),
+              condition: t("trencher_conditions"),
             },
-            { service: "Trencher", price: "TBC", condition: "-" },
-            { service: "Automatic Boom Sprayer", price: "TBC", condition: "-" },
-            { service: "Drone Sprayer", price: "TBC", condition: "-" },
+            {
+              service: t("automatic_boom_sprayer"),
+              price: t("automatic_boom_sprayer_price"),
+              condition: t("automatic_boom_sprayer_conditions"),
+            },
+            {
+              service: t("drone_sprayer"),
+              price: t("drone_sprayer_price"),
+              condition: t("drone_sprayer_conditions"),
+            },
           ].map((item, index) => (
             <div
               key={index}
@@ -175,40 +192,42 @@ const Pricing = () => {
       </div>
 
       <div className="bg-white flex flex-col items-center justify-center p-16">
-        <h1 className="text-3xl font-bold mb-8">Harvesting Equipment</h1>
+        <h1 className="text-3xl font-bold mb-8">
+          {t("harvesting_equipment_table")}
+        </h1>
 
         <div className="w-full bg-white overflow-x-auto">
           <div className="bg-gray-300 grid grid-cols-1 md:grid-cols-3 font-bold p-4 min-w-[500px]">
-            <div>Service/Equipment</div>
-            <div>Price</div>
-            <div>Conditions</div>
+            <div>{t("service_equipment")}</div>
+            <div>{t("price")}</div>
+            <div>{t("conditions")}</div>
           </div>
 
           {[
             {
-              service: "Wheat Combine Harvester",
-              price: "Rs. 250 per Kanal",
-              condition: "Minimum 4 Kanals",
+              service: t("wheat_combine_harvester"),
+              price: t("wheat_combine_harvester_price"),
+              condition: t("wheat_combine_harvester_conditions"),
             },
             {
-              service: "Paddy Combine Harvester",
-              price: "Rs. 300 per Kanal",
-              condition: "Minimum 4 Kanals",
+              service: t("paddy_combine_harvester"),
+              price: t("paddy_combine_harvester_price"),
+              condition: t("paddy_combine_harvester_conditions"),
             },
             {
-              service: "Sugarcane Harvester",
-              price: "Rs. 90 per Quintal",
-              condition: "Includes Transport to Mill",
+              service: t("sugarcane_harvester"),
+              price: t("sugarcane_harvester_price"),
+              condition: t("sugarcane_harvester_conditions"),
             },
             {
-              service: "Automatic Potato Digger & Grader",
-              price: "Rs. 2500 per Acre",
-              condition: "Minimum 2 Acres",
+              service: t("automatic_potato_digger_grader"),
+              price: t("automatic_potato_digger_grader_price"),
+              condition: t("automatic_potato_digger_grader_conditions"),
             },
             {
-              service: "Pneumatic Planter",
-              price: "Rs. 160 per Kanal",
-              condition: "Minimum 4 Kanals",
+              service: t("pneumatic_planter"),
+              price: t("pneumatic_planter_price"),
+              condition: t("pneumatic_planter_conditions"),
             },
           ].map((item, index) => (
             <div
@@ -226,40 +245,42 @@ const Pricing = () => {
       </div>
 
       <div className="flex flex-col items-center justify-center p-16">
-        <h1 className="text-3xl font-bold mb-4">Transportation Services</h1>
+        <h1 className="text-3xl font-bold mb-4">
+          {t("transportation_services_table")}
+        </h1>
         <div className="w-full mt-10 overflow-x-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 bg-gray-300 font-bold p-4 min-w-[500px]">
-            <div>Service/Equipment</div>
-            <div>Price</div>
-            <div>Conditions</div>
+            <div>{t("service_equipment")}</div>
+            <div>{t("price")}</div>
+            <div>{t("conditions")}</div>
           </div>
 
           {[
             {
-              service: "Trolley Bed (5 feet high)",
-              price: "Rs. 300 per Km",
-              condition: "-",
+              service: t("trolley_bed"),
+              price: t("trolley_bed_price"),
+              condition: t("trolley_bed_conditions"),
             },
             {
-              service: "PTO Trolley for Sugarcane",
-              price: "Rs. 30 per Quintal",
-              condition: "-",
+              service: t("pto_trolley_sugarcane"),
+              price: t("pto_trolley_sugarcane_price"),
+              condition: t("pto_trolley_sugarcane_conditions"),
             },
             {
-              service: "Tata 207 or UTE",
-              price: "Rs. 600",
-              condition: "Up to 5 Kilometers",
+              service: t("tata_207_ute"),
+              price: t("tata_207_ute_price"),
+              condition: t("tata_207_ute_conditions"),
             },
             {
-              service: "Additional Mileage Charge",
-              price: "Rs. 50 per Km",
-              condition: "Beyond 5 Kilometers",
+              service: t("additional_mileage_charge"),
+              price: t("additional_mileage_charge_price"),
+              condition: t("additional_mileage_charge_conditions"),
             },
-            {
-              service: "Pneumatic Planter",
-              price: "Rs. 160 per Kanal",
-              condition: "Minimum 4 Kanals",
-            },
+            // {
+            //   service: t("pneumatic_planter"),
+            //   price: t("pneumatic_planter_price"),
+            //   condition: t("pneumatic_planter_conditions"),
+            // },
           ].map((item, index) => (
             <div
               key={index}

@@ -8,11 +8,11 @@ import maps from "../assets/images/map.jpg";
 
 const services = [
   {
-    title: "Crop Selection",
+    title: "Easy Booking on App",
     image: wheat,
   },
   {
-    title: "Tractor Booking",
+    title: "Live View of Service on your mobile",
     image: tractorbooking,
   },
   {

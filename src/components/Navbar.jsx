@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { BiSolidSun, BiSolidMoon } from "react-icons/bi";
 import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
 import ResponsiveMenu from "./ResponsiveMenu";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link ,NavLink, useLocation } from "react-router-dom";
 import { Globe, ChevronDown } from "lucide-react";
 import {
   FaFacebook,
@@ -14,7 +14,7 @@ import {
   FaMapMarkerAlt,
   FaWhatsapp,
 } from "react-icons/fa";
-import logo from "../assets/images/logo/ezykheti_logo-v2.png";
+import logo from "../assets/images/logo/logo2.png";
 import ContactModal from "./Modal";
 import LearnMoreModal from "./LearnMoreModal";
 import { Typewriter } from "react-simple-typewriter";
@@ -30,7 +30,7 @@ export const Navlinks = [
 
 const languages = [
   { code: "en", label: "EN" },
-  { code: "hi", label: "हिन्दी" },
+  { code: "hn", label: "हिन्दी" },
   { code: "pj", label: "ਪੰਜਾਬੀ" },
 ];
 
@@ -91,21 +91,21 @@ const Navbar = () => {
       <div className="hidden xl:flex justify-between items-center px-22 bg-white border-b border-gray-300 text-sm">
         <div className="flex items-center space-x-6">
           <a
-            href="tel:+918104535322"
+            href="tel:+916239007239"
             className="flex items-center space-x-1 text-gray-800 hover:text-blue-500 transition"
           >
             <FaPhone />
-            <span>+91 81045 35322</span>
+            <span>+91 62390 07239</span>
           </a>
           <a
-            href="mailto:info@rscarrentalgoa.com"
+            href="mailto:admin@ezykheti.com"
             className="flex items-center space-x-1 text-gray-800 hover:text-red-500 transition"
           >
             <FaEnvelope />
-            <span>info@ezykheti.com</span>
+            <span>admin@ezykheti.com</span>
           </a>
           <a
-            href="https://wa.me/918104535322"
+            href="https://wa.me/916239007239"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center space-x-1 text-gray-800 hover:text-green-500 transition"
@@ -118,7 +118,7 @@ const Navbar = () => {
           <Typewriter
             words={[
               "🚜 Best & Cheap Prices for farming services!",
-              "📞 Call: +91 12345 67890 for instant booking!",
+              "📞 Call: +91 62390 07239 for instant booking!",
               "🌾 24 hours prior booking needed for smooth service!",
             ]}
             loop={true}
@@ -151,16 +151,18 @@ const Navbar = () => {
 
       <div className="bg-white flex justify-between items-center py-4 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 border-b border-gray-300">
         {/* Logo */}
-        <div
-          data-aos="zoom-in"
-          className="transition duration-300 hover:scale-105"
-        >
-          <img
-            src={logo}
-            alt="RS Goa Car Rental Logo"
-            className="max-w-[150px] md:max-w-[190px] h-auto transition-transform duration-300 hover:scale-105"
-          />
-        </div>
+        <Link to="/">
+  <div
+    data-aos="zoom-in"
+    className="transition duration-300 hover:scale-105"
+  >
+    <img
+      src={logo}
+      alt="Ezykheti"
+      className="max-w-[150px] md:max-w-[190px] h-auto transition-transform duration-300 hover:scale-105"
+    />
+  </div>
+</Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-4">

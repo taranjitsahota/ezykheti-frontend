@@ -108,7 +108,7 @@
   "book": "ਬੁੱਕ ਕਰੋ",
   "book_description": "ਸਾਡੀ ਐਪ ਰਾਹੀਂ ਆਪਣੇ ਸੁਵਿਧਾਜਨਕ ਸਮੇਂ 'ਤੇ ਉਪਕਰਣ ਦੀ ਬੁਕਿੰਗ ਕਰੋ।",
 
-  "quick_links": "ਝੱਟ ਲਿੰਕ",
+  "quick_links": "ਤੁਰੰਤ ਲਿੰਕ",
 
   "home_bottom_link": "ਮੁੱਖ ਪੰਨਾ",
   "about_us_bottom_link": "ਸਾਡੇ ਬਾਰੇ",
@@ -155,9 +155,12 @@
   "our_services_header": "ਸਾਡੀਆਂ ਸੇਵਾਵਾਂ",
 
   "our_services": "ਸਾਡੀਆਂ ਸੇਵਾਵਾਂ",
-  "core_services": "ਯੂਜ਼ਰਾਂ ਲਈ ਮੁੱਖ ਸੇਵਾਵਾਂ",
+  "core_services": "ਵਰਤੋਂਕਾਰਾਂ ਲਈ ਮੁੱਖ ਸੇਵਾਵਾਂ",
 
-  "our_equipments": "ਸਾਡੇ ਉਪਕਰਣ",
+  "our": "ਸਾਡੇ ",
+  "equipments": "ਉਪਕਰਣ",
+
+  "our_equipments": "ਸਾਡੇ ਉਪਕਰਨ ਕਿਰਾਏ ਤੇ ਅਤੇ ਸਬਸਕ੍ਰਿਪਸ਼ਨ ਲਈ ਉਪਲਬਧ ਹਨ",
 
   "cultivation_equipment": "ਖੇਤੀਬਾੜੀ ਉਪਕਰਣ",
   "cultivation_equipment_description": "ਸੁਪਰ ਸੀਡਰ, ਰੋਟਾਵੇਟਰ, ਡਿਸਕ ਹੈਰੋ, ਖੁਦਾਈ ਯੰਤਰ, ਆਲੂ ਲਗਾਉਣ ਵਾਲੀ ਮਸ਼ੀਨ, ਨਿਊਮੈਟਿਕ ਪਲਾਂਟਰ, ਆਟੋਮੈਟਿਕ ਧਾਣ ਚੁਣਨ ਵਾਲੀ ਮਸ਼ੀਨ",
@@ -184,13 +187,18 @@
   "early_bird_discount_description_punjabi_hindi4": "ਛੂਟ ਪ੍ਰਾਪਤ ਕਰੋ।",
 
   "bulk_discount": "ਥੋਕ ਛੂਟ",
-  "bulk_discount_description": "3 ਏਕੜ ਜਾਂ ਵੱਧ ਦੀ ਗਾਹਕੀ 'ਤੇ ਵਾਧੂ 5% ਛੂਟ।",
+  "bulk_discount_description1": "",
+  "bulk_discount_description2": "",
+  "bulk_discount_description3": "",
+
+  "bulk_discount_description_punjabi_hindi1": "3 ਏਕੜ ਜਾਂ ਉਸ ਤੋਂ ਵੱਧ ਦੇ ਸਬਸਕ੍ਰਿਪਸ਼ਨ ਤੇ ਅਤਿਰਿਕਤ",
+  "bulk_discount_description_punjabi_hindi2": "5% ਛੂਟ।",
 
   "payment_terms": "ਭੁਗਤਾਨ ਦੀਆਂ ਸ਼ਰਤਾਂ",
   "payment_terms_description1": "ਕੁੱਲ ਗਾਹਕੀ ਰਕਮ ਦਾ 25% ਗਾਹਕੀ ਦੇ ਦਿਨ ਭੁਗਤਾਨਯੋਗ ਹੋਵੇਗਾ।",
   "payment_terms_description2": "ਬਾਕੀ ਰਕਮ ਤੁਹਾਡੇ ਦਿੱਤੇ ਬੈਂਕ ਖਾਤੇ ਜਾਂ ਚੁਣੇ ਹੋਏ ਭੁਗਤਾਨ ਢੰਗ ਰਾਹੀਂ ਸਾਲ ਦੇ ਬਾਕੀ ਮਹੀਨਿਆਂ ਵਿੱਚ ਸਮਾਨ ਮਾਸਿਕ ਕਿਸ਼ਤਾਂ ਵਜੋਂ ਕਟੋਤੀ ਕੀਤੀ ਜਾਵੇਗੀ।",
 
-  "pay_as_you_go": "ਜਿੰਨਾ ਵਰਤੋ, ਉੰਨਾ ਭਰੋ ਰੇਟ ਸੂਚੀ",
+  "pay_as_you_go": "ਵਰਤੋਂ ਅਨੁਸਾਰ ਭੁਗਤਾਨ ਦੀ ਕੀਮਤ ਸੂਚੀ",
 
   "cultivation_equipment_table": "ਖੇਤੀਬਾੜੀ ਉਪਕਰਣ",
 

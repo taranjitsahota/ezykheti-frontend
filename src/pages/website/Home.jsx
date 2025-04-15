@@ -42,7 +42,7 @@ const Home = () => {
           }}
         ></div>
 
-        <div data-aos="slide-up" className=" gap-4">
+        <div data-aos="slide-up" className="mb-10 gap-4">
           {/* Content */}
           {/* <h1>{t("Empowering")}</h1> */}
 
@@ -137,24 +137,24 @@ const Home = () => {
         >
           {[
             {
-              title: "Affordable Access",
-              desc: "No need for large capital investment; pay only when you use the equipment.",
+              title: t("affordable_access"),
+              desc: t("affordable_access_description"),
             },
             {
-              title: "State-of-the-Art Machinery",
-              desc: "Regularly maintained and upgraded to ensure peak performance.",
+              title: t("state_of_the_art_machinery"),
+              desc: t("state_of_the_art_machinery_description"),
             },
             {
-              title: "Designed for Farmers",
-              desc: "Specifically tailored to the needs of farmers.",
+              title: t("designed_for_farmers"),
+              desc: t("designed_for_farmers_description"),
             },
             {
-              title: "Flexible Plans",
-              desc: "Choose between pay-as-you-go or annual subscription for continuous service.",
+              title: t("flexible_plans"),
+              desc: t("flexible_plans_description"),
             },
             {
-              title: "Increased Productivity & Profitability",
-              desc: "Enhance efficiency, reduce labor dependency, and maximize yield.",
+              title: t("increased_productivity_&_profitability"),
+              desc: t("increased_productivity_&_profitability_description"),
             },
           ].map((item, index) => (
             <div

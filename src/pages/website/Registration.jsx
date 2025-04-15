@@ -88,6 +88,20 @@ const Registration = () => {
                 className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
               />
             </div>
+            <div>
+              <input
+                type="text"
+                placeholder={t("pincode")}
+                className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder={t("District")}
+                className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
+              />
+            </div>
             <div className="flex gap-4">
               <input
                 type="text"
