@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Phone, Mail } from "lucide-react";
 import { Loader } from "lucide-react";
+import AuthLayout from "../../layouts/AuthLayout";
+import { toast } from "react-toastify";
+
 
 const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
@@ -11,7 +14,8 @@ const ForgotPassword = () => {
 
   const handleNext = () => {
     if (!otpType) {
-      alert("Please select an OTP type.");
+      toast.error("Please select an OTP type.");
+
       return;
     }
     setLoading(true);
@@ -19,27 +23,17 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen  px-4">
-      <div className="w-full max-w-md h-[500px] md:h-[500px] p-4 px-12 rounded-4xl border border-gray-300">
-        <div className="max-w-md w-full mx-auto text-center mt-16">
-          <h2 className="text-3xl text-[#222222] font-bold">
-            Forgot Password ?
-          </h2>
-          <p className="text-[#222222]">
-            No Worries we will send you reset instructions.
-          </p>
-        </div>
-
+    <AuthLayout title="Forgot Password ?" subtitle="No Worries we'll send you reset instructions.">
         <div className="mt-10 space-y-4">
-          <p className="text-[#222222]  text-xl font-semibold">How you like?</p>
+          <p className="text-xl font-semibold">How you like?</p>
 
           <div
             onClick={() => setOtpType("phone")}
             className="flex items-center gap-4 rounded cursor-pointer"
           >
             <div className="flex items-center gap-2">
-              <Phone className="text-[#222222]" />
-              <span className="font-semibold text-[#222222]">Phone :</span>
+              <Phone className="" />
+              <span className="font-semibold">Phone :</span>
             </div>
             <div
               className={`w-6 h-6 flex items-center justify-center rounded ${
@@ -67,8 +61,8 @@ const ForgotPassword = () => {
             className="flex items-center gap-5.5 rounded cursor-pointer"
           >
             <div className="flex items-center gap-2">
-              <Mail className="text-[#222222]" />
-              <span className="font-semibold text-[#222222]">Email :</span>
+              <Mail className="" />
+              <span className="font-semibold">Email :</span>
             </div>
             <div
               className={`w-6 h-6 flex items-center justify-center rounded ${
@@ -93,7 +87,7 @@ const ForgotPassword = () => {
         </div>
 
         <button
-          className="w-full cursor-pointer mt-12 px-3 py-2 bg-[#222222] text-white rounded-xl"
+          className="btn-submit w-full cursor-pointer mt-12"
           onClick={handleNext}
         >
           {loading ? (
@@ -106,13 +100,13 @@ const ForgotPassword = () => {
           )}
         </button>
         <div
-          className=" flex justify-center mt-4 text-center text-md text-gray-600 cursor-pointer hover:text-[#222222] flex items-center"
+          className=" flex justify-center mt-4 text-center text-md text-gray-600 cursor-pointer hover:text-[#417505] flex items-center"
           onClick={() => navigate("/admin")}
         >
           <span className="mr-1">←</span> Back to Login
         </div>
-      </div>
-    </div>
+      
+    </AuthLayout>
   );
 };
 

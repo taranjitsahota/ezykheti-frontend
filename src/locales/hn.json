@@ -106,6 +106,8 @@
   "book": "बुक करें",
   "book_description": "हमारे ऐप के माध्यम से अपनी सुविधा अनुसार उपकरण उपयोग के लिए समय निर्धारित करें।",
 
+  "Footer": "*******************************************************************Footer Page*****************************************************************",
+
   "quick_links": "त्वरित लिंक",
 
   "home_bottom_link": "होम",
@@ -117,6 +119,8 @@
   "contact_information": "संपर्क जानकारी",
 
   "address": "पंजाब कार्यालय का पता",
+  "address1": "वी.पी.ओ. बुड्डी पिंड, ज़िला: होशियारपुर-144212,",
+  "address2": "ਪੰਜਾਬ, ਇੰਡੀਆ।",
   "phone": "फोन: +1 (555) 123-4567",
   "email": "ईमेल: info@carrental.com",
 
@@ -162,7 +166,7 @@
   "cultivation_equipment": "कृषि उपकरण",
   "cultivation_equipment_description": "सुपर सीडर्स, रोटावेटर, डिस हैरो, कल्टीवेटर, आलू प्लांटर, न्यूमैटिक प्लांटर, ऑटोमैटिक धान प्लांटर",
 
-  "_Pricing_Page": "**********************************************************मूल्य निर्धारण पेज****************************************************************",
+  "_Pricing_Page": "**********************************************************मूल्य निर्धारण और सेवाएं पेज****************************************************************",
 
   "annual_subscription_plans": "वार्षिक सब्सक्रिप्शन योजनाएं",
 
@@ -275,6 +279,51 @@
   "additional_mileage_charge_price": "₹50 प्रति किलोमीटर",
   "additional_mileage_charge_conditions": "5 किलोमीटर से अधिक",
 
+  "trolley_with_pto": "पीटीओ वाली ट्रॉली",
+  "trolley_with_pto_price": "रु. 300 प्रति किलोमीटर",
+
+  "tata_207": "टाटा 207",
+  "tata_207_price": "रु. 600 पहले 5 किलोमीटर तक",
+
+  "sugarcane_harvester1": "गन्ना हार्वेस्टर",
+  "sugarcane_harvester_price1": "रु. 90 प्रति क्विंटल, मिल तक परिवहन सहित",
+
+  "rotavator1": "रोटावेटर",
+  "rotavator_price1": "रु. 600 प्रति 30 मिनट",
+
+  "pto_trolley": "पीटीओ ट्रॉली",
+  "pto_trolley_price": "रु. 300 प्रति किलोमीटर",
+
+  "automatic_potato_digger_and_loader": "स्वचालित आलू खोदने और लोड करने वाली मशीन",
+  "automatic_potato_digger_and_loader_price": "रु. 250 प्रति कनाल",
+
+  "disc_harrow": "डिस्क हैरो",
+  "disc_harrow_price": "रु. 125 प्रति कनाल",
+
+  "drone_spraying": "ड्रोन स्प्रेइंग",
+  "drone_spraying_price": "रु. 800 प्रति एकड़",
+
+  "combine_harvester": "कंबाइन हार्वेस्टर",
+  "combine_harvester_price": "गेहूं: रु. 2000 प्रति एकड़, धान: रु. 2200 प्रति एकड़",
+
+  "super_seeder1": "सुपर सीडर",
+  "super_seeder_price1": "रु. 250 प्रति कनाल",
+
+  "tractor_mounted_boom_sprayer": "ट्रैक्टर माउंटेड बूम स्प्रेयर",
+  "tractor_mounted_boom_sprayer_price": "निर्धारित होना बाकी है",
+
+  "rice_planter": "धान रोपाई मशीन",
+  "rice_planter_price": "निर्धारित होना बाकी है",
+
+  "baler_rectangular": "आयताकार बेलर",
+  "baler_rectangular_price": "निर्धारित होना बाकी है",
+
+  "sugar_cane_trench": "गन्ने की खाई",
+  "sugar_cane_trench_price": "रु. 100 प्रति कनाल",
+
+  "sugar_cane_trencher": "गन्ना खाई खोदने की मशीन",
+  "sugar_cane_trencher_price": "रु. 100 प्रति कनाल",
+
   "download_rate_pdf_link": "रेट पीडीएफ डाउनलोड करें",
 
   "_Registration_Page": "**********************************************************पंजीकरण पृष्ठ****************************************************************",
@@ -287,6 +336,8 @@
   "contact_number": "संपर्क नंबर *",
   "email_optional": "ईमेल (वैकल्पिक)",
   "village_name": "गांव का नाम *",
+  "pincode": "पिन कोड *",
+  "district": "जिला *",
 
   "area_of_land": "भूमि का क्षेत्रफल *",
   "in_kanal": "कनाल में",

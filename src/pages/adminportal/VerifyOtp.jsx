@@ -5,6 +5,8 @@ import { FaMobileAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { Loader } from "lucide-react";
 import { toast } from "react-toastify";
+import AuthLayout from "../../layouts/AuthLayout";
+
 
 const VerifyOTP = () => {
   const navigate = useNavigate();
@@ -138,29 +140,39 @@ const VerifyOTP = () => {
   };
 
   return (
-    // <div className="flex items-center justify-center min-h-screen">
-    <div className="flex items-center justify-center w-full min-h-screen px-4 py-10 sm:px-6 lg:px-8">
-      {/* <div className="w-full max-w-md p-8 rounded-3xl border border-gray-400"> */}
-      <div className="w-full max-w-md p-12 rounded-3xl border border-gray-400 min-h-[500px] flex flex-col justify-center">
-        {/* <div className="p-8 rounded-3xl shadow-md w-96 border"> */}
-        {/* Phone icon */}
-        <div className="flex mb-4">
+
+    <AuthLayout
+  title={
+    <>
+      <div className="flex items-center justify-center w-full mt-4 mb-6">
           {contact.includes("@") ? (
             <MdEmail className="text-6xl border p-2 rounded-lg" />
           ) : (
             <FaMobileAlt className="text-6xl border p-2 rounded-lg" />
           )}
         </div>
+      Verify OTP
+    </>
+  } 
+  subtitle={
+    <>
+      We sent a code to{" "}
+      <span className="text-black font-semibold">{contact}</span>
+    </>
+  }
+>
 
-        {/* Title */}
-        <h2 className="text-xl font-bold mb-1">Password reset</h2>
-        <p className="text-sm text-gray-500 mb-6">
-          We sent a code to{" "}
-          <span className="text-black font-semibold">{contact}</span>
-        </p>
+
+    {/* <div className="flex items-center justify-center w-full min-h-screen px-4 py-10 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md p-12 rounded-3xl border border-gray-400 min-h-[500px] flex flex-col justify-center"> */}
+        {/* <div className="p-8 rounded-3xl shadow-md w-96 border"> */}
+        {/* Phone icon */}
+        
+
+       
 
         {/* OTP boxes */}
-        <div className="flex justify-between mb-6">
+        <div className="flex justify-between mb-6 mt-8">
           {otp.map((digit, index) => (
             <input
               key={index}
@@ -179,7 +191,7 @@ const VerifyOTP = () => {
 
         {/* Verify Button */}
         <button
-          className="w-full py-2 mb-3 border border-gray-300 rounded-xl font-medium bg-[#222222] text-white cursor-pointer"
+          className="btn-submit w-full py-2 mb-3 rounded-xl font-medium cursor-pointer"
           onClick={handleVerifyOTP}
           disabled={loading}
         >
@@ -198,7 +210,7 @@ const VerifyOTP = () => {
         <p className="text-center text-sm text-gray-600 mt-4">
           Didn’t receive the code?{" "}
           <span
-            className="text-black font-medium cursor-pointer hover:underline"
+            className="font-medium cursor-pointer text-[#417505] hover:underline hover:text-green-900"
             onClick={() =>
               handleResendOTP(contact.includes("@") ? "email" : "phone")
             }
@@ -206,8 +218,9 @@ const VerifyOTP = () => {
             {resending ? "Resending..." : "Resend"}
           </span>
         </p>
-      </div>
-    </div>
+      {/* </div>
+    </div> */}
+    </AuthLayout>
   );
 };
 

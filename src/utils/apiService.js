@@ -3,7 +3,6 @@ import API from '../api/axios';
 export const apiRequest = async ({ url, method = 'get', data = {}, params = {} }) => {
   try {
     const response = await API({ url, method, data, params });
-console.log(response.data);
     if (response.data.status === true) {
       return {
         success: true,

@@ -108,6 +108,8 @@
   "book": "ਬੁੱਕ ਕਰੋ",
   "book_description": "ਸਾਡੀ ਐਪ ਰਾਹੀਂ ਆਪਣੇ ਸੁਵਿਧਾਜਨਕ ਸਮੇਂ 'ਤੇ ਉਪਕਰਣ ਦੀ ਬੁਕਿੰਗ ਕਰੋ।",
 
+  "Footer": "*******************************************************************Footer Page*****************************************************************",
+
   "quick_links": "ਤੁਰੰਤ ਲਿੰਕ",
 
   "home_bottom_link": "ਮੁੱਖ ਪੰਨਾ",
@@ -119,6 +121,8 @@
   "contact_information": "ਸੰਪਰਕ ਜਾਣਕਾਰੀ",
 
   "address": "ਪੰਜਾਬ ਦਫ਼ਤਰ ਦਾ ਪਤਾ",
+  "address1": "ਵੀ.ਪੀ.ਓ. ਬੁੱਡੀ ਪਿੰਡ, ਜ਼ਿਲ੍ਹਾ: ਹੋਸ਼ਿਆਰਪੁਰ-144212",
+  "address2": "ਪੰਜਾਬ, ਇੰਡੀਆ।",
   "phone": "ਫ਼ੋਨ: +1 (555) 123-4567",
   "email": "ਈਮੇਲ: info@carrental.com",
 
@@ -165,7 +169,7 @@
   "cultivation_equipment": "ਖੇਤੀਬਾੜੀ ਉਪਕਰਣ",
   "cultivation_equipment_description": "ਸੁਪਰ ਸੀਡਰ, ਰੋਟਾਵੇਟਰ, ਡਿਸਕ ਹੈਰੋ, ਖੁਦਾਈ ਯੰਤਰ, ਆਲੂ ਲਗਾਉਣ ਵਾਲੀ ਮਸ਼ੀਨ, ਨਿਊਮੈਟਿਕ ਪਲਾਂਟਰ, ਆਟੋਮੈਟਿਕ ਧਾਣ ਚੁਣਨ ਵਾਲੀ ਮਸ਼ੀਨ",
 
-  "_Pricing_Page": "**********************************************************ਮੁੱਲ ਸੂਚੀ ਪੰਨਾ****************************************************************",
+  "_Pricing_Page": "**********************************************************ਮੁੱਲ ਸੂਚੀ ਅਤੇ ਸੇਵਾਵਾਂ ਪੰਨਾ****************************************************************",
 
   "annual_subscription_plans": "ਸਾਲਾਨਾ ਗਾਹਕੀ ਯੋਜਨਾਵਾਂ",
 
@@ -278,6 +282,51 @@
   "additional_mileage_charge_price": "ਰੁ. 50 ਪ੍ਰਤੀ ਕਿਲੋਮੀਟਰ",
   "additional_mileage_charge_conditions": "5 ਕਿਲੋਮੀਟਰ ਤੋਂ ਵੱਧ",
 
+  "trolley_with_pto": "ਪੀਟੀਓ ਨਾਲ ਟਰਾਲੀ",
+  "trolley_with_pto_price": "ਰੁ. 300 ਪ੍ਰਤੀ ਕਿਲੋਮੀਟਰ",
+
+  "tata_207": "ਟਾਟਾ 207",
+  "tata_207_price": "ਰੁ. 600 ਪਹਿਲੇ 5 ਕਿਲੋਮੀਟਰ ਲਈ",
+
+  "sugarcane_harvester1": "ਗੰਨੇ ਦੀ ਕਟਾਈ ਵਾਲੀ ਮਸ਼ੀਨ",
+  "sugarcane_harvester_price1": "ਰੁ. 90 ਪ੍ਰਤੀ ਕਿੰਟਲ, ਮਿਲ ਤੱਕ ਲਿਜਾਣ ਸਮੇਤ",
+
+  "rotavator1": "ਰੋਟਾਵੇਟਰ",
+  "rotavator_price1": "ਰੁ. 600 30 ਮਿੰਟ ਲਈ",
+
+  "pto_trolley": "ਪੀਟੀਓ ਟਰਾਲੀ",
+  "pto_trolley_price": "ਰੁ. 300 ਪ੍ਰਤੀ ਕਿਲੋਮੀਟਰ",
+
+  "automatic_potato_digger_and_loader": "ਆਟੋਮੈਟਿਕ ਆਲੂ ਖੋਦਨ ਵਾਲੀ ਅਤੇ ਲੋਡਰ",
+  "automatic_potato_digger_and_loader_price": "ਰੁ. 250 ਪ੍ਰਤੀ ਕਨਾਲ",
+
+  "disc_harrow": "ਡਿਸਕ ਹੈਰੋ",
+  "disc_harrow_price": "ਰੁ. 125 ਪ੍ਰਤੀ ਕਨਾਲ",
+
+  "drone_spraying": "ਡਰੋਨ ਛਿੜਕਾਅ",
+  "drone_spraying_price": "ਰੁ. 800 ਪ੍ਰਤੀ ਏਕੜ",
+
+  "combine_harvester": "ਕੰਬਾਈਨ ਹਾਰਵੇਸਟਰ",
+  "combine_harvester_price": "ਗੇਹੂੰ: ਰੁ. 2000 ਪ੍ਰਤੀ ਏਕੜ, ਧਾਨ: ਰੁ. 2200 ਪ੍ਰਤੀ ਏਕੜ",
+
+  "super_seeder1": "ਸੁਪਰ ਸੀਡਰ",
+  "super_seeder_price1": "ਰੁ. 250 ਪ੍ਰਤੀ ਕਨਾਲ",
+
+  "tractor_mounted_boom_sprayer": "ਟ੍ਰੈਕਟਰ ਮਾਊਂਟ ਬੂਮ ਸਪ੍ਰੇਅਰ",
+  "tractor_mounted_boom_sprayer_price": "ਤਯ ਹੋਣਾ ਬਾਕੀ ਹੈ",
+
+  "rice_planter": "ਧਾਨ ਰੋਪਣ ਵਾਲੀ ਮਸ਼ੀਨ",
+  "rice_planter_price": "ਤਯ ਹੋਣਾ ਬਾਕੀ ਹੈ",
+
+  "baler_rectangular": "ਚੌਰਸ ਬੇਲਰ",
+  "baler_rectangular_price": "ਤਯ ਹੋਣਾ ਬਾਕੀ ਹੈ",
+
+  "sugar_cane_trench": "ਗੰਨੇ ਦੀ ਖਾਲ",
+  "sugar_cane_trench_price": "ਰੁ. 100 ਪ੍ਰਤੀ ਕਨਾਲ",
+
+  "sugar_cane_trencher": "ਗੰਨੇ ਦੀ ਟ੍ਰੈਂਚਿੰਗ ਮਸ਼ੀਨ",
+  "sugar_cane_trencher_price": "ਰੁ. 100 ਪ੍ਰਤੀ ਕਨਾਲ",
+
   "download_rate_pdf_link": "ਰੇਟ ਪੀ.ਡੀ.ਐਫ ਡਾਊਨਲੋਡ ਕਰੋ",
 
   "_Registration_Page": "**********************************************************ਰਜਿਸਟਰੇਸ਼ਨ ਪੇਜ****************************************************************",
@@ -290,6 +339,8 @@
   "contact_number": "ਸੰਪਰਕ ਨੰਬਰ *",
   "email_optional": "ਈਮੇਲ (ਚੋਣਵਾਂ)",
   "village_name": "ਪਿੰਡ ਦਾ ਨਾਮ *",
+  "pincode": "ਪਿਨ ਕੋਡ *",
+  "district": "ਜਿਲਾ *",
 
   "area_of_land": "ਜ਼ਮੀਨ ਦਾ ਖੇਤਰਫਲ *",
   "in_kanal": "ਕਨਾਲ ਵਿੱਚ",

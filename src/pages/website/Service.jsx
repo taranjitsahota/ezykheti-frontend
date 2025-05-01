@@ -30,112 +30,111 @@ import { useTranslation } from "react-i18next";
 const cardData = [
   {
     image: Cultivator,
-    title: "Cultivator",
+    titleKey: "cultivator",
     price: "Rs. 90 per Kanal",
-    description:
-      "Rs. 90 per Kanal",
+    descriptionKey: "cultivator_price",
   },
   {
     image: Trolley,
-    title: "Trolley With PTO",
-    description:
-      "Rs. 300 per Km",
+    titleKey: "trolley_with_pto",
+    price: "Rs. 300 per Km",
+    descriptionKey: "trolley_with_pto_price",
   },
   {
     image: TATA207,
-    title: "TATA 207",
-    description:
-      "Rs. 600 upto 5 Kilometers",
+    titleKey: "tata_207",
+    price: "Rs. 600 upto 5 Kilometers",
+    descriptionKey: "tata_207_price",
   },
   {
     image: SugarcaneHarvester,
-    title: "Sugarcane Harvester",
-    description:
-      "Rs. 90 per Quintal with transportation to mill",
+    titleKey: "sugarcane_harvester1",
+    price: "Rs. 90 per Quintal with transportation to mill",
+    descriptionKey: "sugarcane_harvester_price1",
   },
   {
     image: Shaktiman_Rotavator,
-    title: "Rotavator",
-    description:
-      "Rs. 600 for 30 mins",
+    titleKey: "rotavator1",
+    price: "Rs. 600 for 30 mins",
+    descriptionKey: "rotavator_price1",
   },
   {
     image: PTOTrolley,
-    title: "PTOTrolley",
-    description:
-      "Rs. 300 per Km",
+    titleKey: "pto_trolley",
+    price: "Rs. 300 per Km",
+    descriptionKey: "pto_trolley_price",
   },
   {
     image: pneumaticplanter,
-    title: "Pneumati Planter",
-    description:
-      "Rs. 160 per Kanal",
+    titleKey: "pneumatic_planter",
+    price: "Rs. 160 per Kanal",
+    descriptionKey: "pneumatic_planter_price",
   },
   {
     image: PotatoHarvester,
-    title: "Automatic Potato Digger and Loader",
-    description:
-      "Rs. 250 per Kanal",
+    titleKey: "automatic_potato_digger_and_loader",
+    price: "Rs. 250 per Kanal",
+    descriptionKey: "automatic_potato_digger_and_loader_price",
   },
   {
     image: discharrow,
-    title: "Disc Harrow",
-    description:
-      "Rs. 125 per Kanal",
+    titleKey: "disc_harrow",
+    price: "Rs. 125 per Kanal",
+    descriptionKey: "disc_harrow_price",
   },
   {
     image: CropSprayingDrone,
-    title: "Drone Spraying",
-    description:
-      "Rs. 800 per Acre",
+    titleKey: "drone_spraying",
+    price: "Rs. 800 per Acre",
+    descriptionKey: "drone_spraying_price",
   },
   {
     image: Combine,
-    title: "Combine Harvester",
-    description:
-      "Wheat: Rs. 2000 per Acre, Paddy: Rs. 2200 per Acre",
+    titleKey: "combine_harvester",
+    price: "Wheat: Rs. 2000 per Acre, Paddy: Rs. 2200 per Acre",
+    descriptionKey: "combine_harvester_price",
   },
   {
     image: superseeder,
-    title: "Super Seeder",
-    description:
-      "Rs. 250 per Kanal",
+    titleKey: "super_seeder1",
+    price: "Rs. 250 per Kanal",
+    descriptionKey: "super_seeder_price1",
   },
   {
     image: BoomSprayer,
-    title: "Tractor Mounted Boom Sprayer",
-    description:
-      "TBC",
+    titleKey: "tractor_mounted_boom_sprayer",
+    price: "TBC",
+    descriptionKey: "tractor_mounted_boom_sprayer_price",
   },
   {
     image: Riceplanter,
-    title: "Rice Planter",
-    description:
-      "TBC",
+    titleKey: "rice_planter",
+    price: "TBC",
+    descriptionKey: "rice_planter_price",
   },
   {
     image: PotatoPlanter,
-    title: "Potato Planter",
-    description:
-      "Rs. 250 per Kanal",
+    titleKey: "potato_planter",
+    price: "Rs. 250 per Kanal",
+    descriptionKey: "potato_planter_price",
   },
   {
     image: BalerRectangular,
-    title: "Baler Rectangular",
-    description:
-      "TBC",
+    titleKey: "baler_rectangular",
+    price: "TBC",
+    descriptionKey: "baler_rectangular_price",
   },
   {
     image: sugarcanetrench,
-    title: "Sugar Cane Trench",
-    description:
-      "Rs. 100 per Kanal",
+    titleKey: "sugar_cane_trench",
+    price: "Rs. 100 per Kanal",
+    descriptionKey: "sugar_cane_trench_price",
   },
   {
     image: SugarcaneTrencher,
-    title: "Sugar Cane Trencher",
-    description:
-      "Rs. 100 per Kanal",
+    titleKey: "sugar_cane_trencher",
+    price: "Rs. 100 per Kanal",
+    descriptionKey: "sugar_cane_trencher_price",
   },
 ];
 
@@ -241,8 +240,8 @@ const Service = () => {
           <Cards
             key={index}
             image={card.image}
-            title={card.title}
-            description={card.description}
+            title={card.titleKey}
+            description={card.descriptionKey}
           />
         ))}
       </div>

@@ -14,7 +14,7 @@ import {
   FaMapMarkerAlt,
   FaWhatsapp,
 } from "react-icons/fa";
-import logo from "../assets/images/logo/logo2.png";
+import logo from "../assets/images/logo/logo.png";
 import ContactModal from "./Modal";
 import LearnMoreModal from "./LearnMoreModal";
 import { Typewriter } from "react-simple-typewriter";

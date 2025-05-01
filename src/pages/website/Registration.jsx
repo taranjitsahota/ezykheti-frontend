@@ -98,7 +98,7 @@ const Registration = () => {
             <div>
               <input
                 type="text"
-                placeholder={t("District")}
+                placeholder={t("district")}
                 className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
               />
             </div>

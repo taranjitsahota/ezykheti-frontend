@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/images/logo/Logo.png";
+import logo from "../assets/images/logo/logo-2.png";
 import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
@@ -15,10 +15,10 @@ const Footer = () => {
         <img
           src={logo}
           alt="RS Goa Car Rental Logo"
-          className="max-w-[150px] md:max-w-[120px] h-auto transition-transform duration-300 hover:scale-105"
+          className="max-w-[190px] md:max-w-[190px] h-auto transition-transform duration-300 hover:scale-105"
         />
       </div>
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="footer-section">
             <h3 className="text-lg font-semibold mb-4 border-b border-gray-600 pb-2">
@@ -105,35 +105,15 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* <div className="footer-section">
-            <h3 className="text-lg font-semibold mb-4 border-b border-gray-600 pb-2">
-              Newsletter
-            </h3>
-            <p className="text-black mb-4">
-              Subscribe to our newsletter for exclusive deals and updates.
-            </p>
-            <form className="flex">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="bg-gray-700 text-white rounded-l-md p-2 w-3/4 focus:outline-none"
-              />
-              <button
-                type="button"
-                className="bg-blue-600 hover:bg-blue-700 text-white rounded-r-md p-2 w-1/2"
-              >
-                Subscribe
-              </button>
-            </form>
-          </div> */}
+          
         </div>
       </div>
-      <div className="flex flex-col md:flex-row justify-center items-center text-center mt-8 border-t border-gray-600 pt-8 gap-4 md:gap-6">
+      <div className="flex flex-col md:flex-row justify-center items-center text-center mt-8 mb-4 border-t border-gray-600 pt-8 gap-4 md:gap-8">
         <p className="text-black">
           &copy; {new Date().getFullYear()} Ezykheti Agri Services Pvt Ltd. All
           rights reserved.
         </p>
-        <div className="flex gap-4">
+        <div className="flex gap-6">
           <Link to="/privacy" className="text-black hover:text-white">
             Privacy Policy
           </Link>

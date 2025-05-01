@@ -1,17 +1,141 @@
 @import "tailwindcss";
 
+
 @layer base {
-  body {
-    background-color: #f2f2f2;
-    font-family: 'DM Sans', sans-serif;
+
+  .opacity-md {
+    opacity: 0.2 !important;
   }
+
+  .MuiDrawer-root > .MuiBackdrop-root {
+    opacity: 0 !important;
+  }
+
+  .MuiPaper-root {
+    background-color: #F4F7F6 !important; /* This could override your drawer style */
+  }
+  
+  .site-wrapper {
+    background-color: #f2f2f2;
+    font-family: 'Inter Tight', sans-serif;
+    --primary-color: #00B86C;
+    --dark-charcoal: #222222;
+    --gray-tone: #4C4C4C;
+    --light-gray: #F2F2F2;
+
+    color: var(--dark-charcoal);
+    line-height: 1.7;
+  }
+
+  .admin-wrapper {
+    background-color: #F4F7F6;
+    /* font-family: 'DM Sans', sans-serif; */
+    font-family: 'Inter Tight', sans-serif;
+  
+    --primary-color: #417505;
+    --warning-color: #F5A623; 
+    --danger-color: #D41C32;
+    --heading-color: #222222;      
+    --menu-color: #4C4C4C;
+    --placeholder-color: #C5C5C5;
+    --light-bg-color: #F4F7F6;
+    --sidebar-bg-color: #F9F9F9;
+    --border-bg-color: #D5D5D5;
+  }
+  .admin-wrapper h1, .admin-wrapper th {
+    color: var(--heading-color);
+  }
+  
+  .admin-wrapper label,
+  .admin-wrapper .menu,
+  .admin-wrapper .table-item {
+    color: var(--menu-color);
+  }
+  
+  .admin-wrapper input::placeholder {
+    color: var(--placeholder-color);
+  }
+  
+  .admin-wrapper .btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  .admin-wrapper .btn-warning {
+    background-color: var(--warning-color);
+    color: white;
+  }
+  
+  .admin-wrapper .btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+  }
+  .admin-wrapper input::placeholder {
+  color: var(--placeholder-color);
+  opacity: 1;
+}
+
+.admin-wrapper input {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--menu-color);
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+.admin-wrapper label {
+  color: var(--heading-color);
+  font-weight: 600;
+}
+
+.admin-wrapper .input-wrapper {
+  border: 1px solid #a6a6a6;
+  border-radius: 12px;
+  padding: 0.5rem 0.75rem;
+  transition: border-color 0.2s ease;
+}
+
+
+
+
+
+
+.admin-wrapper .input-wrapper:hover {
+  border-color: var(--primary-color);
+}
+
+.admin-wrapper .btn-submit {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  width: 100%;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.admin-wrapper .btn-submit:hover {
+  background-color: #336703;
+}
+
+.admin-wrapper .forgot-link {
+  color: var(--primary-color);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: inline-block;
+}
+
 }
 
 body {
   /* font-family: 'Outfit', sans-serif; */
   /* font-weight: 300; */
-  /* letter-spacing: 0.05em; */
-  line-height: 1.7;
+  letter-spacing: 0.02em;
+  line-height: 1.9;
 }
 body, html {
   overflow-x: hidden;

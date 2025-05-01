@@ -20,6 +20,7 @@ import Service from "./pages/website/Service";
 import { useTranslation } from "react-i18next";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Admins from "./pages/adminportal/admins";
 
 
 function App() {
@@ -98,6 +99,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admins"
+            element={
+              <ProtectedRoute>
+                <Admins />
               </ProtectedRoute>
             }
           />

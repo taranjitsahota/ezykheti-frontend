@@ -173,7 +173,9 @@
   "cultivation_equipment": "Cultivation Equipment",
   "cultivation_equipment_description": "Super Seeders,Rotavators,Disc Harrows, Cultivators, Potato Planters,Pneumatic Planters,Automatic Paddy Planters",
 
-  "_Pricing_Page": "**********************************************************Pricing Page****************************************************************",
+  "cultivator1": "cultivator",
+
+  "_Pricing_Page": "**********************************************************Pricing and Services Page****************************************************************",
 
   "annual_subscription_plans": "Annual Subscription Plans",
 
@@ -286,6 +288,51 @@
   "additional_mileage_charge_price": "Rs. 50 per Km",
   "additional_mileage_charge_conditions": "Beyond 5 Kilometers",
 
+  "trolley_with_pto": "Trolley With PTO",
+  "trolley_with_pto_price": "Rs. 300 per Km",
+
+  "tata_207": "TATA 207",
+  "tata_207_price": "Rs. 600 upto 5 Kilometers",
+
+  "sugarcane_harvester1": "Sugarcane Harvester",
+  "sugarcane_harvester_price1": "Rs. 90 per Quintal with transportation to mill",
+
+  "rotavator1": "Rotavator",
+  "rotavator_price1": "Rs. 600 for 30 mins",
+
+  "pto_trolley": "PTO Trolley",
+  "pto_trolley_price": "Rs. 300 per Km",
+
+  "automatic_potato_digger_and_loader": "Automatic Potato Digger and Loader",
+  "automatic_potato_digger_and_loader_price": "Rs. 250 per Kanal",
+
+  "disc_harrow": "Disc Harrow",
+  "disc_harrow_price": "Rs. 125 per Kanal",
+
+  "drone_spraying": "Drone Spraying",
+  "drone_spraying_price": "Rs. 800 per Acre",
+
+  "combine_harvester": "Combine Harvester",
+  "combine_harvester_price": "Wheat: Rs. 2000 per Acre, Paddy: Rs. 2200 per Acre",
+
+  "super_seeder1": "Super Seeder",
+  "super_seeder_price1": "Rs. 250 per Kanal",
+
+  "tractor_mounted_boom_sprayer": "Tractor Mounted Boom Sprayer",
+  "tractor_mounted_boom_sprayer_price": "TBC",
+
+  "rice_planter": "Rice Planter",
+  "rice_planter_price": "TBC",
+
+  "baler_rectangular": "Baler Rectangular",
+  "baler_rectangular_price": "TBC",
+
+  "sugar_cane_trench": "Sugar Cane Trench",
+  "sugar_cane_trench_price": "Rs. 100 per Kanal",
+
+  "sugar_cane_trencher": "Sugar Cane Trencher",
+  "sugar_cane_trencher_price": "Rs. 100 per Kanal",
+
   "download_rate_pdf_link": "Download Rates PDF",
 
   "_Registration_Page": "**********************************************************Registration Page****************************************************************",
@@ -299,7 +346,7 @@
   "email_optional": "Email (Optional)",
   "village_name": "Village Name *",
   "pincode": "Pin code *",
-  "District": "District *",
+  "district": "District *",
 
   "area_of_land": "Area of Land *",
   "in_kanal": "in Kanal",
