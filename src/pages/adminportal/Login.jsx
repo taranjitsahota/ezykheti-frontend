@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import logo from "../../assets/images/logo/logo.png";
+import logo from "../../assets/images/logo/Logo.png";
 import cover from "../../assets/images/login-page-cover.png";
 import vector from "../../assets/images/vector.png";
 import { useNavigate } from "react-router-dom";

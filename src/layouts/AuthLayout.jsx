@@ -1,6 +1,6 @@
 // src/layouts/AuthLayout.jsx
 import React from "react";
-import logo from "../assets/images/logo/logo.png";
+import logo from "../assets/images/logo/Logo.png";
 import cover from "../assets/images/login-page-cover.png";
 
 const AuthLayout = ({ children, title = "Welcome Back", subtitle = "Sign in to access your dashboard" }) => {

@@ -2,7 +2,7 @@ import React from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { Navlinks } from "./Navbar";
-import logo from "../assets/images/logo/logo.png";
+import logo from "../assets/images/logo/Logo.png";
 
 const ResponsiveMenu = ({ showMenu }) => {
   const { t } = useTranslation();
