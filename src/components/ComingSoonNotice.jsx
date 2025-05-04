@@ -7,7 +7,7 @@ const ComingSoonNotice = () => {
   if (!show) return null;
 
   return (
-    <div className="fixed bottom-140 right-4 max-w-xs bg-yellow-100 text-yellow-900 border border-yellow-300 shadow-lg p-4 rounded-xl z-50">
+    <div className="fixed bottom-120 right-4 max-w-xs bg-yellow-100 text-yellow-900 border border-yellow-300 shadow-lg p-4 rounded-xl z-50">
       <div className="flex justify-between items-start">
         <div>
           <p className="font-semibold">🚧 Coming Soon!</p>
