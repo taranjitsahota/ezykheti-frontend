@@ -4,11 +4,49 @@ import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
-export default function Anchor({ open, toggleDrawer, formContent }) {
-  const handleSubmit = (e) => {
+export default function Anchor({ open, toggleDrawer, formContent, add, handleSubmit, loading }) {
+  const internalHandleSubmit  = (e) => {
     e.preventDefault();
-    console.log("Form Submitted");
+    if (handleSubmit) handleSubmit(e);
+  };
+
+  const enhanceInputs = (elements) => {
+    return React.Children.map(elements, (child) => {
+      if (!React.isValidElement(child)) return child;
+
+      if (child.type === TextField) {
+        return (
+          <div className="admin-wrapper" style={{ marginBottom: "1rem" }}>
+            {React.cloneElement(child, {
+              variant: "standard",
+              InputProps: {
+                ...child.props.InputProps,
+                disableUnderline: true,
+                className: `${
+                  child.props.InputProps?.className || ""
+                } admin-textfield`,
+              },
+              InputLabelProps: {
+                ...child.props.InputLabelProps,
+                className: "admin-label",
+                shrink: true,
+              },
+            })}
+          </div>
+        );
+      }
+
+      if (child.props?.children) {
+        return React.cloneElement(child, {
+          children: enhanceInputs(child.props.children),
+        });
+      }
+
+      return child;
+    });
   };
 
   return (
@@ -16,37 +54,57 @@ export default function Anchor({ open, toggleDrawer, formContent }) {
       open={open}
       onClose={() => toggleDrawer(false)}
       anchor="right"
+      // disableScrollLock={true}
       sx={{
-        '& .MuiDrawer-paper': {
-          mt: '65px',
-          bgcolor: 'var(--sidebar-bg-color)',
-        //   bgcolor: 'background.paper',
-          backdropFilter: 'none',
-          zIndex: 1,
+        "& .MuiDrawer-paper": {
+          mt: "65px",
+          bgcolor: "var(--sidebar-bg-color)",
+          //   bgcolor: 'background.paper',
+          backdropFilter: "none",
+          width: { xs: "100%", sm: 500 },
+          zIndex: 1300,
           opacity: 1,
         },
       }}
     >
       <Box
+        className="admin-wrapper"
         sx={{
-          width: { xs: 250, sm: 400 },
-          padding: 2,
-          overflowY: 'auto', 
-          height: '100%',
+          width: { xs: 250, sm: 500 },
+          padding: 4,
+          overflowY: "auto",
+          height: "100%",
         }}
       >
-        <Typography variant="h6" gutterBottom>
-          Add Details
+        <Box sx={{ display: "flex", mb: 2 }}>
+        <IconButton
+          onClick={() => toggleDrawer(false)}
+          sx={{
+            border: "2px solid var(--warning-color)",
+            color: "var(--warning-color)",
+            borderRadius: "50%",
+            width: 32,
+            height: 32,
+          }}
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+        </Box>
+        <Typography variant="h6" gutterBottom sx={{ mb: 4 }} >
+          {add}
         </Typography>
-        <form onSubmit={handleSubmit}>
-        {formContent}
+        <form onSubmit={internalHandleSubmit}>
+          {enhanceInputs(formContent)}
+
           <Button
             type="submit"
             variant="contained"
             fullWidth
-            sx={{ mt: 2 }}
+            sx={{ mt: 2,padding: "12px" }}
+            className="btn-primary"
+            disabled={loading} 
           >
-            Submit
+            {loading ? "Submitting..." : "Submit"}
           </Button>
         </form>
       </Box>

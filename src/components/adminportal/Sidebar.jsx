@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import logo from "../../assets/images/logo/Logo.png";
+import logo from "../../assets/images/logo/Logo-icon.png";
 import {
   LayoutDashboard,
   User,
@@ -15,7 +15,7 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
     <aside
       ref={sidebarRef}
       className={`
-    w-28 admin-wrapper bg-[var(--sidebar-bg-color)] border-r border-[var(--border-bg-color)] fixed md:relative z-20 group transform transition-transform duration-300 ease-in-out z-30
+    w-28 fixed admin-wrapper bg-[var(--sidebar-bg-color)] border-r border-[var(--border-bg-color)] fixed md:relative z-20 group transform transition-transform duration-300 ease-in-out z-30
    ${isOpen ? "translate-x-0" : "-translate-x-full"}
    transition-transform duration-300 ease-in-out
     w-34
@@ -45,7 +45,7 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
         <img
           src={logo}
           alt="EzyKheti Logo"
-          className="h-14 transition-all duration-300 ease-in-out group-hover:block"
+          className="h-16 transition-all duration-300 ease-in-out group-hover:block"
         />
       </div>
       <div className="p-2">
@@ -53,7 +53,18 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
           {[
             { to: "/dashboard", icon: <LayoutDashboard />, label: "Dashboard" },
             { to: "/admins", icon: <User />, label: "Admins" },
-            { to: "/vehicles", icon: <Tractor />, label: "Vehicles" },
+            { to: "/areas", icon: <User />, label: "Areas" },
+            { to: "/assign-bookings", icon: <User />, label: "Assign Bookings" },
+            { to: "/business-timings", icon: <User />, label: "Buisness Timings" },
+            { to: "/crops", icon: <User />, label: "Crops" },
+            { to: "/drivers", icon: <User />, label: "Drivers" },
+            { to: "/interested-dashboard", icon: <User />, label: "Interested Dashboard" },
+            { to: "/my-bookings", icon: <User />, label: "My Bookings" },
+            { to: "/services", icon: <User />, label: "Services" },
+            { to: "/service-areas", icon: <User />, label: "Service Areas" },
+            // { to: "/admins", icon: <User />, label: "Admins" },
+            // { to: "/admins", icon: <User />, label: "Admins" },
+            { to: "/users", icon: <Tractor />, label: "Users" },
             {
               to: "/attachments",
               icon: <Puzzle />,

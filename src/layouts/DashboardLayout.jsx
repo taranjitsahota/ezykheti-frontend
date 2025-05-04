@@ -11,6 +11,8 @@ const DashboardLayout = ({
   add = "add",
   showAddButton = true,
   formContent,
+  handleSubmit,
+  submitloading,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -57,35 +59,50 @@ const DashboardLayout = ({
           }`}
           style={{ opacity: 1 }}
         >
-          <div className="flex items-center justify-between mb-6">
-            <div className="relative inline-block">
-              <h1 className="text-3xl text-gray-900">{pageTitle}</h1>
-              <div className="absolute left-0 bottom-0 w-16 h-1 bg-gradient-to-r from-[var(--primary-color)] to-[var(--warning-color)] w-full rounded-full"></div>
+          <div
+            className={`transition-all ${
+              open ? "transform translate-x-0" : ""
+            }`}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div className="relative inline-block">
+                <h1 className="text-3xl text-gray-900">{pageTitle}</h1>
+                <div className="absolute left-0 bottom-0 w-16 h-1 bg-gradient-to-r from-[var(--primary-color)] to-[var(--warning-color)] w-full rounded-full"></div>
+              </div>
+
+              <div className="flex gap-4">
+                {showAddButton && (
+                  <span
+                    className="flex rounded-full px-4 py-2 hover:text-white border border-gray-300 cursor-pointer items-center gap-2"
+                    onClick={() => toggleDrawer(true)}
+                  >
+                    <Circle className="w-5 h-5 text-[var(--warning-color)]">
+                      <Plus />
+                    </Circle>
+                    <span className="text-sm font-medium text-gray-900">
+                      {add}
+                    </span>{" "}
+                  </span>
+                )}
+                <Anchor
+                  open={open}
+                  toggleDrawer={toggleDrawer}
+                  formContent={formContent}
+                  add={add}
+                  handleSubmit={handleSubmit}
+                  loading={submitloading}
+                />
+                <button className="flex items-center gap-2 px-4 py-2 rounded-full hover:text-white border border-gray-300 cursor-pointer transition-colors duration-200">
+                  <Filter className="w-4 h-4 text-[var(--warning-color)]" />
+                  <span className="text-sm font-medium text-gray-900">
+                    Filter
+                  </span>
+                </button>
+              </div>
             </div>
 
-            <div className="flex gap-4">
-            {showAddButton && (
-              <span
-                className="flex rounded-full px-4 py-2 hover:text-white border border-gray-300 cursor-pointer items-center gap-2"
-                onClick={() => toggleDrawer(true)}
-              >
-                <Circle className="w-5 h-5 text-[var(--warning-color)]">
-                  <Plus />
-                </Circle>
-                <span className="text-sm font-medium text-gray-900">{add}</span>{" "}
-              </span>
-              )}
-              <Anchor open={open} toggleDrawer={toggleDrawer} formContent={formContent} />
-              <button className="flex items-center gap-2 px-4 py-2 rounded-full hover:text-white border border-gray-300 cursor-pointer transition-colors duration-200">
-                <Filter className="w-4 h-4 text-[var(--warning-color)]" />
-                <span className="text-sm font-medium text-gray-900">
-                  Filter
-                </span>
-              </button>
-            </div>
+            {children}
           </div>
-
-          {children}
         </main>
       </div>
     </div>

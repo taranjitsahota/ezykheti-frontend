@@ -31,7 +31,7 @@
     background-color: #F4F7F6;
     /* font-family: 'DM Sans', sans-serif; */
     font-family: 'Inter Tight', sans-serif;
-  
+    
     --primary-color: #417505;
     --warning-color: #F5A623; 
     --danger-color: #D41C32;
@@ -57,8 +57,8 @@
   }
   
   .admin-wrapper .btn-primary {
-    background-color: var(--primary-color);
-    color: white;
+    background-color: var(--primary-color) !important;
+    color: white !important;
   }
   
   .admin-wrapper .btn-warning {
@@ -96,6 +96,28 @@
 }
 
 
+.admin-textfield {
+  background-color: white;
+  border: 1px solid #D5D5D5;
+  border-radius: 14px;
+  padding: 6px;
+  font-size: 16px;
+  margin-top: 28px !important;
+  /* border: none !important; */
+}
+
+.admin-label {
+  font-weight: 500 !important;
+  /* margin-bottom: 60px !important; */
+  display: block !important;
+  font-size: 22px !important;
+  color: #333 !important;
+  padding: 0px !important;
+  /* letter-spacing: 1px !important; */
+}
+/* .input-wrapper {
+  margin-bottom: 1.5rem;
+} */
 
 
 
@@ -144,6 +166,7 @@ body, html {
 
 html {
   scroll-behavior: smooth;
+  overflow-y: scroll;
 }
 
 /* Fix alignment issues */

@@ -1,17 +1,32 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Login from "./pages/adminportal/Login";
 import Home from "./pages/website/Home";
 import Registration from "./pages/website/Registration";
 import About from "./pages/website/About";
 import Pricing from "./pages/website/Pricing";
-import Register from "./pages/adminportal/Register";
-import ForgotPassword from "./pages/adminportal/ForgotPassword";
-import SendOTP from "./pages/adminportal/SendOtp";
-import VerifyOTP from "./pages/adminportal/VerifyOtp";
-import ResetPassword from "./pages/adminportal/ResetPassword";
+import ComingSoonNotice from "./components/ComingSoonNotice";
+
+import Admins from "./pages/adminportal/admins";
+import Areas from "./pages/adminportal/Areas";
+import AssignBookings from "./pages/adminportal/AssignBookings";
+import BusinessTimings from "./pages/adminportal/BusinessTimings";
+import Crops from "./pages/adminportal/Crops";
 import Dashboard from "./pages/adminportal/Dashboard";
+import Drivers from "./pages/adminportal/Drivers";
+import ForgotPassword from "./pages/adminportal/ForgotPassword";
+import InterestedDashboard from "./pages/adminportal/InterestedDashboard";
+import Login from "./pages/adminportal/Login";
+import Mybookings from "./pages/adminportal/MyBookings";
+import Register from "./pages/adminportal/Register";
+import ResetPassword from "./pages/adminportal/ResetPassword";
+import SendOTP from "./pages/adminportal/SendOtp";
+import Services from "./pages/adminportal/Services";
+import ServiceAreas from "./pages/adminportal/ServiceAreas";
+import Users from "./pages/adminportal/Users";
+import VerifyOTP from "./pages/adminportal/VerifyOtp";
+
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useEffect, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,8 +35,6 @@ import Service from "./pages/website/Service";
 import { useTranslation } from "react-i18next";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Admins from "./pages/adminportal/admins";
-
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -75,17 +88,38 @@ function App() {
     "/pricing",
   ];
 
+  const protectedRoutes = [
+    { path: "/admins", element: <Admins /> },
+    { path: "/areas", element: <Areas /> },
+    { path: "/assign-bookings", element: <AssignBookings /> },
+    { path: "/business-timings", element: <BusinessTimings /> },
+    { path: "/crops", element: <Crops /> },
+    { path: "/dashboard", element: <Dashboard /> },
+    { path: "/drivers", element: <Drivers /> },
+    { path: "/interested-dashboard", element: <InterestedDashboard /> },
+    { path: "/my-bookings", element: <Mybookings /> },
+    { path: "/services", element: <Services /> },
+    { path: "/service-areas", element: <ServiceAreas /> },
+    { path: "/users", element: <Users /> },
+    // { path: "/admins", element: <Admins /> },
+    // { path: "/admins", element: <Admins /> },
+    // { path: "/admins", element: <Admins /> },
+    // { path: "/admins", element: <Admins /> },
+    // add more protected routes here
+  ];
+
   const showHeaderFooter = showHeaderFooterRoutes.includes(location.pathname);
 
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
+      <ComingSoonNotice />
       <Suspense fallback={<div>Loading...</div>}>
         {showHeaderFooter && <Navbar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/registration" element={<Registration />} />
-          <Route path="/services" element={<Service />} />
+          <Route path="/service" element={<Service />} />
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/admin" element={<Login />} />
@@ -94,22 +128,14 @@ function App() {
           <Route path="/send-otp" element={<SendOTP />} />
           <Route path="/verify-otp" element={<VerifyOTP />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admins"
-            element={
-              <ProtectedRoute>
-                <Admins />
-              </ProtectedRoute>
-            }
-          />
+          {protectedRoutes.map(({ path, element }) => (
+            <Route
+              key={path}
+              path={path}
+              element={<ProtectedRoute>{element}</ProtectedRoute>}
+            />
+          ))}
+          
         </Routes>
         {showHeaderFooter && <Footer />}
       </Suspense>
