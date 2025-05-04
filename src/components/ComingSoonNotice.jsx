@@ -7,15 +7,18 @@ const ComingSoonNotice = () => {
   if (!show) return null;
 
   return (
-    <div className="fixed bottom-120 right-4 max-w-xs bg-yellow-100 text-yellow-900 border border-yellow-300 shadow-lg p-4 rounded-xl z-50">
-      <div className="flex justify-between items-start">
-        <div>
-          <p className="font-semibold">🚧 Coming Soon!</p>
-          <p className="text-sm">We’re working on something awesome. This website is under development. Starting the Services Very soon.</p>
+    <div className="fixed bottom-4 right-4 w-[90%] sm:w-80 bg-yellow-100 text-yellow-900 border border-yellow-300 shadow-lg p-4 rounded-xl z-50">
+      <div className="flex justify-between items-start space-x-2">
+        <div className="text-sm sm:text-base">
+          <p className="font-semibold text-base sm:text-lg">🚧 Coming Soon!</p>
+          <p className="text-sm">
+            We’re working on something awesome. This website is under development. Starting the services very soon.
+          </p>
         </div>
         <button
           onClick={() => setShow(false)}
-          className="text-yellow-900 hover:text-yellow-700 ml-2"
+          className="text-yellow-900 hover:text-yellow-700 text-lg"
+          aria-label="Close"
         >
           ✖
         </button>
