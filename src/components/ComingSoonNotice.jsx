@@ -11,7 +11,7 @@ const ComingSoonNotice = () => {
       <div className="flex justify-between items-start">
         <div>
           <p className="font-semibold">🚧 Coming Soon!</p>
-          <p className="text-sm">We’re working on something awesome. This website is under development.</p>
+          <p className="text-sm">We’re working on something awesome. This website is under development. Starting the Services Very soon.</p>
         </div>
         <button
           onClick={() => setShow(false)}
