@@ -83,7 +83,7 @@ function App() {
   const showHeaderFooterRoutes = [
     "/",
     "/registration",
-    "/services",
+    "/service",
     "/about",
     "/pricing",
   ];

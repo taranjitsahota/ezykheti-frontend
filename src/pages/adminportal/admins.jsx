@@ -11,13 +11,50 @@ import { Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 import { Eye, EyeOff } from "lucide-react";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
+import Anchor from "../../components/adminportal/Anchor";
 
 const Admins = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
+
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [formData, setFormData] = useState({});
+
+  const toggleDrawer = (value) => setDrawerOpen(value);
+  const add = "Edit Admin";
+
+  const handleSubmit = async () => {
+    try {
+      setSubmitLoading(true);
+
+      const response = await apiRequest({
+        url: isEditMode
+          ? `/update-admin/${formData.id}` // replace with your actual edit API URL
+          : "/register-superadmin-admin",
+        method: isEditMode ? "put" : "post",
+        data: formData,
+      });
+
+      if (response.success) {
+        toast.success(
+          isEdit ? "Admin updated successfully!" : "Admin created successfully!"
+        );
+        setDrawerOpen(false);
+        setIsEditMode(false); // reset edit mode
+        handleAdminList(); // refresh table
+      } else {
+        toast.error(response.message || "Failed to submit.");
+      }
+    } catch (error) {
+      const msg = error?.response?.data?.message || "Something went wrong.";
+      toast.error(msg);
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-
 
     const data = {
       name: formData.get("name"),
@@ -64,7 +101,36 @@ const Admins = () => {
     { field: "email", headerName: "Email", width: 200 },
     { field: "contact_number", headerName: "Contact", width: 150 },
     { field: "role", headerName: "Role", width: 100 },
+    {
+      field: "action",
+      headerName: "Action Button",
+      width: 150,
+      renderCell: (params) => (
+        <button
+          onClick={() => {
+            setIsEditMode(true);
+            setFormData(params.row); // row = your current row data
+            toggleDrawer(true); // open anchor
+          }}
+          className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
+        >
+          Edit
+        </button>
+      ),
+    },
   ];
+
+  // const handleEdit = (row) => {
+  //   console.log("Edit row: ", row);
+  //   // Optionally set form values and open drawer:
+  //   setDrawerOpen(true);
+  //   // Set data to form if needed using refs or state
+  // };
+
+  // const handleEdit = (rowData) => {
+  //   setEditingData(rowData);
+  //   setIsEditOpen(true);
+  // };
 
   const token = localStorage.getItem("auth_token");
   const handleAdminList = async () => {
@@ -226,6 +292,104 @@ const Admins = () => {
     </>
   );
 
+  const adminFormContentEdit = (
+    <>
+      <TextField
+        label="Name"
+        placeholder="Enter name"
+        name="name"
+        defaultValue={formData.name || ""}
+        fullWidth
+        required
+      />
+      <TextField
+        label="Email"
+        placeholder="Enter email"
+        name="email"
+        type="email"
+        defaultValue={formData.email || ""}
+        fullWidth
+        required
+      />
+      <TextField
+        placeholder="Enter contact number"
+        label="Contact Number"
+        name="contact_number"
+        defaultValue={formData.contact_number || ""}
+        fullWidth
+        required
+      />
+      <TextField
+        placeholder="Enter Password"
+        label="Password"
+        name="password"
+        fullWidth
+        required={!isEditMode}
+        type={showPassword ? "text" : "password"}
+        variant="standard"
+        defaultValue={formData.password || ""}
+        InputProps={{
+          disableUnderline: true,
+          className: "admin-textfield",
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() => setShowPassword(!showPassword)}
+                edge="end"
+                className="ml-2 cursor-pointer"
+              >
+                {showPassword ? (
+                  <EyeOff size={20} className="text-gray-600" />
+                ) : (
+                  <Eye size={20} className="text-gray-600" />
+                )}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+        InputLabelProps={{
+          className: "admin-label",
+          shrink: true,
+        }}
+      />
+  
+      <TextField
+        placeholder="Confirm Password"
+        label="Confirm Password"
+        name="confirm_password"
+        fullWidth
+        required={!isEditMode}
+        type={showConfirmPassword ? "text" : "password"}
+        variant="standard"
+        defaultValue={formData.confirm_password || ""}
+        InputProps={{
+          disableUnderline: true,
+          className: "admin-textfield",
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                edge="end"
+                className="ml-2 cursor-pointer"
+              >
+                {showConfirmPassword ? (
+                  <EyeOff size={20} className="text-gray-600" />
+                ) : (
+                  <Eye size={20} className="text-gray-600" />
+                )}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+        InputLabelProps={{
+          className: "admin-label",
+          shrink: true,
+        }}
+      />
+    </>
+  );
+  
+
   return (
     <DashboardLayout
       pageTitle="Admins"
@@ -234,6 +398,23 @@ const Admins = () => {
       handleSubmit={handleFormSubmit}
       submitLoading={submitLoading}
     >
+    <div
+          className={`flex-1 overflow-y-auto ${
+            drawerOpen ? "opacity-md transition-filter duration-300" : ""
+          }`}
+          style={{ opacity: 1 }}
+        >
+      <Anchor
+        open={drawerOpen}
+        toggleDrawer={toggleDrawer}
+        formContent={adminFormContentEdit}
+        add={add}
+        handleSubmit={handleSubmit}
+        loading={submitLoading}
+        formData={formData}
+        isEdit={isEditMode}
+      />
+
       <BasicTable rows={rows} columns={columns} loading={loading} />
 
       {/* <Button
@@ -244,7 +425,9 @@ const Admins = () => {
         Add Admin
       </Button>
       <Anchor open={drawerOpen} toggleDrawer={setDrawerOpen} formContent={adminFormContent} /> */}
+    </div>
     </DashboardLayout>
+
   );
 };
 

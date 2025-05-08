@@ -2,18 +2,11 @@ import React, { useRef, useState, useEffect } from "react";
 import { BiSolidSun, BiSolidMoon } from "react-icons/bi";
 import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
 import ResponsiveMenu from "./ResponsiveMenu";
-import { Link ,NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { Globe, ChevronDown } from "lucide-react";
-import {
-  FaFacebook,
-  FaTwitter,
-  FaInstagram,
-  FaYoutube,
-  FaEnvelope,
-  FaPhone,
-  FaMapMarkerAlt,
-  FaWhatsapp,
-} from "react-icons/fa";
+import { Mail, Phone, X } from "lucide-react";
+import { FaFacebook, FaInstagram, FaYoutube, FaWhatsapp } from "react-icons/fa";
+
 import logo from "../assets/images/logo/Logo.png";
 import ContactModal from "./Modal";
 import LearnMoreModal from "./LearnMoreModal";
@@ -23,7 +16,7 @@ import { useTranslation } from "react-i18next";
 export const Navlinks = [
   { id: 1, nameKey: "home_link", link: "/" },
   { id: 3, nameKey: "about_us_menu_link", link: "/about" },
-  { id: 2, nameKey: "services_menu_link", link: "/services" },
+  { id: 2, nameKey: "services_menu_link", link: "/service" },
   { id: 4, nameKey: "pricing_menu_link", link: "/pricing" },
   { id: 4, nameKey: "registration_menu_link", link: "/registration" },
 ];
@@ -94,14 +87,14 @@ const Navbar = () => {
             href="tel:+916239007239"
             className="flex items-center space-x-1 text-gray-800 hover:text-blue-500 transition"
           >
-            <FaPhone />
+            <Phone />
             <span>+91 62390 07239</span>
           </a>
           <a
             href="mailto:admin@ezykheti.com"
             className="flex items-center space-x-1 text-gray-800 hover:text-red-500 transition"
           >
-            <FaEnvelope />
+            <Mail />
             <span>admin@ezykheti.com</span>
           </a>
           <a
@@ -110,7 +103,7 @@ const Navbar = () => {
             rel="noopener noreferrer"
             className="flex items-center space-x-1 text-gray-800 hover:text-green-500 transition"
           >
-            <FaWhatsapp />
+            <FaWhatsapp className="w-5 h-5" />
             <span>WhatsApp</span>
           </a>
         </div>
@@ -131,14 +124,32 @@ const Navbar = () => {
         </div>
         <div className="flex items-center space-x-4">
           {[
-            { icon: FaFacebook, color: "text-blue-500" },
-            { icon: FaTwitter, color: "text-sky-400" },
-            { icon: FaInstagram, color: "text-pink-500" },
-            { icon: FaYoutube, color: "text-red-500" },
-          ].map(({ icon: Icon, color }, idx) => (
+            {
+              icon: FaFacebook,
+              color: "text-blue-500",
+              link: "https://www.facebook.com/share/1HPz1mQXoL/",
+            },
+            {
+              icon: X,
+              color: "text-black-400",
+              link: "https://x.com/EzyKheti",
+            },
+            {
+              icon: FaInstagram,
+              color: "text-pink-500",
+              link: "https://www.instagram.com/ezykheti/",
+            },
+            {
+              icon: FaYoutube,
+              color: "text-red-500",
+              link: "https://www.youtube.com/@ezykheti",
+            },
+          ].map(({ icon: Icon, color, link }, idx) => (
             <a
               key={idx}
-              href="#"
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
               className={`inline-flex ${color} text-lg hover:scale-110 transition-transform duration-300 ease-in-out`}
             >
               <Icon className="w-4 h-4" />
@@ -152,17 +163,17 @@ const Navbar = () => {
       <div className="bg-white flex justify-between items-center py-4 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 border-b border-gray-300">
         {/* Logo */}
         <Link to="/">
-  <div
-    data-aos="zoom-in"
-    className="transition duration-300 hover:scale-105"
-  >
-    <img
-      src={logo}
-      alt="Ezykheti"
-      className="max-w-[150px] md:max-w-[190px] h-auto transition-transform duration-300 hover:scale-105"
-    />
-  </div>
-</Link>
+          <div
+            data-aos="zoom-in"
+            className="transition duration-300 hover:scale-105"
+          >
+            <img
+              src={logo}
+              alt="Ezykheti"
+              className="max-w-[150px] md:max-w-[190px] h-auto transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+        </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-4">
@@ -179,33 +190,30 @@ const Navbar = () => {
               {t(nameKey)}
             </NavLink>
           ))}
-          
         </nav>
-          <div className="relative sm:block" ref={dropdownRef}>
-            <button
-              onClick={toggleDropdown}
-              className="flex items-center gap-1 px-3 py-2 text-sm md:text-base border border-gray-300 rounded hover:bg-gray-100 transition-all"
-            >
-              <Globe className="w-4 h-4" />
-              <span>
-                {languages.find((l) => l.code === selectedLang)?.label}
-              </span>
-              <ChevronDown className="w-4 h-4" />
-            </button>
-            {open && (
-              <ul className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-md z-10">
-                {languages.map(({ code, label }) => (
-                  <li
-                    key={code}
-                    onClick={() => handleSelect(code)}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
-                  >
-                    {label}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+        <div className="relative sm:block" ref={dropdownRef}>
+          <button
+            onClick={toggleDropdown}
+            className="flex items-center gap-1 px-3 py-2 text-sm md:text-base border border-gray-300 rounded hover:bg-gray-100 transition-all"
+          >
+            <Globe className="w-4 h-4" />
+            <span>{languages.find((l) => l.code === selectedLang)?.label}</span>
+            <ChevronDown className="w-4 h-4" />
+          </button>
+          {open && (
+            <ul className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-md z-10">
+              {languages.map(({ code, label }) => (
+                <li
+                  key={code}
+                  onClick={() => handleSelect(code)}
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                >
+                  {label}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
         <div className="flex hidden xl:flex items-center gap-4">
           <button
