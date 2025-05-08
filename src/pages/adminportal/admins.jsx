@@ -12,9 +12,13 @@ import { Eye, EyeOff } from "lucide-react";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Anchor from "../../components/adminportal/Anchor";
+import ConfirmModal from "../../components/adminportal/ConfirmModal";
 
 const Admins = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
+
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({});
@@ -22,13 +26,36 @@ const Admins = () => {
   const toggleDrawer = (value) => setDrawerOpen(value);
   const add = "Edit Admin";
 
+  const handleDelete = async () => {
+    if (!deleteId) return; // Ensure deleteId is available
+    
+    try {
+      console.log(deleteId);
+      const response = await apiRequest({
+        url: `/user/${deleteId}`, // Dynamic URL using deleteId
+        method: "delete",
+      });
+  
+      if (response.success) {
+        toast.success("Admin deleted successfully!");
+        handleAdminList(); // Refresh list of admins or any data
+      } else {
+        toast.error(response.message || "Failed to delete.");
+      }
+    } catch (error) {
+      const msg = error?.response?.data?.message || "Something went wrong.";
+      toast.error(msg);
+    }
+  };
+  
+
   const handleSubmit = async () => {
     try {
       setSubmitLoading(true);
 
       const response = await apiRequest({
         url: isEditMode
-          ? `/update-admin/${formData.id}` // replace with your actual edit API URL
+          ? `/user/${formData.id}` // replace with your actual edit API URL
           : "/register-superadmin-admin",
         method: isEditMode ? "put" : "post",
         data: formData,
@@ -106,16 +133,29 @@ const Admins = () => {
       headerName: "Action Button",
       width: 150,
       renderCell: (params) => (
-        <button
-          onClick={() => {
-            setIsEditMode(true);
-            setFormData(params.row); // row = your current row data
-            toggleDrawer(true); // open anchor
-          }}
-          className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
-        >
-          Edit
-        </button>
+        <div className="flex items-center gap-2 h-full">
+          <button
+            onClick={() => {
+              setIsEditMode(true);
+              setFormData(params.row); // row = your current row data
+              toggleDrawer(true); // open anchor
+            }}
+            className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
+          >
+            Edit
+          </button>
+
+          <button
+            // onClick={() => handleDelete(params.row.id)} // Call your delete function with row ID
+            onClick={() => {
+              setDeleteId(params.row.id);
+              setShowConfirm(true);
+            }}
+            className="bg-[#D24545] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
+          >
+            Delete
+          </button>
+        </div>
       ),
     },
   ];
@@ -352,7 +392,7 @@ const Admins = () => {
           shrink: true,
         }}
       />
-  
+
       <TextField
         placeholder="Confirm Password"
         label="Confirm Password"
@@ -388,7 +428,6 @@ const Admins = () => {
       />
     </>
   );
-  
 
   return (
     <DashboardLayout
@@ -398,26 +437,46 @@ const Admins = () => {
       handleSubmit={handleFormSubmit}
       submitLoading={submitLoading}
     >
-    <div
-          className={`flex-1 overflow-y-auto ${
-            drawerOpen ? "opacity-md transition-filter duration-300" : ""
-          }`}
-          style={{ opacity: 1 }}
-        >
-      <Anchor
-        open={drawerOpen}
-        toggleDrawer={toggleDrawer}
-        formContent={adminFormContentEdit}
-        add={add}
-        handleSubmit={handleSubmit}
-        loading={submitLoading}
-        formData={formData}
-        isEdit={isEditMode}
-      />
+      <div
+        className={`flex-1 overflow-y-auto ${
+          drawerOpen ? "opacity-md transition-filter duration-300" : ""
+        }`}
+        style={{ opacity: 1 }}
+      >
+        <Anchor
+          open={drawerOpen}
+          toggleDrawer={toggleDrawer}
+          formContent={adminFormContentEdit}
+          add={add}
+          handleSubmit={handleSubmit}
+          loading={submitLoading}
+          formData={formData}
+          isEdit={isEditMode}
+        />
 
-      <BasicTable rows={rows} columns={columns} loading={loading} />
+        <div>
+          <ConfirmModal
+            show={showConfirm}
+            onClose={() => setShowConfirm(false)}
+            message="Do you really want to delete this item?"
+            buttons={[
+              {
+                label: "Delete",
+                onClick: handleDelete,
+                className: "bg-red-600 text-white hover:bg-red-700",
+              },
+              {
+                label: "Cancel",
+                onClick: () => setShowConfirm(false),
+                className: "bg-gray-200 text-black hover:bg-gray-300",
+              },
+            ]}
+          />
+        </div>
 
-      {/* <Button
+        <BasicTable rows={rows} columns={columns} loading={loading} />
+
+        {/* <Button
         variant="contained"
         onClick={() => setDrawerOpen(true)}
         sx={{ mt: 2 }}
@@ -425,9 +484,8 @@ const Admins = () => {
         Add Admin
       </Button>
       <Anchor open={drawerOpen} toggleDrawer={setDrawerOpen} formContent={adminFormContent} /> */}
-    </div>
+      </div>
     </DashboardLayout>
-
   );
 };
 
