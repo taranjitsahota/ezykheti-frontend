@@ -62,11 +62,11 @@ const Testimonials = () => {
                 </p>
               </div>
               <div className="flex items-center gap-4">
-                <img
+                {/* <img
                   src={tItem.img}
                   alt={t(tItem.nameKey)}
                   className="w-12 h-12 rounded-full object-cover"
-                />
+                /> */}
                 <div>
                   <h4 className="font-bold">{t(tItem.nameKey)}</h4>
                   <p className="text-sm text-gray-300">{t(tItem.roleKey)}</p>

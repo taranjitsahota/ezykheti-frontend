@@ -245,11 +245,11 @@
   "trencher_conditions": "-",
 
   "automatic_boom_sprayer": "Automatic Boom Sprayer",
-  "automatic_boom_sprayer_price": "TBC",
+  "automatic_boom_sprayer_price": "Rs. 300 per Acre",
   "automatic_boom_sprayer_conditions": "-",
 
   "drone_sprayer": "Drone Sprayer",
-  "drone_sprayer_price": "Rs. 800 per Acre",
+  "drone_sprayer_price": "Rs. 500 per Acre",
   "drone_sprayer_conditions": "-",
 
   "harvesting_equipment_table": "Harvesting Equipment",

@@ -104,6 +104,9 @@ const VerifyOTP = () => {
         } else {
           localStorage.setItem("auth_token", response.data.token);
           localStorage.setItem("login_time", new Date().getTime());
+          localStorage.setItem("user_role", response.data.role || "user");
+          localStorage.setItem("username", response.data.name || "Guest");
+          localStorage.setItem("user_id", response.data.id);
           navigate("/dashboard");
         }
       } else {

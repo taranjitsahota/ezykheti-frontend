@@ -32,7 +32,7 @@ const Admins = () => {
     try {
       console.log(deleteId);
       const response = await apiRequest({
-        url: `/user/${deleteId}`, // Dynamic URL using deleteId
+        url: `/users/${deleteId}`, // Dynamic URL using deleteId
         method: "delete",
       });
   
@@ -49,37 +49,9 @@ const Admins = () => {
   };
   
 
-  const handleSubmit = async () => {
-    try {
-      setSubmitLoading(true);
+  const handleSubmit = async (e) => {
+    // console.log(formData);
 
-      const response = await apiRequest({
-        url: isEditMode
-          ? `/user/${formData.id}` // replace with your actual edit API URL
-          : "/register-superadmin-admin",
-        method: isEditMode ? "put" : "post",
-        data: formData,
-      });
-
-      if (response.success) {
-        toast.success(
-          isEdit ? "Admin updated successfully!" : "Admin created successfully!"
-        );
-        setDrawerOpen(false);
-        setIsEditMode(false); // reset edit mode
-        handleAdminList(); // refresh table
-      } else {
-        toast.error(response.message || "Failed to submit.");
-      }
-    } catch (error) {
-      const msg = error?.response?.data?.message || "Something went wrong.";
-      toast.error(msg);
-    } finally {
-      setSubmitLoading(false);
-    }
-  };
-
-  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
 
@@ -94,18 +66,31 @@ const Admins = () => {
 
     try {
       setSubmitLoading(true);
+
       const response = await apiRequest({
-        url: "/register-superadmin-admin",
-        method: "post",
-        data,
+        url: isEditMode
+          ? `/users/${formData.id}` // replace with your actual edit API URL
+          : "/register-superadmin-admin",
+        method: isEditMode ? "put" : "post",
+        data: isEditMode
+        ? {
+            name: formData.name,
+            email: formData.email,
+            contact_number: formData.contact_number,
+          }
+        : data,
       });
+      console.log(formData);
 
       if (response.success) {
-        toast.success("Admin created successfully!");
+        toast.success(
+          isEditMode ? "Admin updated successfully!" : "Admin created successfully!"
+        );
         setDrawerOpen(false);
-        handleAdminList(); // refresh the table
+        setIsEditMode(false);
+        handleAdminList();
       } else {
-        toast.error(response.message || "Failed to create admin.");
+        toast.error(response.message || "Failed to submit.");
       }
     } catch (error) {
       const msg = error?.response?.data?.message || "Something went wrong.";
@@ -114,6 +99,42 @@ const Admins = () => {
       setSubmitLoading(false);
     }
   };
+
+  // const handleFormSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData(e.target);
+
+  //   const data = {
+  //     name: formData.get("name"),
+  //     email: formData.get("email"),
+  //     contact_number: formData.get("contact_number"),
+  //     password: formData.get("password"),
+  //     password_confirmation: formData.get("confirm_password"),
+  //     role: "admin",
+  //   };
+
+  //   try {
+  //     setSubmitLoading(true);
+  //     const response = await apiRequest({
+  //       url: "/register-superadmin-admin",
+  //       method: "post",
+  //       data,
+  //     });
+
+  //     if (response.success) {
+  //       toast.success("Admin created successfully!");
+  //       setDrawerOpen(false);
+  //       handleAdminList(); // refresh the table
+  //     } else {
+  //       toast.error(response.message || "Failed to create admin.");
+  //     }
+  //   } catch (error) {
+  //     const msg = error?.response?.data?.message || "Something went wrong.";
+  //     toast.error(msg);
+  //   } finally {
+  //     setSubmitLoading(false);
+  //   }
+  // };
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -172,7 +193,6 @@ const Admins = () => {
   //   setIsEditOpen(true);
   // };
 
-  const token = localStorage.getItem("auth_token");
   const handleAdminList = async () => {
     setLoading(true);
     try {
@@ -244,7 +264,7 @@ const Admins = () => {
               <IconButton
                 onClick={() => setShowPassword(!showPassword)}
                 edge="end"
-                className="ml-2 cursor-pointer"
+                className="ml-2 cursor-pointer right-2"
               >
                 {showPassword ? (
                   <EyeOff size={20} className="text-gray-600" />
@@ -277,7 +297,7 @@ const Admins = () => {
               <IconButton
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 edge="end"
-                className="ml-2 cursor-pointer"
+                className="ml-2 cursor-pointer right-2"
               >
                 {showConfirmPassword ? (
                   <EyeOff size={20} className="text-gray-600" />
@@ -339,6 +359,7 @@ const Admins = () => {
         placeholder="Enter name"
         name="name"
         defaultValue={formData.name || ""}
+        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         fullWidth
         required
       />
@@ -348,6 +369,7 @@ const Admins = () => {
         name="email"
         type="email"
         defaultValue={formData.email || ""}
+        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         fullWidth
         required
       />
@@ -356,10 +378,11 @@ const Admins = () => {
         label="Contact Number"
         name="contact_number"
         defaultValue={formData.contact_number || ""}
+        onChange={(e) => setFormData({ ...formData, contact_number: e.target.value })}
         fullWidth
         required
       />
-      <TextField
+      {/* <TextField
         placeholder="Enter Password"
         label="Password"
         name="password"
@@ -425,7 +448,7 @@ const Admins = () => {
           className: "admin-label",
           shrink: true,
         }}
-      />
+      /> */}
     </>
   );
 
@@ -434,7 +457,7 @@ const Admins = () => {
       pageTitle="Admins"
       add="Add Admin"
       formContent={adminFormContent}
-      handleSubmit={handleFormSubmit}
+      handleSubmit={handleSubmit}
       submitLoading={submitLoading}
     >
       <div

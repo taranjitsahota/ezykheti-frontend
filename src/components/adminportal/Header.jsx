@@ -1,9 +1,12 @@
-import { Bell, Search, Settings, LogOut    } from "lucide-react";
+import { Bell, Search, Settings, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { User } from "lucide-react";
 
 const Header = ({ toggleSidebar }) => {
   const username = localStorage.getItem("username");
+  const profilePhoto = localStorage.getItem("profile_photo");
 
   const navigate = useNavigate();
 
@@ -102,11 +105,17 @@ const Header = ({ toggleSidebar }) => {
             ref={dropdownRef}
             onClick={handleProfileClick}
           >
-            <img
-              src="https://i.pravatar.cc/40"
-              alt="profile"
-              className="w-10 h-10 rounded-full object-cover"
-            />
+            {profilePhoto ? (
+              <img
+                src={profilePhoto}
+                alt="profile"
+                className="w-10 h-10 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+                <User className="w-6 h-6 text-gray-700" />
+              </div>
+            )}
             <div className="text-left">
               <div className="text-left">
                 <p className="text-sm font-medium text-gray-700">Hello,</p>
@@ -120,11 +129,13 @@ const Header = ({ toggleSidebar }) => {
           {/* Dropdown Menu */}
           {isDropdownOpen && (
             <div className="absolute top-14 right-0 bg-white rounded-lg shadow-lg w-48 z-20">
+              <Link to="/profile">
+                <button className="block w-full text-left px-4 py-1 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  View profile
+                </button>
+              </Link>
               <button className="block w-full text-left px-4 py-1 text-gray-700 hover:bg-gray-100">
-                Update profile photo
-              </button>
-              <button className="block w-full text-left px-4 py-1 text-gray-700 hover:bg-gray-100">
-                Change pin
+                Change password
               </button>
               <button className="block w-full text-left px-4 py-1 text-gray-700 hover:bg-gray-100">
                 Users
@@ -134,7 +145,7 @@ const Header = ({ toggleSidebar }) => {
                 className="block w-full text-left px-4 rounded-b-lg text-white bg-[var(--warning-color)] cursor-pointer mt-2 flex items-center justify-between"
               >
                 LogOut
-                <LogOut    size={16} />
+                <LogOut size={16} />
               </button>
             </div>
           )}

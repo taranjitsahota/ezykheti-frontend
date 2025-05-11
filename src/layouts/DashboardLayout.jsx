@@ -10,9 +10,10 @@ const DashboardLayout = ({
   pageTitle = "Dashboard",
   add = "add",
   showAddButton = true,
+  showFilterButton = true,
   formContent,
   handleSubmit,
-  submitloading,
+  submitLoading,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -90,14 +91,16 @@ const DashboardLayout = ({
                   formContent={formContent}
                   add={add}
                   handleSubmit={handleSubmit}
-                  loading={submitloading}
+                  loading={submitLoading}
                 />
-                <button className="flex items-center gap-2 px-4 py-2 rounded-full hover:text-white border border-gray-300 cursor-pointer transition-colors duration-200">
-                  <Filter className="w-4 h-4 text-[var(--warning-color)]" />
-                  <span className="text-sm font-medium text-gray-900">
-                    Filter
-                  </span>
-                </button>
+                {showFilterButton && (
+                  <button className="flex items-center gap-2 px-4 py-2 rounded-full hover:text-white border border-gray-300 cursor-pointer transition-colors duration-200">
+                    <Filter className="w-4 h-4 text-[var(--warning-color)]" />
+                    <span className="text-sm font-medium text-gray-900">
+                      Filter
+                    </span>
+                  </button>
+                )}
               </div>
             </div>
 

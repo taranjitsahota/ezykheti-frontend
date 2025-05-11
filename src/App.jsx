@@ -18,6 +18,7 @@ import ForgotPassword from "./pages/adminportal/ForgotPassword";
 import InterestedDashboard from "./pages/adminportal/InterestedDashboard";
 import Login from "./pages/adminportal/Login";
 import Mybookings from "./pages/adminportal/MyBookings";
+import Profile from "./pages/adminportal/Profile";
 import Register from "./pages/adminportal/Register";
 import ResetPassword from "./pages/adminportal/ResetPassword";
 import SendOTP from "./pages/adminportal/SendOtp";
@@ -101,7 +102,7 @@ function App() {
     { path: "/services", element: <Services /> },
     { path: "/service-areas", element: <ServiceAreas /> },
     { path: "/users", element: <Users /> },
-    // { path: "/admins", element: <Admins /> },
+    { path: "/profile", element: <Profile /> },
     // { path: "/admins", element: <Admins /> },
     // { path: "/admins", element: <Admins /> },
     // { path: "/admins", element: <Admins /> },

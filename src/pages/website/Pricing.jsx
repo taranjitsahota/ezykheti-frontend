@@ -115,94 +115,94 @@ const Pricing = () => {
           </div>
         </div>
       </div>
+      <div className="admin-wrapper bg-white py-20 px-4 md:px-10">
+        <section className="max-w-7xl mx-auto">
+          <h2 className="text-center  text-4xl md:text-5xl font-bold mb-4">
+            {t("pay_as_you_go")}
+          </h2>
+          <p className=" text-center text-lg  mb-16">
+            {t("cultivation_equipment_table")}
+          </p>
 
-      <div className="flex flex-col items-center justify-center p-16">
-        <h1 className="text-3xl font-bold mb-4">{t("pay_as_you_go")}</h1>
-        <h3 className="text-2xl font-bold mb-8">
-          {t("cultivation_equipment_table")}
-        </h3>
-
-        <div className="w-full bg-gray-300 overflow-x-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 font-bold p-4 min-w-[500px]">
-            <div>{t("service_equipment")}</div>
-            <div>{t("price")}</div>
-            <div>{t("conditions")}</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+            {[
+              {
+                name: t("super_seeder"),
+                price: t("super_seeder_price"),
+                conditions: t("super_seeder_conditions"),
+              },
+              {
+                name: t("rotavator"),
+                price: t("rotavator_price"),
+                conditions: t("rotavator_conditions"),
+              },
+              {
+                name: t("cultivator"),
+                price: t("cultivator_price"),
+                conditions: t("cultivator_conditions"),
+              },
+              {
+                name: t("potato_planter"),
+                price: t("potato_planter_price"),
+                conditions: t("potato_planter_conditions"),
+              },
+              {
+                name: t("pneumatic_planter"),
+                price: t("pneumatic_planter_price"),
+                conditions: t("pneumatic_planter_conditions"),
+              },
+              {
+                name: t("automatic_paddy_planter"),
+                price: t("automatic_paddy_planter_price"),
+                conditions: t("automatic_paddy_planter_conditions"),
+              },
+              {
+                name: t("trencher"),
+                price: t("trencher_price"),
+                conditions: t("trencher_conditions"),
+              },
+              {
+                name: t("automatic_boom_sprayer"),
+                price: t("automatic_boom_sprayer_price"),
+                conditions: t("automatic_boom_sprayer_conditions"),
+              },
+              {
+                name: t("drone_sprayer"),
+                price: t("drone_sprayer_price"),
+                conditions: t("drone_sprayer_conditions"),
+              },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-3xl shadow-md hover:shadow-xl transition-transform transform hover:-translate-y-1 duration-300 border border-green-100"
+              >
+                <div className="bg-green-100 text-black text-xl font-medium px-4 py-4 rounded-t-3xl tracking-wide">
+                  {item.name}
+                </div>
+                <div className="p-6">
+                  <div className="text-2xl font-bold text-green-900 mb-2">
+                    {item.price}
+                  </div>
+                  <p className="text-green-600 text-sm leading-relaxed">
+                    {item.conditions}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
-
-          {[
-            {
-              service: t("super_seeder"),
-              price: t("super_seeder_price"),
-              condition: t("super_seeder_conditions"),
-            },
-
-            {
-              service: t("rotavator"),
-              price: t("rotavator_price"),
-              condition: t("rotavator_conditions"),
-            },
-            {
-              service: t("cultivator"),
-              price: t("cultivator_price"),
-              condition: t("cultivator_conditions"),
-            },
-            {
-              service: t("potato_planter"),
-              price: t("potato_planter_price"),
-              condition: t("potato_planter_conditions"),
-            },
-            {
-              service: t("pneumatic_planter"),
-              price: t("pneumatic_planter_price"),
-              condition: t("pneumatic_planter_conditions"),
-            },
-            {
-              service: t("automatic_paddy_planter"),
-              price: t("automatic_paddy_planter_price"),
-              condition: t("automatic_paddy_planter_conditions"),
-            },
-            {
-              service: t("trencher"),
-              price: t("trencher_price"),
-              condition: t("trencher_conditions"),
-            },
-            {
-              service: t("automatic_boom_sprayer"),
-              price: t("automatic_boom_sprayer_price"),
-              condition: t("automatic_boom_sprayer_conditions"),
-            },
-            {
-              service: t("drone_sprayer"),
-              price: t("drone_sprayer_price"),
-              condition: t("drone_sprayer_conditions"),
-            },
-          ].map((item, index) => (
-            <div
-              key={index}
-              className={`grid grid-cols-1 md:grid-cols-3 p-2 min-w-[500px] ${
-                index % 2 === 0 ? "bg-white" : "bg-gray-200"
-              }`}
-            >
-              <div>{item.service}</div>
-              <div>{item.price}</div>
-              <div>{item.condition}</div>
-            </div>
-          ))}
-        </div>
+        </section>
       </div>
-
-      <div className="bg-white flex flex-col items-center justify-center p-16">
-        <h1 className="text-3xl font-bold mb-8">
+      
+      <div className="bg-white py-20 px-4 md:px-10">
+        <section className="max-w-7xl mx-auto">
+          <h2 className="text-center  text-4xl md:text-5xl font-bold mb-4">
           {t("harvesting_equipment_table")}
-        </h1>
+          </h2>
+          <p className=" text-center text-lg  mb-16">
+            {t("cultivation_equipment_table")}
+          </p>
 
-        <div className="w-full bg-white overflow-x-auto">
-          <div className="bg-gray-300 grid grid-cols-1 md:grid-cols-3 font-bold p-4 min-w-[500px]">
-            <div>{t("service_equipment")}</div>
-            <div>{t("price")}</div>
-            <div>{t("conditions")}</div>
-          </div>
-
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
           {[
             {
               service: t("wheat_combine_harvester"),
@@ -229,32 +229,39 @@ const Pricing = () => {
               price: t("pneumatic_planter_price"),
               condition: t("pneumatic_planter_conditions"),
             },
-          ].map((item, index) => (
-            <div
-              key={index}
-              className={`grid grid-cols-1 md:grid-cols-3 p-4 min-w-[500px] ${
-                index % 2 === 0 ? "" : "bg-gray-200"
-              }`}
-            >
-              <div>{item.service}</div>
-              <div>{item.price}</div>
-              <div>{item.condition}</div>
-            </div>
-          ))}
-        </div>
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-3xl shadow-md hover:shadow-xl transition-transform transform hover:-translate-y-1 duration-300 border border-green-100"
+              >
+                <div className="bg-green-100 text-black text-xl font-medium px-4 py-4 rounded-t-3xl tracking-wide">
+                  {item.service}
+                </div>
+                <div className="p-6">
+                  <div className="text-2xl font-bold text-green-900 mb-2">
+                    {item.price}
+                  </div>
+                  <p className="text-green-600 text-sm leading-relaxed">
+                    {item.condition}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+        </section>
       </div>
 
-      <div className="flex flex-col items-center justify-center p-16">
-        <h1 className="text-3xl font-bold mb-4">
+      <div className="bg-white py-20 px-4 md:px-10">
+        <section className="max-w-7xl mx-auto">
+          <h2 className="text-center  text-4xl md:text-5xl font-bold mb-4">
           {t("transportation_services_table")}
-        </h1>
-        <div className="w-full mt-10 overflow-x-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 bg-gray-300 font-bold p-4 min-w-[500px]">
-            <div>{t("service_equipment")}</div>
-            <div>{t("price")}</div>
-            <div>{t("conditions")}</div>
-          </div>
+          </h2>
+          {/* <p className=" text-center text-lg  mb-16">
+            {t("cultivation_equipment_table")}
+          </p> */}
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
           {[
             {
               service: t("trolley_bed"),
@@ -276,25 +283,28 @@ const Pricing = () => {
               price: t("additional_mileage_charge_price"),
               condition: t("additional_mileage_charge_conditions"),
             },
-            // {
-            //   service: t("pneumatic_planter"),
-            //   price: t("pneumatic_planter_price"),
-            //   condition: t("pneumatic_planter_conditions"),
-            // },
-          ].map((item, index) => (
-            <div
-              key={index}
-              className={`grid grid-cols-1 md:grid-cols-3 p-4 min-w-[500px] ${
-                index % 2 === 0 ? "" : "bg-gray-200"
-              }`}
-            >
-              <div>{item.service}</div>
-              <div>{item.price}</div>
-              <div>{item.condition}</div>
-            </div>
-          ))}
-        </div>
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-3xl shadow-md hover:shadow-xl transition-transform transform hover:-translate-y-1 duration-300 border border-green-100"
+              >
+                <div className="bg-green-100 text-black text-xl font-medium px-4 py-4 rounded-t-3xl tracking-wide">
+                  {item.service}
+                </div>
+                <div className="p-6">
+                  <div className="text-2xl font-bold text-green-900 mb-2">
+                    {item.price}
+                  </div>
+                  <p className="text-green-600 text-sm leading-relaxed">
+                    {item.condition}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
+
       <a
         href="/your-pdf-filename.pdf"
         download
@@ -303,7 +313,7 @@ const Pricing = () => {
         Download Rates PDF
       </a>
     </div>
-  );
+  );z
 };
 
 export default Pricing;
