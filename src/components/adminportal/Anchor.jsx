@@ -7,10 +7,20 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
-export default function Anchor({ open, toggleDrawer, formContent, add, handleSubmit, loading }) {
-  const internalHandleSubmit  = (e) => {
-    e.preventDefault();
-    if (handleSubmit) handleSubmit(e);
+export default function Anchor({
+  open,
+  toggleDrawer,
+  formContent,
+  add,
+  handleSubmit,
+  loading,
+}) {
+  const internalHandleSubmit = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+
+    const data = Object.fromEntries(formData.entries());
+    if (handleSubmit) handleSubmit(data);
   };
 
   const enhanceInputs = (elements) => {
@@ -77,20 +87,20 @@ export default function Anchor({ open, toggleDrawer, formContent, add, handleSub
         }}
       >
         <Box sx={{ display: "flex", mb: 2 }}>
-        <IconButton
-          onClick={() => toggleDrawer(false)}
-          sx={{
-            border: "2px solid var(--warning-color)",
-            color: "var(--warning-color)",
-            borderRadius: "50%",
-            width: 32,
-            height: 32,
-          }}
-        >
-          <CloseIcon fontSize="small" />
-        </IconButton>
+          <IconButton
+            onClick={() => toggleDrawer(false)}
+            sx={{
+              border: "2px solid var(--warning-color)",
+              color: "var(--warning-color)",
+              borderRadius: "50%",
+              width: 32,
+              height: 32,
+            }}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
         </Box>
-        <Typography variant="h6" gutterBottom sx={{ mb: 4 }} >
+        <Typography variant="h6" gutterBottom sx={{ mb: 4 }}>
           {add}
         </Typography>
         <form onSubmit={internalHandleSubmit}>
@@ -100,9 +110,9 @@ export default function Anchor({ open, toggleDrawer, formContent, add, handleSub
             type="submit"
             variant="contained"
             fullWidth
-            sx={{ mt: 2,padding: "12px" }}
+            sx={{ mt: 2, padding: "12px" }}
             className="btn-primary"
-            disabled={loading} 
+            disabled={loading}
           >
             {loading ? "Submitting..." : "Submit"}
           </Button>

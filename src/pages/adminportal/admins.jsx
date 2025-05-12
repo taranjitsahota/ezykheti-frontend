@@ -28,14 +28,14 @@ const Admins = () => {
 
   const handleDelete = async () => {
     if (!deleteId) return; // Ensure deleteId is available
-    
+
     try {
       console.log(deleteId);
       const response = await apiRequest({
         url: `/users/${deleteId}`, // Dynamic URL using deleteId
         method: "delete",
       });
-  
+
       if (response.success) {
         toast.success("Admin deleted successfully!");
         handleAdminList(); // Refresh list of admins or any data
@@ -47,20 +47,16 @@ const Admins = () => {
       toast.error(msg);
     }
   };
-  
 
-  const handleSubmit = async (e) => {
-    // console.log(formData);
-
-    e.preventDefault();
-    const formData = new FormData(e.target);
+  const handleSubmit = async (formdata) => {
+    // console.log(formData)
 
     const data = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      contact_number: formData.get("contact_number"),
-      password: formData.get("password"),
-      password_confirmation: formData.get("confirm_password"),
+      name: formdata?.name,
+      email: formdata?.email,
+      contact_number: formdata?.contact_number,
+      password: formdata?.password,
+      password_confirmation: formdata?.confirm_password,
       role: "admin",
     };
 
@@ -73,20 +69,22 @@ const Admins = () => {
           : "/register-superadmin-admin",
         method: isEditMode ? "put" : "post",
         data: isEditMode
-        ? {
-            name: formData.name,
-            email: formData.email,
-            contact_number: formData.contact_number,
-          }
-        : data,
+          ? {
+              name: formData.name,
+              email: formData.email,
+              contact_number: formData.contact_number,
+            }
+          : data,
       });
       console.log(formData);
 
       if (response.success) {
         toast.success(
-          isEditMode ? "Admin updated successfully!" : "Admin created successfully!"
+          isEditMode
+            ? "Admin updated successfully!"
+            : "Admin created successfully!"
         );
-        setDrawerOpen(false);
+        setDrawerOpen("");
         setIsEditMode(false);
         handleAdminList();
       } else {
@@ -141,7 +139,7 @@ const Admins = () => {
 
   const [rows, setRows] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState("");
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
@@ -378,7 +376,9 @@ const Admins = () => {
         label="Contact Number"
         name="contact_number"
         defaultValue={formData.contact_number || ""}
-        onChange={(e) => setFormData({ ...formData, contact_number: e.target.value })}
+        onChange={(e) =>
+          setFormData({ ...formData, contact_number: e.target.value })
+        }
         fullWidth
         required
       />
@@ -456,8 +456,8 @@ const Admins = () => {
     <DashboardLayout
       pageTitle="Admins"
       add="Add Admin"
-      formContent={adminFormContent}
-      handleSubmit={handleSubmit}
+      toggleDrawer={toggleDrawer}
+      drawerOpen={drawerOpen}
       submitLoading={submitLoading}
     >
       <div
@@ -469,12 +469,14 @@ const Admins = () => {
         <Anchor
           open={drawerOpen}
           toggleDrawer={toggleDrawer}
-          formContent={adminFormContentEdit}
-          add={add}
+          formContent={
+            drawerOpen === "add" ? adminFormContent : adminFormContentEdit
+          }
+          add={drawerOpen === "add" ? "Add Admin" : "Edit Admin"}
           handleSubmit={handleSubmit}
           loading={submitLoading}
-          formData={formData}
-          isEdit={isEditMode}
+          formData={drawerOpen !== "add" && formData}
+          isEdit={drawerOpen !== "add" && isEditMode}
         />
 
         <div>

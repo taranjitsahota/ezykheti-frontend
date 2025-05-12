@@ -11,16 +11,9 @@ const DashboardLayout = ({
   add = "add",
   showAddButton = true,
   showFilterButton = true,
-  formContent,
-  handleSubmit,
-  submitLoading,
+  drawerOpen,
+  toggleDrawer,
 }) => {
-  const [open, setOpen] = useState(false);
-
-  const toggleDrawer = (newOpen) => {
-    setOpen(newOpen);
-  };
-
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
 
@@ -56,13 +49,13 @@ const DashboardLayout = ({
 
         <main
           className={`flex-1 p-6 overflow-y-auto ${
-            open ? "opacity-md transition-filter duration-300" : ""
+            drawerOpen ? "opacity-md transition-filter duration-300" : ""
           }`}
           style={{ opacity: 1 }}
         >
           <div
             className={`transition-all ${
-              open ? "transform translate-x-0" : ""
+              drawerOpen ? "transform translate-x-0" : ""
             }`}
           >
             <div className="flex items-center justify-between mb-6">
@@ -75,7 +68,7 @@ const DashboardLayout = ({
                 {showAddButton && (
                   <span
                     className="flex rounded-full px-4 py-2 hover:text-white border border-gray-300 cursor-pointer items-center gap-2"
-                    onClick={() => toggleDrawer(true)}
+                    onClick={() => toggleDrawer("add")}
                   >
                     <Circle className="w-5 h-5 text-[var(--warning-color)]">
                       <Plus />
@@ -85,14 +78,14 @@ const DashboardLayout = ({
                     </span>{" "}
                   </span>
                 )}
-                <Anchor
+                {/* <Anchor
                   open={open}
                   toggleDrawer={toggleDrawer}
                   formContent={formContent}
                   add={add}
                   handleSubmit={handleSubmit}
                   loading={submitLoading}
-                />
+                /> */}
                 {showFilterButton && (
                   <button className="flex items-center gap-2 px-4 py-2 rounded-full hover:text-white border border-gray-300 cursor-pointer transition-colors duration-200">
                     <Filter className="w-4 h-4 text-[var(--warning-color)]" />
