@@ -2,9 +2,79 @@ import React from "react";
 import greenlines from "../../assets/images/line_vector.png";
 import tractor from "../../assets/images/tenweb_media_sfqvrggfb.webp";
 import { useTranslation } from "react-i18next";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useState } from "react";
+import { apiRequest } from "../../utils/apiService";
+import { toast } from "react-toastify";
 
 const Registration = () => {
   const { i18n, t } = useTranslation();
+  const [submitLoading, setSubmitLoading] = useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      farmer_name: "",
+      contact_number: "",
+      email: "",
+      village_name: "",
+      pincode: "",
+      district: "",
+      area_of_land: "",
+      land_unit: "in_kanal",
+    },
+    validationSchema: Yup.object({
+      farmer_name: Yup.string().required("Farmer name is required"),
+      contact_number: Yup.string()
+        .matches(/^[0-9]{10}$/, "Enter a valid 10-digit number")
+        .required("Contact number is required"),
+      email: Yup.string().email("Invalid email address").nullable(),
+      village_name: Yup.string().required("Village name is required"),
+      pincode: Yup.string()
+        .matches(/^[0-9]{6}$/, "Enter a valid 6-digit pincode")
+        .required("Pincode is required"),
+      district: Yup.string().required("District is required"),
+      area_of_land: Yup.number()
+        .typeError("Area must be a number")
+        .positive("Must be positive")
+        .required("Area of land is required"),
+      land_unit: Yup.string().required("Unit is required"),
+    }),
+    onSubmit: async (values, { resetForm }) => {
+      const data = {
+        name: values.farmer_name,
+        email: values.email,
+        contact_number: values.contact_number,
+        village_name: values.village_name,
+        pincode: values.pincode,
+        district: values.district,
+        area_of_land: values.area_of_land,
+        land_unit: values.land_unit,
+      };
+      console.log(data);
+
+      try {
+        setSubmitLoading(true);
+        const response = await apiRequest({
+          url: "/contact-form", // replace with your actual endpoint
+          method: "post",
+          data,
+        });
+
+        if (response.success) {
+          toast.success("Form submitted successfully!");
+          resetForm();
+        } else {
+          toast.error(response.message || "Failed to submit.");
+        }
+      } catch (error) {
+        const msg = error?.response?.data?.message || "Something went wrong.";
+        toast.error(msg);
+      } finally {
+        setSubmitLoading(false);
+      }
+    },
+  });
 
   return (
     <div>
@@ -59,66 +129,80 @@ const Registration = () => {
             ever since the 1500s..
           </p>
 
-          <form className="space-y-6">
-            <div>
-              <input
-                type="text"
-                placeholder={t("farmer_name")}
-                className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder={t("contact_number")}
-                className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
-              />
-            </div>
-            <div>
-              <input
-                type="email"
-                placeholder={t("email_optional")}
-                className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder={t("village_name")}
-                className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder={t("pincode")}
-                className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder={t("district")}
-                className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
-              />
-            </div>
+          <form className="space-y-6" onSubmit={formik.handleSubmit}>
+            {[
+              { name: "farmer_name", type: "text", label: t("farmer_name") },
+              {
+                name: "contact_number",
+                type: "text",
+                label: t("contact_number"),
+              },
+              { name: "email", type: "email", label: t("email_optional") },
+              { name: "village_name", type: "text", label: t("village_name") },
+              { name: "pincode", type: "text", label: t("pincode") },
+              { name: "district", type: "text", label: t("district") },
+              // { name: "area_of_land", type: "text", label: t("area_of_land") },
+            ].map((field) => (
+              <div key={field.name}>
+                <input
+                  type={field.type}
+                  name={field.name}
+                  placeholder={field.label}
+                  value={formik.values[field.name]}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
+                />
+                {formik.touched[field.name] && formik.errors[field.name] && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {formik.errors[field.name]}
+                  </p>
+                )}
+              </div>
+            ))}
+
             <div className="flex gap-4">
-              <input
-                type="text"
-                placeholder={t("area_of_land")}
-                className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
-              />
-              <select className="border-b-2 border-green-400 py-2 px-8 outline-none text-gray-700">
-                <option>{t("in_kanal")}</option>
-                <option>{t("in_acres")}</option>
-                <option>{t("in_hectares")}</option>
-              </select>
-            </div>
+              <div className="w-full">
+                <input
+                  type="text"
+                  name="area_of_land"
+                  placeholder={t("area_of_land")}
+                  value={formik.values.area_of_land}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="w-full border-b-2 border-green-400 outline-none py-2 text-gray-700"
+                />
+                {formik.touched.area_of_land && formik.errors.area_of_land && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {formik.errors.area_of_land}
+                  </p>
+                )}
+              </div>
+
+              
+                <select
+                  name="land_unit"
+                  value={formik.values.land_unit}
+                  onChange={formik.handleChange}
+                  className="border-b-2 border-green-400 py-2 px-8 outline-none text-gray-700"
+                >
+                  <option value="in_kanal">{t("in_kanal")}</option>
+                  <option value="in_acres">{t("in_acres")}</option>
+                  <option value="in_hectares">{t("in_hectares")}</option>
+                </select>
+              </div>
+           
+
             <button
               type="submit"
-              className="bg-green-500 hover:bg-green-600 text-white w-full py-3 rounded-lg text-lg font-semibold"
+              disabled={submitLoading}
+              className={`w-full py-3 rounded-lg text-lg font-semibold text-white ${
+                submitLoading
+                  ? "bg-green-300"
+                  : "bg-green-500 hover:bg-green-600"
+              }`}
             >
-              SUBMIT
+              {submitLoading ? "Submitting..." : "SUBMIT"}
             </button>
           </form>
         </div>

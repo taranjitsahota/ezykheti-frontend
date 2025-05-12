@@ -1,16 +1,13 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { X } from "lucide-react";
 import tractor from "../assets/images/farmer.webp";
+import { apiRequest } from "../utils/apiService";
+import { toast } from "react-toastify";
 
 export default function ContactModal({ onClose }) {
-  const [formData, setFormData] = useState({
-    farmerName: "",
-    contactNumber: "",
-    email: "",
-    villageName: "",
-    areaOfLand: "",
-  });
-
+  const [submitLoading, setSubmitLoading] = useState(false);
   const modalRef = useRef();
 
   const handleBackdropClick = (e) => {
@@ -29,16 +26,61 @@ export default function ContactModal({ onClose }) {
     return () => window.removeEventListener("keydown", handleEscape);
   }, [onClose]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const formik = useFormik({
+    initialValues: {
+      farmerName: "",
+      contactNumber: "",
+      email: "",
+      villageName: "",
+      pincode: "",
+      district: "",
+      areaOfLand: "",
+      landUnit: "in_kanal",
+    },
+    validationSchema: Yup.object({
+      farmerName: Yup.string().required("Farmer name is required"),
+      contactNumber: Yup.string()
+        .matches(/^[0-9]{10}$/, "Must be 10 digits")
+        .required("Contact number is required"),
+      email: Yup.string().email("Invalid email").nullable(),
+      villageName: Yup.string().required("Village name is required"),
+      areaOfLand: Yup.string().required("Area of land is required"),
+    }),
+    onSubmit: async (values, { resetForm }) => {
+      const data = {
+        name: values.farmerName,
+        email: values.email,
+        contact_number: values.contactNumber,
+        village_name: values.villageName,
+        pincode: values.pincode,
+        district: values.district,
+        area_of_land: values.areaOfLand,
+        land_unit: values.landUnit,
+      };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-    // Add your API submit logic here
-    onClose(); // Close modal after submission
-  };
+      try {
+        setSubmitLoading(true);
+        const response = await apiRequest({
+          url: "/contact-form", // replace with your actual endpoint
+          method: "post",
+          data,
+        });
+
+        if (response.success) {
+          toast.success("Form submitted successfully!");
+          resetForm();
+          onClose();  // Close the modal only after successful form submission
+        } else {
+          toast.error(response.data.message || "Failed to submit.");
+        }
+      } catch (error) {
+        const msg = error?.response?.data?.message || "Something went wrong.";
+        toast.error(msg);
+      } finally {
+        setSubmitLoading(false);
+      }
+    },
+  });
 
   return (
     <div
@@ -62,33 +104,41 @@ export default function ContactModal({ onClose }) {
             Get in touch with us
           </h2>
 
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={formik.handleSubmit} className="space-y-3">
             <div>
               <label className="text-sm font-medium">Farmer Name *</label>
               <input
                 name="farmerName"
-                value={formData.farmerName}
-                onChange={handleChange}
+                onChange={formik.handleChange}
+                value={formik.values.farmerName}
                 className="w-full border-b-2 border-green-500 focus:border-green-700 outline-none py-1"
-                required
               />
+              {formik.touched.farmerName && formik.errors.farmerName && (
+                <p className="text-xs text-red-600">
+                  {formik.errors.farmerName}
+                </p>
+              )}
             </div>
 
             <div>
               <label className="text-sm font-medium">Contact Number *</label>
               <input
                 name="contactNumber"
-                value={formData.contactNumber}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    contactNumber: e.target.value.replace(/\D/, ""),
-                  })
-                }
                 maxLength={10}
+                onChange={(e) => {
+                  formik.setFieldValue(
+                    "contactNumber",
+                    e.target.value.replace(/\D/, "")
+                  );
+                }}
+                value={formik.values.contactNumber}
                 className="w-full border-b-2 border-green-500 focus:border-green-700 outline-none py-1"
-                required
               />
+              {formik.touched.contactNumber && formik.errors.contactNumber && (
+                <p className="text-xs text-red-600">
+                  {formik.errors.contactNumber}
+                </p>
+              )}
             </div>
 
             <div>
@@ -96,51 +146,69 @@ export default function ContactModal({ onClose }) {
               <input
                 name="email"
                 type="email"
-                value={formData.email}
-                onChange={handleChange}
+                onChange={formik.handleChange}
+                value={formik.values.email}
                 className="w-full border-b border-gray-400 focus:border-green-700 outline-none py-1"
               />
+              {formik.touched.email && formik.errors.email && (
+                <p className="text-xs text-red-600">{formik.errors.email}</p>
+              )}
             </div>
 
             <div>
               <label className="text-sm font-medium">Village Name *</label>
               <input
                 name="villageName"
-                value={formData.villageName}
-                onChange={handleChange}
+                onChange={formik.handleChange}
+                value={formik.values.villageName}
                 className="w-full border-b-2 border-green-500 focus:border-green-700 outline-none py-1"
-                required
               />
+              {formik.touched.villageName && formik.errors.villageName && (
+                <p className="text-xs text-red-600">
+                  {formik.errors.villageName}
+                </p>
+              )}
             </div>
 
             <div className="w-full mb-6">
               <label className="block text-sm font-medium">
                 Area of Land (in Kanal) *
               </label>
-              <div className="flex flex-col md:flex-row gap-4 ">
+              <div className="flex flex-col md:flex-row gap-4">
                 <input
                   name="areaOfLand"
-                  value={formData.areaOfLand}
-                  onChange={handleChange}
+                  onChange={formik.handleChange}
+                  value={formik.values.areaOfLand}
                   className="w-full border-b-2 border-green-500 focus:border-green-700 outline-none py-1"
-                  required
                 />
-                <select className="border-b-2 border-green-400 py-2 outline-none text-gray-700">
-                  <option>in Kanal</option>
-                  <option>in Acres</option>
-                  <option>in Hectares</option>
+                <select
+                  name="landUnit"
+                  value={formik.values.landUnit}
+                  onChange={formik.handleChange}
+                  className="border-b-2 border-green-400 py-2 outline-none text-gray-700"
+                >
+                  <option value="in_kanal">in Kanal</option>
+                  <option value="in_acres">in Acres</option>
+                  <option value="in_hectares">in Hectares</option>
                 </select>
               </div>
+              {formik.touched.areaOfLand && formik.errors.areaOfLand && (
+                <p className="text-xs text-red-600">
+                  {formik.errors.areaOfLand}
+                </p>
+              )}
             </div>
 
             <button
               type="submit"
               className="w-full bg-green-500 text-white py-1.5 rounded-xl hover:bg-green-600 transition focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1"
+              disabled={submitLoading}
             >
-              SUBMIT
+              {submitLoading ? "Submitting..." : "SUBMIT"}
             </button>
           </form>
         </div>
+
         <div className="hidden md:block w-1/2 mt-8 relative overflow-hidden">
           <img
             src={tractor}
