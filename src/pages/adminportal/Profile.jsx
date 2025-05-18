@@ -8,6 +8,39 @@ import { Camera, Pencil, X, Calendar } from "lucide-react";
 import { User } from "lucide-react";
 
 const Profile = () => {
+  const [editUser, setEditUser] = useState({
+    name: "",
+    dob: "",
+    email: "",
+    contact_number: "",
+  });
+
+  const handleProfileUpdate = async (e) => {
+    e.preventDefault();
+    const id = localStorage.getItem("user_id");
+
+    try {
+      setLoading(true);
+      const response = await apiRequest({
+        url: `/users/${id}`,
+        method: "put",
+        data: editUser,
+      });
+
+      if (response.success) {
+        toast.success("Profile updated successfully!");
+        handleUserProfile();
+        setIsModalOpen(false);
+      } else {
+        toast.error(response.message || "Update failed.");
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating profile.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fileInputRef = useRef(null);
@@ -25,7 +58,6 @@ const Profile = () => {
       setModalImage(user.profile_photo_url || "/default-avatar.png");
       setShowModal(true);
       setShowMenu(false);
-      console.log("setShowModal(true) called");
     } else {
       fileInputRef.current.click();
       closeMenu();
@@ -104,6 +136,13 @@ const Profile = () => {
 
       if (response.success) {
         setUser(response.data);
+        setEditUser({
+          name: response.data.name || "",
+          dob: response.data.dob || "",
+          email: response.data.email || "",
+          contact_number: response.data.contact_number || "",
+        });
+
         localStorage.setItem(
           "profile_photo",
           response.data.profile_photo_url || ""
@@ -297,56 +336,51 @@ const Profile = () => {
       )}
 
       {isModalOpen && (
-         <div className="fixed inset-0 backdrop-blur bg-opacity-50 flex items-center justify-center z-50">
-         <div className="bg-white rounded-lg shadow-md w-[90%] max-w-md relative font-sans p-8">
-           <h2 className="text-xl font-semibold mb-6">Edit Personal Information</h2>
-   
-           {/* Close Button */}
-           <button
-             onClick={() => setIsModalOpen(false)}
-             aria-label="Close"
-             className="absolute top-6 right-6 w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 hover:bg-gray-400"
-           >
-             <X className="w-5 h-5" />
-           </button>
-   
-           <form className="space-y-5">
-             <div className="flex gap-6">
-               <div className="flex flex-col w-1/2">
-                 <label htmlFor="firstName" className="text-sm mb-1">
-                   First Name
+        <div className="fixed inset-0 backdrop-blur bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-md w-[90%] max-w-md relative font-sans p-8">
+            <h2 className="text-xl font-semibold mb-6">
+              Edit Personal Information
+            </h2>
+
+            {/* Close Button */}
+            <button
+              onClick={() => setIsModalOpen(false)}
+              aria-label="Close"
+              className="absolute top-6 right-6 w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 hover:bg-gray-400"
+            >
+              <X className="w-5 h-5" />
+            </button>
+ <form onSubmit={handleProfileUpdate} className="space-y-5">
+               <div className="flex flex-col">
+                 <label htmlFor="name" className="text-sm mb-1">
+                  Name
                  </label>
                  <input
-                   id="firstName"
                    type="text"
-                   value="Jessica"
+                    value={editUser.name}
+                  onChange={(e) =>
+                    setEditUser({ ...editUser, name: e.target.value })
+                  }
+                  required
+                   placeholder="Please enter your name"
                    className="border border-orange-400 rounded px-3 py-2 text-lg focus:outline-none focus:ring-1 focus:ring-orange-400"
                  />
                </div>
-               <div className="flex flex-col w-1/2">
-                 <label htmlFor="lastName" className="text-sm mb-1">
-                   Last Name
-                 </label>
-                 <input
-                   id="lastName"
-                   type="text"
-                   value="Khaleira"
-                   disabled
-                   className="border border-gray-300 rounded px-3 py-2 text-lg text-gray-400 bg-white cursor-not-allowed"
-                 />
-               </div>
-             </div>
+             
    
              <div className="flex flex-col">
                <label htmlFor="email" className="text-sm mb-1">
                  Email Address
                </label>
                <input
-                 id="email"
+                 value={editUser.email}
+                  onChange={(e) =>
+                    setEditUser({ ...editUser, email: e.target.value })
+                  }
+                  required
                  type="email"
-                 placeholder="info@ezykheti.com"
-                 disabled
-                 className="border border-gray-300 rounded px-3 py-2 text-lg text-gray-400 bg-white cursor-not-allowed"
+                 placeholder="Please enter your email address"
+                 className="border border-orange-400 rounded px-3 py-2 text-lg focus:outline-none focus:ring-1 focus:ring-orange-400"
                />
              </div>
    
@@ -355,11 +389,14 @@ const Profile = () => {
                  Phone Number
                </label>
                <input
-                 id="phone"
                  type="tel"
-                 placeholder="+91 98765 43210"
-                 disabled
-                 className="border border-gray-300 rounded px-3 py-2 text-lg text-gray-400 bg-white cursor-not-allowed"
+                 placeholder="Please enter your phone number"
+                  value={editUser.contact_number}
+                  onChange={(e) =>
+                    setEditUser({ ...editUser, contact_number: e.target.value })
+                  }
+                  required
+                 className="border border-orange-400 rounded px-3 py-2 text-lg focus:outline-none focus:ring-1 focus:ring-orange-400"
                />
              </div>
    
@@ -369,28 +406,16 @@ const Profile = () => {
                </label>
                <div className="relative">
                  <input
-                   id="dob"
                    type="text"
-                   placeholder="12/10/1998"
-                   disabled
-                   className="border border-gray-300 rounded px-3 py-2 pr-10 text-lg text-gray-400 bg-white cursor-not-allowed w-full"
+                   placeholder="Please enter your D.O.B"
+                     value={editUser.dob}
+                  onChange={(e) =>
+                    setEditUser({ ...editUser, dob: e.target.value })
+                  }
+                   className="border border-gray-300 rounded px-3 py-2 pr-10 text-lg w-full focus:outline-none focus:ring-1 focus:ring-orange-400"
                  />
-                 <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 text-lg pointer-events-none" />
+                 <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 text-lg pointer-events-none " />
                </div>
-             </div>
-   
-             <div className="flex flex-col relative">
-               <label htmlFor="role" className="text-sm mb-1">
-                 User Role
-               </label>
-               <select
-                 id="role"
-                 disabled
-                 className="border border-gray-300 rounded px-3 py-2 text-lg text-gray-400 bg-white cursor-not-allowed appearance-none pr-8"
-               >
-                 <option>Admin</option>
-               </select>
-               <i className="fas fa-caret-down pointer-events-none absolute right-3 top-[50%] -translate-y-1/2 text-gray-600" />
              </div>
    
              <div className="flex justify-end">
@@ -402,8 +427,76 @@ const Profile = () => {
                </button>
              </div>
            </form>
-         </div>
-       </div>
+            {/* <form onSubmit={handleProfileUpdate} className="space-y-4">
+              <div>
+                <label className="block mb-1 font-medium">Name</label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={editUser.name}
+                  onChange={(e) =>
+                    setEditUser({ ...editUser, name: e.target.value })
+                  }
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Date of Birth</label>
+                <input
+                  type="date"
+                  className="w-full border rounded px-3 py-2"
+                  value={editUser.dob}
+                  onChange={(e) =>
+                    setEditUser({ ...editUser, dob: e.target.value })
+                  }
+                />
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Email</label>
+                <input
+                  type="email"
+                  className="w-full border rounded px-3 py-2"
+                  value={editUser.email}
+                  onChange={(e) =>
+                    setEditUser({ ...editUser, email: e.target.value })
+                  }
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Contact Number</label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={editUser.contact_number}
+                  onChange={(e) =>
+                    setEditUser({ ...editUser, contact_number: e.target.value })
+                  }
+                  required
+                />
+              </div>
+
+              <div className="flex justify-end gap-4 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-[var(--primary-color)] text-white px-4 py-2 rounded hover:bg-[var(--primary-color-dark)]"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form> */}
+          </div>
+        </div>
       )}
     </DashboardLayout>
   );

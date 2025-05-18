@@ -115,11 +115,11 @@ const Footer = () => {
           rights reserved.
         </p>
         <div className="flex gap-6">
-          <Link to="/privacy" className="text-black hover:text-white">
+          <Link to="/privacy-policy" className="text-black hover:text-white">
             Privacy Policy
           </Link>
-          <Link to="/terms" className="text-black hover:text-white">
-            Terms and Conditions
+          <Link to="/refund-policy" className="text-black hover:text-white">
+            Refund Policy
           </Link>
         </div>
       </div>

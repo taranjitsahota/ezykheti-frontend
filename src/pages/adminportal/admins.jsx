@@ -22,15 +22,18 @@ const Admins = () => {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({});
-
-  const toggleDrawer = (value) => setDrawerOpen(value);
-  const add = "Edit Admin";
+  const toggleDrawer = (value) => {
+    if (value === "add") {
+      setIsEditMode(false); // ✅ ensure it's add mode
+      setFormData({}); // ✅ reset form
+    }
+    setDrawerOpen(value);
+  };
 
   const handleDelete = async () => {
     if (!deleteId) return; // Ensure deleteId is available
 
     try {
-      console.log(deleteId);
       const response = await apiRequest({
         url: `/users/${deleteId}`, // Dynamic URL using deleteId
         method: "delete",
@@ -49,8 +52,6 @@ const Admins = () => {
   };
 
   const handleSubmit = async (formdata) => {
-    // console.log(formData)
-
     const data = {
       name: formdata?.name,
       email: formdata?.email,
@@ -76,7 +77,6 @@ const Admins = () => {
             }
           : data,
       });
-      console.log(formData);
 
       if (response.success) {
         toast.success(
@@ -98,51 +98,26 @@ const Admins = () => {
     }
   };
 
-  // const handleFormSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const formData = new FormData(e.target);
-
-  //   const data = {
-  //     name: formData.get("name"),
-  //     email: formData.get("email"),
-  //     contact_number: formData.get("contact_number"),
-  //     password: formData.get("password"),
-  //     password_confirmation: formData.get("confirm_password"),
-  //     role: "admin",
-  //   };
-
-  //   try {
-  //     setSubmitLoading(true);
-  //     const response = await apiRequest({
-  //       url: "/register-superadmin-admin",
-  //       method: "post",
-  //       data,
-  //     });
-
-  //     if (response.success) {
-  //       toast.success("Admin created successfully!");
-  //       setDrawerOpen(false);
-  //       handleAdminList(); // refresh the table
-  //     } else {
-  //       toast.error(response.message || "Failed to create admin.");
-  //     }
-  //   } catch (error) {
-  //     const msg = error?.response?.data?.message || "Something went wrong.";
-  //     toast.error(msg);
-  //   } finally {
-  //     setSubmitLoading(false);
-  //   }
-  // };
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [rows, setRows] = React.useState([]);
+
+  const rowsWithSerial = rows.map((row, index) => ({
+    ...row,
+    serial: index + 1, // add serial field
+  }));
+
   const [loading, setLoading] = React.useState(false);
   const [drawerOpen, setDrawerOpen] = useState("");
 
   const columns = [
-    { field: "id", headerName: "ID", width: 70 },
+    {
+      field: "serial",
+      headerName: "S.No.",
+      width: 80,
+      sortable: false,
+    },
     { field: "name", headerName: "Name", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
     { field: "contact_number", headerName: "Contact", width: 150 },
@@ -165,7 +140,6 @@ const Admins = () => {
           </button>
 
           <button
-            // onClick={() => handleDelete(params.row.id)} // Call your delete function with row ID
             onClick={() => {
               setDeleteId(params.row.id);
               setShowConfirm(true);
@@ -178,18 +152,6 @@ const Admins = () => {
       ),
     },
   ];
-
-  // const handleEdit = (row) => {
-  //   console.log("Edit row: ", row);
-  //   // Optionally set form values and open drawer:
-  //   setDrawerOpen(true);
-  //   // Set data to form if needed using refs or state
-  // };
-
-  // const handleEdit = (rowData) => {
-  //   setEditingData(rowData);
-  //   setIsEditOpen(true);
-  // };
 
   const handleAdminList = async () => {
     setLoading(true);
@@ -245,6 +207,7 @@ const Admins = () => {
         fullWidth
         // margin="normal"
         required
+         inputProps={{ maxLength: 10, pattern: "[0-9]{10}" }}
       />
       <TextField
         placeholder="Enter Password"
@@ -382,73 +345,6 @@ const Admins = () => {
         fullWidth
         required
       />
-      {/* <TextField
-        placeholder="Enter Password"
-        label="Password"
-        name="password"
-        fullWidth
-        required={!isEditMode}
-        type={showPassword ? "text" : "password"}
-        variant="standard"
-        defaultValue={formData.password || ""}
-        InputProps={{
-          disableUnderline: true,
-          className: "admin-textfield",
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                onClick={() => setShowPassword(!showPassword)}
-                edge="end"
-                className="ml-2 cursor-pointer"
-              >
-                {showPassword ? (
-                  <EyeOff size={20} className="text-gray-600" />
-                ) : (
-                  <Eye size={20} className="text-gray-600" />
-                )}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-        InputLabelProps={{
-          className: "admin-label",
-          shrink: true,
-        }}
-      />
-
-      <TextField
-        placeholder="Confirm Password"
-        label="Confirm Password"
-        name="confirm_password"
-        fullWidth
-        required={!isEditMode}
-        type={showConfirmPassword ? "text" : "password"}
-        variant="standard"
-        defaultValue={formData.confirm_password || ""}
-        InputProps={{
-          disableUnderline: true,
-          className: "admin-textfield",
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                edge="end"
-                className="ml-2 cursor-pointer"
-              >
-                {showConfirmPassword ? (
-                  <EyeOff size={20} className="text-gray-600" />
-                ) : (
-                  <Eye size={20} className="text-gray-600" />
-                )}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-        InputLabelProps={{
-          className: "admin-label",
-          shrink: true,
-        }}
-      /> */}
     </>
   );
 
@@ -499,16 +395,7 @@ const Admins = () => {
           />
         </div>
 
-        <BasicTable rows={rows} columns={columns} loading={loading} />
-
-        {/* <Button
-        variant="contained"
-        onClick={() => setDrawerOpen(true)}
-        sx={{ mt: 2 }}
-      >
-        Add Admin
-      </Button>
-      <Anchor open={drawerOpen} toggleDrawer={setDrawerOpen} formContent={adminFormContent} /> */}
+        <BasicTable rows={rowsWithSerial} columns={columns} loading={loading} />
       </div>
     </DashboardLayout>
   );

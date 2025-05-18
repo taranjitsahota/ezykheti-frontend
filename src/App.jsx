@@ -5,6 +5,8 @@ import Home from "./pages/website/Home";
 import Registration from "./pages/website/Registration";
 import About from "./pages/website/About";
 import Pricing from "./pages/website/Pricing";
+import PrivacyPolicy from "./pages/website/PrivacyPolicy";
+import RefundPolicy from "./pages/website/RefundPolicy";
 import ComingSoonNotice from "./components/ComingSoonNotice";
 
 import Admins from "./pages/adminportal/admins";
@@ -19,6 +21,7 @@ import InterestedDashboard from "./pages/adminportal/InterestedDashboard";
 import Login from "./pages/adminportal/Login";
 import Mybookings from "./pages/adminportal/MyBookings";
 import Profile from "./pages/adminportal/Profile";
+import Equipment from "./pages/adminportal/Equipment";
 import Register from "./pages/adminportal/Register";
 import ResetPassword from "./pages/adminportal/ResetPassword";
 import SendOTP from "./pages/adminportal/SendOtp";
@@ -87,17 +90,20 @@ function App() {
     "/service",
     "/about",
     "/pricing",
+    "/privacy-policy",
+    "/refund-policy",
   ];
 
   const protectedRoutes = [
     { path: "/admins", element: <Admins /> },
+    { path: "/equipments", element: <Equipment /> },
     { path: "/areas", element: <Areas /> },
     { path: "/assign-bookings", element: <AssignBookings /> },
     { path: "/business-timings", element: <BusinessTimings /> },
     { path: "/crops", element: <Crops /> },
     { path: "/dashboard", element: <Dashboard /> },
     { path: "/drivers", element: <Drivers /> },
-    { path: "/interested-dashboard", element: <InterestedDashboard /> },
+    { path: "/interested-users", element: <InterestedDashboard /> },
     { path: "/my-bookings", element: <Mybookings /> },
     { path: "/services", element: <Services /> },
     { path: "/service-areas", element: <ServiceAreas /> },
@@ -123,6 +129,8 @@ function App() {
           <Route path="/service" element={<Service />} />
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} /> 
+          <Route path="/refund-policy" element={<RefundPolicy />} /> 
           <Route path="/admin" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

@@ -11,10 +11,11 @@ import { Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 import { Eye, EyeOff } from "lucide-react";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
+import { Dialog, DialogTitle, DialogContent } from "@mui/material";
 import Anchor from "../../components/adminportal/Anchor";
 import ConfirmModal from "../../components/adminportal/ConfirmModal";
 
-const Crops = () => {
+const Equipment = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const [showConfirm, setShowConfirm] = useState(false);
@@ -22,6 +23,12 @@ const Crops = () => {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({});
+
+  const [previewImage, setPreviewImage] = useState(null);
+
+  const handleImagePreview = (url) => {
+    setPreviewImage(url);
+  };
 
   const toggleDrawer = (value) => {
     if (value === "add") {
@@ -31,17 +38,41 @@ const Crops = () => {
     setDrawerOpen(value);
   };
 
+  const handleStatusToggle = async (id, currentStatus) => {
+    const newStatus = currentStatus ? 0 : 1;
+
+    try {
+      const response = await apiRequest({
+        url: `/equipments/${id}`, // Use `id` passed to the function
+        method: "put",
+        data: {
+          is_enabled: newStatus, // Send the toggled status
+        },
+      });
+
+      if (response.success) {
+        toast.success("Equipment status updated successfully!");
+        handleAdminList(); // Refresh the list or rows
+      } else {
+        toast.error(response.message || "Failed to update status.");
+      }
+    } catch (error) {
+      const msg = error?.response?.data?.message || "Something went wrong.";
+      toast.error(msg);
+    }
+  };
+
   const handleDelete = async () => {
     if (!deleteId) return; // Ensure deleteId is available
 
     try {
       const response = await apiRequest({
-        url: `/crops/${deleteId}`, // Dynamic URL using deleteId
+        url: `/equipments/${deleteId}`, // Dynamic URL using deleteId
         method: "delete",
       });
 
       if (response.success) {
-        toast.success("Crop deleted successfully!");
+        toast.success("Equipment deleted successfully!");
         handleAdminList(); // Refresh list of admins or any data
       } else {
         toast.error(response.message || "Failed to delete.");
@@ -55,6 +86,11 @@ const Crops = () => {
   const handleSubmit = async (formdata) => {
     const data = {
       name: formdata?.name,
+      image: formdata?.image,
+      price_per_kanal: formdata?.price_per_kanal,
+      min_kanal: formdata?.min_kanal,
+      minutes_per_kanal: formdata?.minutes_per_kanal,
+      inventory: formdata?.inventory,
       is_enabled: formdata?.is_enabled,
     };
 
@@ -63,22 +99,17 @@ const Crops = () => {
 
       const response = await apiRequest({
         url: isEditMode
-          ? `/crops/${formData.id}` // replace with your actual edit API URL
-          : "/crops",
+          ? `/equipments/${formData.id}` // replace with your actual edit API URL
+          : "/equipments",
         method: isEditMode ? "put" : "post",
-        data: isEditMode
-          ? {
-              name: formData.name,
-              is_enabled: formData.is_enabled,
-            }
-          : data,
+        data: data,
       });
 
       if (response.success) {
         toast.success(
           isEditMode
-            ? "Crop updated successfully!"
-            : "Crop created successfully!"
+            ? "Equipment updated successfully!"
+            : "Equipment created successfully!"
         );
         setDrawerOpen("");
         setIsEditMode(false);
@@ -94,8 +125,8 @@ const Crops = () => {
     }
   };
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  //   const [showPassword, setShowPassword] = useState(false);
+  //   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [rows, setRows] = React.useState([]);
 
@@ -111,13 +142,30 @@ const Crops = () => {
     {
       field: "serial",
       headerName: "S.No.",
-      width: 80,
+      width: 60,
       sortable: false,
     },
     { field: "name", headerName: "Name", width: 150 },
-    // { field: "email", headerName: "Email", width: 200 },
-    // { field: "contact_number", headerName: "Contact", width: 150 },
-    // { field: "role", headerName: "Role", width: 100 },
+    {
+      field: "image",
+      headerName: "Image",
+      width: 120,
+      renderCell: (params) => (
+        <div className="flex items-center justify-center w-full">
+          <img
+            src={params.row.image || "/default.jpg"}
+            alt="preview"
+            className="w-10 h-10 rounded-full object-cover cursor-pointer"
+            onClick={() => handleImagePreview(params.row.image)}
+          />
+        </div>
+      ),
+    },
+
+    { field: "price_per_kanal", headerName: "Price Per Kanal", width: 150 },
+    { field: "min_kanal", headerName: "Min Kanal", width: 150 },
+    { field: "minutes_per_kanal", headerName: "Minutes Per Kanal", width: 150 },
+    { field: "inventory", headerName: "Inventory", width: 150 },
     {
       field: "is_enabled",
       headerName: "Status",
@@ -165,6 +213,7 @@ const Crops = () => {
         );
       },
     },
+
     {
       field: "action",
       headerName: "Action Button",
@@ -200,7 +249,7 @@ const Crops = () => {
     setLoading(true);
     try {
       const response = await apiRequest({
-        url: "/crops",
+        url: "/equipments",
         method: "get",
       });
 
@@ -225,7 +274,7 @@ const Crops = () => {
     handleAdminList();
   }, []);
 
-  const cropFormContent = (
+  const equipmentFormContent = (
     <>
       <TextField
         label="Name"
@@ -234,7 +283,45 @@ const Crops = () => {
         fullWidth
         required
       />
-   <TextField
+      <TextField
+        label="Price Per Kanal"
+        placeholder="Enter price per kanal"
+        name="price_per_kanal"
+        type="number"
+        fullWidth
+        // margin="normal"
+        required
+      />
+      <TextField
+        placeholder="Enter Min Kanal"
+        label="Min Kanal"
+        name="min_kanal"
+        type="number"
+        fullWidth
+        // margin="normal"
+        required
+        inputProps={{ maxLength: 10, pattern: "[0-9]{10}" }}
+      />
+      <TextField
+        placeholder="Enter Minutes Per Kanal"
+        label="Minutes Per Kanal"
+        name="minutes_per_kanal"
+        type="number"
+        fullWidth
+        required
+        variant="standard"
+      />
+
+      <TextField
+        placeholder="Enter Inventory"
+        label="Inventory"
+        name="inventory"
+        type="number"
+        fullWidth
+        required
+      />
+
+      <TextField
         select
         label="Status"
         name="is_enabled"
@@ -245,12 +332,10 @@ const Crops = () => {
         <MenuItem value={1}>True</MenuItem>
         <MenuItem value={0}>False</MenuItem>
       </TextField>
-      
-
     </>
   );
 
-  const cropFormContentEdit = (
+  const equipmentFormContentEdit = (
     <>
       <TextField
         label="Name"
@@ -261,7 +346,52 @@ const Crops = () => {
         fullWidth
         required
       />
-       <TextField
+      <TextField
+        label="Price Per Kanal"
+        placeholder="Enter price per kanal"
+        name="price_per_kanal"
+        defaultValue={formData.price_per_kanal || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, price_per_kanal: e.target.value })
+        }
+        fullWidth
+        required
+      />
+      <TextField
+        placeholder="Enter Min Kanal"
+        label="Min Kanal"
+        name="min_kanal"
+        defaultValue={formData.min_kanal || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, min_kanal: e.target.value })
+        }
+        fullWidth
+        required
+      />
+      <TextField
+        placeholder="Enter Minutes Per Kanal"
+        label="Minutes Per Kanal"
+        name="minutes_per_kanal"
+        defaultValue={formData.minutes_per_kanal || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, minutes_per_kanal: e.target.value })
+        }
+        fullWidth
+        required
+      />
+      <TextField
+        placeholder="Enter Inventory"
+        label="Inventory"
+        name="inventory"
+        defaultValue={formData.inventory || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, inventory: e.target.value })
+        }
+        fullWidth
+        required
+      />
+
+      <TextField
         select
         label="Status"
         name="is_enabled"
@@ -279,15 +409,15 @@ const Crops = () => {
         required
       >
         <MenuItem value={true}>True</MenuItem>
-        <MenuItem value={false}>False</MenuItem>
+        <MenuItem value={0}>False</MenuItem>
       </TextField>
     </>
   );
 
   return (
     <DashboardLayout
-      pageTitle="Crops"
-      add="Add Crop"
+      pageTitle="Equipments"
+      add="Add Equipment"
       toggleDrawer={toggleDrawer}
       drawerOpen={drawerOpen}
       submitLoading={submitLoading}
@@ -302,14 +432,32 @@ const Crops = () => {
           open={drawerOpen}
           toggleDrawer={toggleDrawer}
           formContent={
-            drawerOpen === "add" ? cropFormContent : cropFormContentEdit
+            drawerOpen === "add"
+              ? equipmentFormContent
+              : equipmentFormContentEdit
           }
-          add={drawerOpen === "add" ? "Add Crop" : "Edit Crop"}
+          add={drawerOpen === "add" ? "Add Equipment" : "Edit Equipment"}
           handleSubmit={handleSubmit}
           loading={submitLoading}
           formData={drawerOpen !== "add" && formData}
           isEdit={drawerOpen !== "add" && isEditMode}
         />
+                <BasicTable rows={rowsWithSerial} columns={columns} loading={loading} />
+                <Dialog
+                  open={!!previewImage}
+                  onClose={() => setPreviewImage(null)}
+                  maxWidth="sm"
+                  fullWidth
+                >
+                  <DialogTitle>Image Preview</DialogTitle>
+                  <DialogContent className="flex justify-center">
+                    <img
+                      src={previewImage}
+                      alt="preview"
+                      className="max-w-full max-h-[400px] rounded"
+                    />
+                  </DialogContent>
+                </Dialog>
 
         <div>
           <ConfirmModal
@@ -331,10 +479,9 @@ const Crops = () => {
           />
         </div>
 
-        <BasicTable rows={rowsWithSerial} columns={columns} loading={loading} />
       </div>
     </DashboardLayout>
   );
 };
 
-export default Crops;
+export default Equipment;

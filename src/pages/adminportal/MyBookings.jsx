@@ -4,36 +4,60 @@ import DashboardLayout from "../../layouts/DashboardLayout";
 import BasicTable from "../../components/adminportal/BasicTable";
 import { apiRequest } from "../../utils/apiService";
 import { toast } from "react-toastify";
-import Anchor from "../../components/adminportal/Anchor"; // Import the Anchor component
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { Select, MenuItem, InputLabel, FormControl } from "@mui/material";
+import { Eye, EyeOff } from "lucide-react";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Anchor from "../../components/adminportal/Anchor";
+import ConfirmModal from "../../components/adminportal/ConfirmModal";
+import CollapsibleTable from "../../components/adminportal/CollapsibleTable";
 
 const MyBookings = () => {
-    const [rows, setRows] = React.useState([]);
-    const [loading, setLoading] = React.useState(false);
-    const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const [rows, setRows] = React.useState([]);
+
+  const rowsWithSerial = rows.map((row, index) => ({
+    ...row,
+    serial: index + 1, // add serial field
+  }));
+
+  const [loading, setLoading] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = useState("");
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Name', width: 150 },
-    { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'contact_number', headerName: 'Contact', width: 150 },
-    { field: 'role', headerName: 'Role', width: 100 },
+    {
+      field: "serial",
+      headerName: "S.No.",
+      width: 80,
+      sortable: false,
+    },
+    { field: "user_name", headerName: "Name", width: 150 },
+    { field: "address", headerName: "Address", width: 150 },
+    { field: "crop_name", headerName: "Crop Name", width: 150 },
+    { field: "date", headerName: "Booking Date", width: 150 },
+    { field: "start_time", headerName: "Start Time", width: 150 },
+    { field: "end_time", headerName: "End Time", width: 150 },
+    { field: "duration", headerName: "Duration", width: 150 },
+    { field: "amount", headerName: "Amount", width: 150 },
+    { field: "status", headerName: "Status", width: 150 },
+    {field: "created_at", headerName: "Requested Date", width: 150},
   ];
 
-  const token = localStorage.getItem("auth_token");
   const handleAdminList = async () => {
     setLoading(true);
     try {
       const response = await apiRequest({
-        url: "/admin-list",
+        url: "/get-all-bookings",
         method: "get",
       });
 
       if (response.success) {
         setRows(response.data || []);
       } else {
-        toast.error(response.message || "Failed to fetch admins.");
+        toast.error(response.message || "Failed to fetch bookings.");
       }
     } catch (error) {
       const msg =
@@ -51,44 +75,30 @@ const MyBookings = () => {
     handleAdminList();
   }, []);
 
-  const adminFormContent = (
-    <>
-      <TextField label="Name" name="name" fullWidth margin="normal" required />
-      <TextField
-        label="Email"
-        name="email"
-        type="email"
-        fullWidth
-        margin="normal"
-        required
-      />
-      <TextField
-        label="Contact Number"
-        name="contact_number"
-        fullWidth
-        margin="normal"
-        required
-      />
-      <TextField label="Role" name="role" fullWidth margin="normal" required />
-    </>
-  );
-
-
-
   return (
-    <DashboardLayout pageTitle="Admins" add="add admin" formContent={adminFormContent}>
-     
-      <BasicTable  rows={rows} columns={columns} loading={loading}/>
+    <DashboardLayout
+    showAddButton={false}
+    showFilterButton={false}
+      pageTitle="Bookings"
+      add="Add Admin"
+      toggleDrawer={false}
+      drawerOpen={false}
+      submitLoading={false}
 
-      {/* <Button
-        variant="contained"
-        onClick={() => setDrawerOpen(true)}
-        sx={{ mt: 2 }}
+    >
+      <div
+        className={`flex-1 overflow-y-auto ${
+          drawerOpen ? "opacity-md transition-filter duration-300" : ""
+        }`}
+        style={{ opacity: 1 }}
       >
-        Add Admin
-      </Button>
-      <Anchor open={drawerOpen} toggleDrawer={setDrawerOpen} formContent={adminFormContent} /> */}
 
+
+        {/* <BasicTable rows={rowsWithSerial} columns={columns} loading={loading} /> */}
+        <div className="bg-white" >
+        <CollapsibleTable rows={rows} />
+        </div>
+      </div>
     </DashboardLayout>
   );
 };

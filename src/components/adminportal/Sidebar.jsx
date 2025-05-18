@@ -53,30 +53,31 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
           {[
             { to: "/dashboard", icon: <LayoutDashboard />, label: "Dashboard" },
             { to: "/admins", icon: <User />, label: "Admins" },
+            { to: "/equipments", icon: <User />, label: "Equipments" },
             { to: "/areas", icon: <User />, label: "Areas" },
             { to: "/assign-bookings", icon: <User />, label: "Assign Bookings" },
             { to: "/business-timings", icon: <User />, label: "Buisness Timings" },
             { to: "/crops", icon: <User />, label: "Crops" },
             { to: "/drivers", icon: <User />, label: "Drivers" },
-            { to: "/interested-dashboard", icon: <User />, label: "Interested Dashboard" },
+            { to: "/interested-users", icon: <User />, label: "Interested users" },
             { to: "/my-bookings", icon: <User />, label: "My Bookings" },
             { to: "/services", icon: <User />, label: "Services" },
             { to: "/service-areas", icon: <User />, label: "Service Areas" },
             // { to: "/admins", icon: <User />, label: "Admins" },
             // { to: "/admins", icon: <User />, label: "Admins" },
             { to: "/users", icon: <Tractor />, label: "Users" },
-            {
-              to: "/attachments",
-              icon: <Puzzle />,
-              label: "Attachment",
-            },
+            // {
+            //   to: "/attachments",
+            //   icon: <Puzzle />,
+            //   label: "Attachment",
+            // },
             { to: "/areas", icon: <Map />, label: "Areas" },
             { to: "/crops", icon: <Sprout />, label: "Crops" },
-            {
-              to: "/assign-bookings",
-              icon: <CalendarCheck />,
-              label: "Assign Bookings",
-            },
+            // {
+            //   to: "/assign-bookings",
+            //   icon: <CalendarCheck />,
+            //   label: "Assign Bookings",
+            // },
           ].map(({ to, icon, label }) => (
             <NavLink
               key={to}

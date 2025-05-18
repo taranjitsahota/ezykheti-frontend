@@ -4,36 +4,100 @@ import DashboardLayout from "../../layouts/DashboardLayout";
 import BasicTable from "../../components/adminportal/BasicTable";
 import { apiRequest } from "../../utils/apiService";
 import { toast } from "react-toastify";
-import Anchor from "../../components/adminportal/Anchor"; // Import the Anchor component
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { Select, MenuItem, InputLabel, FormControl } from "@mui/material";
+import { Eye, EyeOff } from "lucide-react";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Anchor from "../../components/adminportal/Anchor";
+import ConfirmModal from "../../components/adminportal/ConfirmModal";
 
 const InterestedDashboard = () => {
-    const [rows, setRows] = React.useState([]);
-    const [loading, setLoading] = React.useState(false);
-    const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
+
+  const handleDelete = async () => {
+    if (!deleteId) return; // Ensure deleteId is available
+
+    try {
+      const response = await apiRequest({
+        url: `/interested-users/${deleteId}`, // Dynamic URL using deleteId
+        method: "delete",
+      });
+
+      if (response.success) {
+        toast.success("Interested User deleted successfully!");
+        handleAdminList(); // Refresh list of admins or any data
+      } else {
+        toast.error(response.message || "Failed to delete.");
+      }
+    } catch (error) {
+      const msg = error?.response?.data?.message || "Something went wrong.";
+      toast.error(msg);
+    }
+  };
+
+  const [rows, setRows] = React.useState([]);
+
+  const rowsWithSerial = rows.map((row, index) => ({
+    ...row,
+    serial: index + 1, // add serial field
+  }));
+
+  const [loading, setLoading] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = useState("");
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Name', width: 150 },
-    { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'contact_number', headerName: 'Contact', width: 150 },
-    { field: 'role', headerName: 'Role', width: 100 },
+    {
+      field: "serial",
+      headerName: "S.No.",
+      width: 80,
+      sortable: false,
+    },
+    { field: "name", headerName: "Name", width: 150 },
+    { field: "contact", headerName: "Contact", width: 150 },
+    { field: "state_name", headerName: "State", width: 150 },
+    { field: "city_name", headerName: "City", width: 150 },
+    {field: "village_name", headerName: "Village", width: 150},
+    {field: "requested_date", headerName: "Requested Date", width: 150},
+    {
+      field: "action",
+      headerName: "Action Button",
+      width: 150,
+      renderCell: (params) => (
+        <div className="flex items-center gap-2 h-full">
+          
+
+          <button
+            onClick={() => {
+              setDeleteId(params.row.id);
+              setShowConfirm(true);
+            }}
+            className="bg-[#D24545] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
+          >
+            Delete
+          </button>
+        </div>
+      ),
+    },
   ];
 
-  const token = localStorage.getItem("auth_token");
   const handleAdminList = async () => {
     setLoading(true);
     try {
       const response = await apiRequest({
-        url: "/admin-list",
+        url: "/interested-users",
         method: "get",
       });
 
       if (response.success) {
         setRows(response.data || []);
       } else {
-        toast.error(response.message || "Failed to fetch admins.");
+        toast.error(response.message || "Failed to fetch interested users.");
       }
     } catch (error) {
       const msg =
@@ -51,44 +115,46 @@ const InterestedDashboard = () => {
     handleAdminList();
   }, []);
 
-  const adminFormContent = (
-    <>
-      <TextField label="Name" name="name" fullWidth margin="normal" required />
-      <TextField
-        label="Email"
-        name="email"
-        type="email"
-        fullWidth
-        margin="normal"
-        required
-      />
-      <TextField
-        label="Contact Number"
-        name="contact_number"
-        fullWidth
-        margin="normal"
-        required
-      />
-      <TextField label="Role" name="role" fullWidth margin="normal" required />
-    </>
-  );
-
-
-
   return (
-    <DashboardLayout pageTitle="Admins" add="add admin" formContent={adminFormContent}>
-     
-      <BasicTable  rows={rows} columns={columns} loading={loading}/>
+    <DashboardLayout
+    showAddButton={false}
+    showFilterButton={false}
+      pageTitle="Interested Users"
+      add="Add Admin"
+      toggleDrawer={false}
+      drawerOpen={false}
+      submitLoading={false}
 
-      {/* <Button
-        variant="contained"
-        onClick={() => setDrawerOpen(true)}
-        sx={{ mt: 2 }}
+    >
+      <div
+        className={`flex-1 overflow-y-auto ${
+          drawerOpen ? "opacity-md transition-filter duration-300" : ""
+        }`}
+        style={{ opacity: 1 }}
       >
-        Add Admin
-      </Button>
-      <Anchor open={drawerOpen} toggleDrawer={setDrawerOpen} formContent={adminFormContent} /> */}
+        
+        <div>
+          <ConfirmModal
+            show={showConfirm}
+            onClose={() => setShowConfirm(false)}
+            message="Do you really want to delete this item?"
+            buttons={[
+              {
+                label: "Delete",
+                onClick: handleDelete,
+                className: "bg-red-600 text-white hover:bg-red-700",
+              },
+              {
+                label: "Cancel",
+                onClick: () => setShowConfirm(false),
+                className: "bg-gray-200 text-black hover:bg-gray-300",
+              },
+            ]}
+          />
+        </div>
 
+        <BasicTable rows={rowsWithSerial} columns={columns} loading={loading} />
+      </div>
     </DashboardLayout>
   );
 };

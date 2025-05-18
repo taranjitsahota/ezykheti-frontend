@@ -2,11 +2,11 @@ import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 
-const paginationModel = { page: 0, pageSize: 5 };
+const paginationModel = { page: 0, pageSize: 10 };
 
 const BasicTable = ({ rows, columns, loading = false }) => {
   return (
-    <Paper sx={{ height: 400, width: "100%" }}>
+    <Paper sx={{ height: 629, width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns.map((col) => ({
@@ -16,7 +16,7 @@ const BasicTable = ({ rows, columns, loading = false }) => {
           minWidth: col.minWidth || 100,
         }))}
         initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10]}
+        pageSizeOptions={[10, 20]}
         loading={loading}
         disableRowSelectionOnClick
         sx={{ border: 0 }}

@@ -22,7 +22,7 @@ const Pricing = () => {
         <div className=" gap-4">
           {/* Content */}
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-snug mt-20 mb-6">
-            Our Services <br />
+            Our Prices <br />
             <br />
           </h1>
         </div>
