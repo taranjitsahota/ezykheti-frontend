@@ -7,7 +7,15 @@ import { toast } from "react-toastify";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { Select, MenuItem, InputLabel, FormControl } from "@mui/material";
+import {
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Box,
+  Button,
+  Typography,
+} from "@mui/material";
 import { Eye, EyeOff } from "lucide-react";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
@@ -84,25 +92,47 @@ const Equipment = () => {
   };
 
   const handleSubmit = async (formdata) => {
-    const data = {
-      name: formdata?.name,
-      image: formdata?.image,
-      price_per_kanal: formdata?.price_per_kanal,
-      min_kanal: formdata?.min_kanal,
-      minutes_per_kanal: formdata?.minutes_per_kanal,
-      inventory: formdata?.inventory,
-      is_enabled: formdata?.is_enabled,
-    };
+    if (!formData.image) {
+      toast.error("Equipment image is required.");
+      return;
+    }
+    const formDataToSend = new FormData();
+
+    // Append all fields — must be strings/numbers/booleans
+    formDataToSend.append("name", formdata.name || "");
+    formDataToSend.append(
+      "price_per_kanal",
+      formdata.price_per_kanal?.toString() || "0"
+    );
+    formDataToSend.append("min_kanal", formdata.min_kanal?.toString() || "0");
+    formDataToSend.append(
+      "minutes_per_kanal",
+      formdata.minutes_per_kanal?.toString() || "0"
+    );
+    formDataToSend.append("inventory", formdata.inventory?.toString() || "0");
+    formDataToSend.append("is_enabled", Number(formdata.is_enabled).toString());
+    formDataToSend.append("image", formdata.image);
+
+    if (isEditMode) {
+      formDataToSend.append("_method", "PUT");
+    }
+
+    // 🔍 Debug FormData
+    for (let pair of formDataToSend.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+    // return;
 
     try {
       setSubmitLoading(true);
 
       const response = await apiRequest({
-        url: isEditMode
-          ? `/equipments/${formData.id}` // replace with your actual edit API URL
-          : "/equipments",
-        method: isEditMode ? "put" : "post",
-        data: data,
+        url: isEditMode ? `/equipments/${formData.id}` : "/equipments",
+        method: "post",
+        data: formDataToSend,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       if (response.success) {
@@ -321,13 +351,39 @@ const Equipment = () => {
         required
       />
 
+      {/* Image Upload Field */}
+      <Typography variant="subtitle1" gutterBottom>
+        Upload Equipment Image*
+      </Typography>
+      <Box mt={4} mb={4}>
+        <input
+          accept="image/*"
+          type="file"
+          name="image"
+          // required
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              setFormData({ ...formData, image: file });
+            }
+          }}
+          style={{ display: "none" }}
+          id="image-upload"
+        />
+        <label htmlFor="image-upload">
+          <Button variant="outlined" component="span">
+            Upload Image
+          </Button>
+        </label>
+      </Box>
+
       <TextField
         select
         label="Status"
         name="is_enabled"
         fullWidth
         required
-        defaultValue="" // or true / false
+        defaultValue="1" // or true / false
       >
         <MenuItem value={1}>True</MenuItem>
         <MenuItem value={0}>False</MenuItem>
@@ -391,24 +447,63 @@ const Equipment = () => {
         required
       />
 
+      <Box mt={4} mb={4}>
+        <input
+          accept="image/*"
+          type="file"
+          name="image"
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              setFormData({ ...formData, image: file });
+            }
+          }}
+          style={{ display: "none" }}
+          id="image-upload"
+        />
+        <label htmlFor="image-upload">
+          <Button variant="outlined" color="green" component="span">
+            Upload Image
+          </Button>
+          {formData.image && (
+            <>
+              <span style={{ marginLeft: 10 }}>
+                {formData.image instanceof File
+                  ? formData.image.name
+                  : "Uploaded Image"}
+              </span>
+              <img
+                src={
+                  formData.image instanceof File
+                    ? URL.createObjectURL(formData.image)
+                    : formData.image
+                }
+                alt="Preview"
+                style={{
+                  height: 40,
+                  marginLeft: 40,
+                  marginBottom: 20,
+                  marginTop: 20,
+                  verticalAlign: "middle",
+                }}
+              />
+            </>
+          )}
+        </label>
+      </Box>
+
       <TextField
         select
         label="Status"
         name="is_enabled"
-        value={
-          formData.is_enabled === 1
-            ? true
-            : formData.is_enabled === 0
-            ? false
-            : ""
-        }
+        value={Number(formData.is_enabled)}
         onChange={(e) =>
-          setFormData({ ...formData, is_enabled: e.target.value === "true" })
+          setFormData({ ...formData, is_enabled: Number(e.target.value) })
         }
         fullWidth
         required
       >
-        <MenuItem value={true}>True</MenuItem>
+        <MenuItem value={1}>True</MenuItem>
         <MenuItem value={0}>False</MenuItem>
       </TextField>
     </>
@@ -442,22 +537,22 @@ const Equipment = () => {
           formData={drawerOpen !== "add" && formData}
           isEdit={drawerOpen !== "add" && isEditMode}
         />
-                <BasicTable rows={rowsWithSerial} columns={columns} loading={loading} />
-                <Dialog
-                  open={!!previewImage}
-                  onClose={() => setPreviewImage(null)}
-                  maxWidth="sm"
-                  fullWidth
-                >
-                  <DialogTitle>Image Preview</DialogTitle>
-                  <DialogContent className="flex justify-center">
-                    <img
-                      src={previewImage}
-                      alt="preview"
-                      className="max-w-full max-h-[400px] rounded"
-                    />
-                  </DialogContent>
-                </Dialog>
+        <BasicTable rows={rowsWithSerial} columns={columns} loading={loading} />
+        <Dialog
+          open={!!previewImage}
+          onClose={() => setPreviewImage(null)}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogTitle>Image Preview</DialogTitle>
+          <DialogContent className="flex justify-center">
+            <img
+              src={previewImage}
+              alt="preview"
+              className="max-w-full max-h-[400px] rounded"
+            />
+          </DialogContent>
+        </Dialog>
 
         <div>
           <ConfirmModal
@@ -478,7 +573,6 @@ const Equipment = () => {
             ]}
           />
         </div>
-
       </div>
     </DashboardLayout>
   );

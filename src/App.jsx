@@ -19,7 +19,7 @@ import Drivers from "./pages/adminportal/Drivers";
 import ForgotPassword from "./pages/adminportal/ForgotPassword";
 import InterestedDashboard from "./pages/adminportal/InterestedDashboard";
 import Login from "./pages/adminportal/Login";
-import Mybookings from "./pages/adminportal/MyBookings";
+import Bookings from "./pages/adminportal/Bookings";
 import Profile from "./pages/adminportal/Profile";
 import Equipment from "./pages/adminportal/Equipment";
 import Register from "./pages/adminportal/Register";
@@ -104,7 +104,7 @@ function App() {
     { path: "/dashboard", element: <Dashboard /> },
     { path: "/drivers", element: <Drivers /> },
     { path: "/interested-users", element: <InterestedDashboard /> },
-    { path: "/my-bookings", element: <Mybookings /> },
+    { path: "/bookings", element: <Bookings /> },
     { path: "/services", element: <Services /> },
     { path: "/service-areas", element: <ServiceAreas /> },
     { path: "/users", element: <Users /> },

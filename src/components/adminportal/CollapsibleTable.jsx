@@ -29,10 +29,11 @@ function CollapsibleRow({ row, index }) {
         <TableCell>{index + 1}</TableCell>
         <TableCell>{row.user_name}</TableCell>
         <TableCell>{row.address}</TableCell>
+        <TableCell>{row.equipment_name}</TableCell>
         <TableCell>{row.date}</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell colSpan={5} sx={{ paddingBottom: 0, paddingTop: 0 }}>
+        <TableCell colSpan={6} sx={{ paddingBottom: 0, paddingTop: 0 }}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ m: 1, backgroundColor: "#ffffff" }}>
               <Typography variant="subtitle1" gutterBottom>
@@ -40,12 +41,13 @@ function CollapsibleRow({ row, index }) {
               </Typography>
               <Table size="small" sx={{ backgroundColor: "#ffffff" }}>
                 <TableBody>
-                  <TableRow><TableCell>Crop Name</TableCell><TableCell>{row.crop_name}</TableCell></TableRow>
+                  <TableRow><TableCell>Crop</TableCell><TableCell>{row.crop_name}</TableCell></TableRow>
                   <TableRow><TableCell>Start Time</TableCell><TableCell>{row.start_time}</TableCell></TableRow>
                   <TableRow><TableCell>End Time</TableCell><TableCell>{row.end_time}</TableCell></TableRow>
                   <TableRow><TableCell>Duration</TableCell><TableCell>{row.duration}</TableCell></TableRow>
                   <TableRow><TableCell>Amount</TableCell><TableCell>{row.amount}</TableCell></TableRow>
-                  <TableRow><TableCell>Status</TableCell><TableCell>{row.status}</TableCell></TableRow>
+                  <TableRow><TableCell>Payment Status</TableCell><TableCell>{row.status}</TableCell></TableRow>
+                  <TableRow><TableCell>Booking Status</TableCell><TableCell>{row.booking_status}</TableCell></TableRow>
                   <TableRow><TableCell>Requested Date</TableCell><TableCell>{row.created_at}</TableCell></TableRow>
                 </TableBody>
               </Table>
@@ -77,6 +79,7 @@ const CollapsibleBookingTable = ({ rows }) => {
             <TableCell>S.No.</TableCell>
             <TableCell>Name</TableCell>
             <TableCell>Address</TableCell>
+            <TableCell>Equipment</TableCell>
             <TableCell>Booking Date</TableCell>
           </TableRow>
         </TableHead>

@@ -15,7 +15,7 @@ import Anchor from "../../components/adminportal/Anchor";
 import ConfirmModal from "../../components/adminportal/ConfirmModal";
 import CollapsibleTable from "../../components/adminportal/CollapsibleTable";
 
-const MyBookings = () => {
+const Bookings = () => {
 
   const [rows, setRows] = React.useState([]);
 
@@ -37,12 +37,14 @@ const MyBookings = () => {
     { field: "user_name", headerName: "Name", width: 150 },
     { field: "address", headerName: "Address", width: 150 },
     { field: "crop_name", headerName: "Crop Name", width: 150 },
+    { field: "equipment_name", headerName: "Service Name", width: 150 },
     { field: "date", headerName: "Booking Date", width: 150 },
     { field: "start_time", headerName: "Start Time", width: 150 },
     { field: "end_time", headerName: "End Time", width: 150 },
     { field: "duration", headerName: "Duration", width: 150 },
     { field: "amount", headerName: "Amount", width: 150 },
     { field: "status", headerName: "Status", width: 150 },
+    { field: "booking_status", headerName: "Booking Status", width: 150 },
     {field: "created_at", headerName: "Requested Date", width: 150},
   ];
 
@@ -103,4 +105,4 @@ const MyBookings = () => {
   );
 };
 
-export default MyBookings;
+export default Bookings;

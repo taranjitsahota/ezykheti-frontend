@@ -23,7 +23,7 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
   `}
     >
       <div className="md:hidden flex justify-end p-4 z-30">
-        <button onClick={toggleSidebar}>
+        <button onClick={toggleSidebar} data-sidebar-toggle>
           <svg
             className="h-6 w-6 text-gray-600"
             fill="none"
@@ -55,12 +55,24 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
             { to: "/admins", icon: <User />, label: "Admins" },
             { to: "/equipments", icon: <User />, label: "Equipments" },
             { to: "/areas", icon: <User />, label: "Areas" },
-            { to: "/assign-bookings", icon: <User />, label: "Assign Bookings" },
-            { to: "/business-timings", icon: <User />, label: "Buisness Timings" },
+            {
+              to: "/assign-bookings",
+              icon: <User />,
+              label: "Assign Bookings",
+            },
+            {
+              to: "/business-timings",
+              icon: <User />,
+              label: "Buisness Timings",
+            },
             { to: "/crops", icon: <User />, label: "Crops" },
             { to: "/drivers", icon: <User />, label: "Drivers" },
-            { to: "/interested-users", icon: <User />, label: "Interested users" },
-            { to: "/my-bookings", icon: <User />, label: "My Bookings" },
+            {
+              to: "/interested-users",
+              icon: <User />,
+              label: "Interested users",
+            },
+            { to: "/bookings", icon: <User />, label: "Bookings" },
             { to: "/services", icon: <User />, label: "Services" },
             { to: "/service-areas", icon: <User />, label: "Service Areas" },
             // { to: "/admins", icon: <User />, label: "Admins" },
@@ -71,8 +83,8 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
             //   icon: <Puzzle />,
             //   label: "Attachment",
             // },
-            { to: "/areas", icon: <Map />, label: "Areas" },
-            { to: "/crops", icon: <Sprout />, label: "Crops" },
+            // { to: "/areas", icon: <Map />, label: "Areas" },
+            // { to: "/crops", icon: <Sprout />, label: "Crops" },
             // {
             //   to: "/assign-bookings",
             //   icon: <CalendarCheck />,

@@ -3,8 +3,68 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { User } from "lucide-react";
+import Modal from "./Modal";
+import { apiRequest } from "../../utils/apiService";
+import { toast } from "react-toastify";
 
 const Header = ({ toggleSidebar }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const fields = [
+    { name: "oldPassword", label: "Old Password", type: "password" },
+    { name: "newPassword", label: "New Password", type: "password" },
+    { name: "confirmPassword", label: "Confirm Password", type: "password" },
+  ];
+
+  const handleSubmit = async (data) => {
+    const { oldPassword, newPassword, confirmPassword } = data;
+    const user_id = localStorage.getItem("user_id");
+
+    // 🔐 Basic validations
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      toast.error("All fields are required.");
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      toast.error("New password must be at least 8 characters.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error("New password and confirm password do not match.");
+      return;
+    }
+
+    try {
+      const response = await apiRequest({
+        url: "/change-password", // your backend route
+        method: "POST",
+        data: {
+          type: "change_password",
+          user_id,
+          old_password: oldPassword,
+          new_password: newPassword,
+          new_password_confirmation: confirmPassword, // Laravel's `confirmed` rule will expect this
+        },
+      });
+
+      if (response.success) {
+        toast.success("Password changed successfully! Please log in again.");
+        localStorage.clear();
+        navigate("/admin");
+        setIsModalOpen(false);
+      } else {
+        toast.error(response.message || "Failed to change password.");
+      }
+    } catch (err) {
+      toast.error("Something went wrong while changing password.");
+      console.error(err);
+    }
+  };
+
   const username = localStorage.getItem("username");
   const profilePhoto = localStorage.getItem("profile_photo");
 
@@ -31,9 +91,25 @@ const Header = ({ toggleSidebar }) => {
     };
   }, []);
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/admin");
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      const res = await apiRequest({
+        url: "/logout",
+        method: "post",
+      });
+
+      if (res.success) {
+        localStorage.clear();
+        navigate("/admin");
+      } else {
+        toast.error(res.message || "Failed to logout.");
+      }
+    } catch (err) {
+      toast.error("Error logging out.");
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   // Step 1: Handle search input change
@@ -58,6 +134,7 @@ const Header = ({ toggleSidebar }) => {
     <header className="admin-wrapper bg-[var(--sidebar-bg-color)] flex items-center justify-between px-6 py-2 border border-[var(--border-bg-color)] sticky top-0 z-30">
       <button
         onClick={toggleSidebar}
+        data-sidebar-toggle
         className="text-green-600 focus:outline-none md:hidden"
       >
         ☰
@@ -134,21 +211,35 @@ const Header = ({ toggleSidebar }) => {
                   View profile
                 </button>
               </Link>
-              <button className="block w-full text-left px-4 py-1 text-gray-700 hover:bg-gray-100">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="block w-full text-left px-4 py-1 text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
                 Change password
               </button>
-              <button className="block w-full text-left px-4 py-1 text-gray-700 hover:bg-gray-100">
+
+              {/* <button className="block w-full text-left px-4 py-1 text-gray-700 hover:bg-gray-100">
                 Users
-              </button>
+              </button> */}
               <button
                 onClick={handleLogout}
-                className="block w-full text-left px-4 rounded-b-lg text-white bg-[var(--warning-color)] cursor-pointer mt-2 flex items-center justify-between"
+                disabled={isLoggingOut}
+                className={`block w-full text-left px-4 rounded-b-lg text-white bg-[var(--warning-color)] cursor-pointer mt-2 flex items-center justify-between ${
+                  isLoggingOut ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               >
-                LogOut
-                <LogOut size={16} />
+                {isLoggingOut ? "Logging out..." : "LogOut"}
+                {!isLoggingOut && <LogOut size={16} />}
               </button>
             </div>
           )}
+          <Modal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            title="Change Password"
+            fields={fields}
+            onSubmit={handleSubmit}
+          />
         </div>
       </div>
     </header>

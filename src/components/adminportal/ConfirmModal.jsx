@@ -38,7 +38,7 @@ const ConfirmModal = ({
                 btn.onClick();
                 onClose();
               }}
-              className={`px-5 py-2 rounded-full transition-all ${btn.className}`}
+              className={`px-5 py-2 rounded-full cursor-pointer transition-all ${btn.className}`}
             >
               {btn.label}
             </button>

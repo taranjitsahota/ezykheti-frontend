@@ -21,7 +21,11 @@ const DashboardLayout = ({
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target) &&
+        !event.target.closest("button[data-sidebar-toggle]")
+      ) {
         setIsSidebarOpen(false);
       }
     };

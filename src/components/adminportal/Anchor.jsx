@@ -74,6 +74,8 @@ export default function Anchor({
           width: { xs: "100%", sm: 500 },
           zIndex: 1300,
           opacity: 1,
+          display: "flex",
+          flexDirection: "column",
         },
       }}
     >
@@ -81,6 +83,7 @@ export default function Anchor({
         className="admin-wrapper"
         sx={{
           width: { xs: 250, sm: 500 },
+          mb: 8,
           padding: 4,
           overflowY: "auto",
           height: "100%",

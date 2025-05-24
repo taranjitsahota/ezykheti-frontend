@@ -31,6 +31,32 @@ const Crops = () => {
     setDrawerOpen(value);
   };
 
+
+  const handleStatusToggle = async (id, currentStatus) => {
+      const newStatus = currentStatus ? 0 : 1;
+  
+      try {
+        const response = await apiRequest({
+          url: `/crops/${id}`, // Use `id` passed to the function
+          method: "put",
+          data: {
+            is_enabled: newStatus, // Send the toggled status
+          },
+        });
+  
+        if (response.success) {
+          toast.success("Crop status updated successfully!");
+          handleAdminList(); // Refresh the list or rows
+        } else {
+          toast.error(response.message || "Failed to update status.");
+        }
+      } catch (error) {
+        const msg = error?.response?.data?.message || "Something went wrong.";
+        toast.error(msg);
+      }
+    };
+
+
   const handleDelete = async () => {
     if (!deleteId) return; // Ensure deleteId is available
 
@@ -240,7 +266,7 @@ const Crops = () => {
         name="is_enabled"
         fullWidth
         required
-        defaultValue="" // or true / false
+        defaultValue="1" // or true / false
       >
         <MenuItem value={1}>True</MenuItem>
         <MenuItem value={0}>False</MenuItem>
@@ -265,21 +291,15 @@ const Crops = () => {
         select
         label="Status"
         name="is_enabled"
-        value={
-          formData.is_enabled === 1
-            ? true
-            : formData.is_enabled === 0
-            ? false
-            : ""
-        }
+       value={Number(formData.is_enabled)}
         onChange={(e) =>
-          setFormData({ ...formData, is_enabled: e.target.value === "true" })
+          setFormData({ ...formData, is_enabled: Number(e.target.value) })
         }
         fullWidth
         required
       >
-        <MenuItem value={true}>True</MenuItem>
-        <MenuItem value={false}>False</MenuItem>
+        <MenuItem value={1}>True</MenuItem>
+        <MenuItem value={0}>False</MenuItem>
       </TextField>
     </>
   );
