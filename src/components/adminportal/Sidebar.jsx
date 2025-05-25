@@ -72,6 +72,11 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
               icon: <User />,
               label: "Interested users",
             },
+            {
+              to: "/interested-users-email",
+              icon: <User />,
+              label: "Interested users Email",
+            },
             { to: "/bookings", icon: <User />, label: "Bookings" },
             { to: "/services", icon: <User />, label: "Services" },
             { to: "/service-areas", icon: <User />, label: "Service Areas" },

@@ -24,13 +24,85 @@ const ServiceAreas = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({});
 
+  const [equipment, setEquipment] = useState([]);
+  const [selectedEquipmentId, setSelectedEquipmentId] = useState(null);
+  const [serviceList, setServiceList] = useState([]);
+  const [areaList, setAreaList] = useState([]);
 
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      try {
+        const response = await apiRequest({
+          url: `/equipments`,
+          method: "get",
+        });
 
+        if (response.success) {
+          setEquipment(response.data);
+        } else {
+          toast.error(response.message || "Failed to fetch equipments.");
+        }
+      } catch (error) {
+        const msg = error?.response?.data?.message || "Something went wrong.";
+        toast.error(msg);
+      }
+    };
+
+    fetchEquipment();
+  }, []);
+
+  const fetchAreas = async () => {
+    try {
+      const response = await apiRequest({
+        url: `/areas`, // Update this to match your filtered endpoint
+        method: "get",
+      });
+
+      if (response.success) {
+        setAreaList(response.data);
+      } else {
+        toast.error(response.message || "Failed to fetch areas.");
+      }
+    } catch (error) {
+      const msg = error?.response?.data?.message || "Something went wrong.";
+      toast.error(msg);
+    }
+  };
+
+  useEffect(() => {
+    fetchAreas();
+  }, []);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      if (!selectedEquipmentId) return;
+
+      try {
+        const response = await apiRequest({
+          url: `/service-by-equipment-id/${selectedEquipmentId}`,
+          method: "get",
+        });
+
+        if (response.success) {
+          setServiceList(response.data);
+        } else {
+          toast.error(response.message || "Failed to fetch services.");
+        }
+      } catch (error) {
+        const msg =
+          error?.response?.data?.message || "Failed to fetch services.";
+        toast.error(msg);
+      }
+    };
+
+    fetchServices();
+  }, [selectedEquipmentId]);
 
   const toggleDrawer = (value) => {
     if (value === "add") {
       setIsEditMode(false); // ✅ ensure it's add mode
       setFormData({}); // ✅ reset form
+      setSelectedEquipmentId(null);
     }
     setDrawerOpen(value);
   };
@@ -82,6 +154,7 @@ const ServiceAreas = () => {
 
   const handleSubmit = async (formdata) => {
     const data = {
+      equipment_id: formdata?.equipment_id,
       area_id: formdata?.area_id,
       service_id: formdata?.service_id,
       is_enabled: formdata?.is_enabled,
@@ -91,9 +164,7 @@ const ServiceAreas = () => {
       setSubmitLoading(true);
 
       const response = await apiRequest({
-        url: isEditMode
-          ? `/service-areas/${formData.id}` // replace with your actual edit API URL
-          : "/service-areas",
+        url: isEditMode ? `/service-areas/${formData.id}` : "/service-areas",
         method: isEditMode ? "put" : "post",
         data: data,
       });
@@ -118,9 +189,6 @@ const ServiceAreas = () => {
     }
   };
 
-  //   const [showPassword, setShowPassword] = useState(false);
-  //   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const [rows, setRows] = React.useState([]);
 
   const rowsWithSerial = rows.map((row, index) => ({
@@ -138,13 +206,25 @@ const ServiceAreas = () => {
       width: 60,
       sortable: false,
     },
-    { field: "area_id", headerName: "Area", width: 150 },
-    { field: "service_id", headerName: "Service", width: 150 },
-    { field: "city", headerName: "City", width: 150 },
-    { field: "state", headerName: "State", width: 150 },
-    { field: "village", headerName: "Village", width: 150 },
+    { field: "equipment", headerName: "Equipment", width: 150 },
     { field: "service", headerName: "Service", width: 150 },
-    
+    {
+      field: "area",
+      headerName: "Area (State > City > Village)",
+      width: 250,
+      renderCell: (params) => {
+        const state = params.row.state || "";
+        const city = params.row.city || "";
+        const village = params.row.village || "";
+        return <span>{`${state} > ${city} > ${village}`}</span>;
+      },
+    },
+
+    // { field: "service_id", headerName: "Service", width: 150 },
+    // { field: "city", headerName: "City", width: 150 },
+    // { field: "state", headerName: "State", width: 150 },
+    // { field: "village", headerName: "Village", width: 150 },
+
     {
       field: "is_enabled",
       headerName: "Status",
@@ -203,6 +283,7 @@ const ServiceAreas = () => {
             onClick={() => {
               setIsEditMode(true);
               setFormData(params.row); // row = your current row data
+              setSelectedEquipmentId(params.row.equipment_id);
               toggleDrawer(true); // open anchor
             }}
             className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
@@ -256,49 +337,65 @@ const ServiceAreas = () => {
   const serviceareasFormContent = (
     <>
       <TextField
-        label="Name"
-        placeholder="Enter name"
-        name="name"
+        select
+        label="Equipment"
+        name="equipment_id"
         fullWidth
         required
-      />
-      <TextField
-        label="Price Per Kanal"
-        placeholder="Enter price per kanal"
-        name="price_per_kanal"
-        type="number"
-        fullWidth
-        // margin="normal"
-        required
-      />
-      <TextField
-        placeholder="Enter Min Kanal"
-        label="Min Kanal"
-        name="min_kanal"
-        type="number"
-        fullWidth
-        // margin="normal"
-        required
-        inputProps={{ maxLength: 10, pattern: "[0-9]{10}" }}
-      />
-      <TextField
-        placeholder="Enter Minutes Per Kanal"
-        label="Minutes Per Kanal"
-        name="minutes_per_kanal"
-        type="number"
-        fullWidth
-        required
-        variant="standard"
-      />
+        value={formData.equipment_id || ""}
+        onChange={(e) => {
+          const id = e.target.value;
+          setFormData({ ...formData, equipment_id: e.target.value });
+          setSelectedEquipmentId(id);
+        }}
+        // disabled={!selectedState}
+        margin="normal"
+      >
+        {equipment.map((equipment) => (
+          <MenuItem key={equipment.id} value={equipment.id}>
+            {equipment.name}
+          </MenuItem>
+        ))}
+      </TextField>
 
       <TextField
-        placeholder="Enter Inventory"
-        label="Inventory"
-        name="inventory"
-        type="number"
+        select
+        label="Service"
+        name="service_id"
         fullWidth
         required
-      />
+        value={formData.service_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, service_id: e.target.value })
+        }
+        margin="normal"
+        disabled={!formData.equipment_id}
+      >
+        {serviceList.map((service) => (
+          <MenuItem key={service.id} value={service.id}>
+            {service.category}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        select
+        label="Area (State > City > Village)"
+        name="area_id"
+        fullWidth
+        required
+        value={formData.area_id || ""}
+        onChange={(e) => setFormData({ ...formData, area_id: e.target.value })}
+        margin="normal"
+      >
+        {areaList.map((area) => (
+          <MenuItem key={area.id} value={area.id}>
+            {`${area.state_name || ""} > ${area.city_name || ""} > ${
+              area.village_name || ""
+            }`}
+          </MenuItem>
+        ))}
+      </TextField>
 
       <TextField
         select
@@ -306,7 +403,10 @@ const ServiceAreas = () => {
         name="is_enabled"
         fullWidth
         required
-        defaultValue="" // or true / false
+        value={formData.is_enabled ?? ""}
+        onChange={(e) =>
+          setFormData({ ...formData, is_enabled: Number(e.target.value) })
+        }
       >
         <MenuItem value={1}>True</MenuItem>
         <MenuItem value={0}>False</MenuItem>
@@ -317,77 +417,77 @@ const ServiceAreas = () => {
   const serviceareasFormContentEdit = (
     <>
       <TextField
-        label="Name"
-        placeholder="Enter name"
-        name="name"
-        defaultValue={formData.name || ""}
-        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        select
+        label="Equipment"
+        name="equipment_id"
         fullWidth
         required
-      />
+        value={formData.equipment_id || ""}
+        onChange={(e) => {
+          const id = e.target.value;
+          setFormData({ ...formData, equipment_id: e.target.value });
+          setSelectedEquipmentId(id);
+        }}
+        // disabled={!selectedState}
+        margin="normal"
+      >
+        {equipment.map((equipment) => (
+          <MenuItem key={equipment.id} value={equipment.id}>
+            {equipment.name}
+          </MenuItem>
+        ))}
+      </TextField>
       <TextField
-        label="Price Per Kanal"
-        placeholder="Enter price per kanal"
-        name="price_per_kanal"
-        defaultValue={formData.price_per_kanal || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, price_per_kanal: e.target.value })
-        }
+        select
+        label="Service"
+        name="service_id"
         fullWidth
         required
-      />
+        value={formData.service_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, service_id: e.target.value })
+        }
+        margin="normal"
+      >
+        {serviceList.map((service) => (
+          <MenuItem key={service.id} value={service.id}>
+            {service.category}
+          </MenuItem>
+        ))}
+      </TextField>
+
       <TextField
-        placeholder="Enter Min Kanal"
-        label="Min Kanal"
-        name="min_kanal"
-        defaultValue={formData.min_kanal || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, min_kanal: e.target.value })
-        }
+        select
+        label="Area (State > City > Village)"
+        name="area_id"
         fullWidth
         required
-      />
-      <TextField
-        placeholder="Enter Minutes Per Kanal"
-        label="Minutes Per Kanal"
-        name="minutes_per_kanal"
-        defaultValue={formData.minutes_per_kanal || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, minutes_per_kanal: e.target.value })
-        }
-        fullWidth
-        required
-      />
-      <TextField
-        placeholder="Enter Inventory"
-        label="Inventory"
-        name="inventory"
-        defaultValue={formData.inventory || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, inventory: e.target.value })
-        }
-        fullWidth
-        required
-      />
+        value={formData.area_id || ""}
+        onChange={(e) => setFormData({ ...formData, area_id: e.target.value })}
+        margin="normal"
+      >
+        {areaList.map((area) => (
+          <MenuItem key={area.id} value={area.id}>
+            {`${area.state_name || ""} > ${area.city_name || ""} > ${
+              area.village_name || ""
+            }`}
+          </MenuItem>
+        ))}
+      </TextField>
 
       <TextField
         select
         label="Status"
         name="is_enabled"
-        value={
-          formData.is_enabled === 1
-            ? true
-            : formData.is_enabled === 0
-            ? false
-            : ""
-        }
-        onChange={(e) =>
-          setFormData({ ...formData, is_enabled: e.target.value === "true" })
-        }
         fullWidth
         required
+        defaultValue={formData.is_enabled ?? ""}
+        onChange={(e) =>
+          setFormData({ ...formData, is_enabled: parseInt(e.target.value) })
+        }
+        margin="normal"
       >
-        <MenuItem value={true}>True</MenuItem>
+        <MenuItem value={1}>True</MenuItem>
         <MenuItem value={0}>False</MenuItem>
       </TextField>
     </>
@@ -415,14 +515,15 @@ const ServiceAreas = () => {
               ? serviceareasFormContent
               : serviceareasFormContentEdit
           }
-          add={drawerOpen === "add" ? "Add Service Areas" : "Edit Service Areas"}
+          add={
+            drawerOpen === "add" ? "Add Service Areas" : "Edit Service Areas"
+          }
           handleSubmit={handleSubmit}
           loading={submitLoading}
           formData={drawerOpen !== "add" && formData}
           isEdit={drawerOpen !== "add" && isEditMode}
         />
-                <BasicTable rows={rowsWithSerial} columns={columns} loading={loading} />
-                
+        <BasicTable rows={rowsWithSerial} columns={columns} loading={loading} />
 
         <div>
           <ConfirmModal
@@ -443,7 +544,6 @@ const ServiceAreas = () => {
             ]}
           />
         </div>
-
       </div>
     </DashboardLayout>
   );

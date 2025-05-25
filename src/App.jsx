@@ -18,6 +18,7 @@ import Dashboard from "./pages/adminportal/Dashboard";
 import Drivers from "./pages/adminportal/Drivers";
 import ForgotPassword from "./pages/adminportal/ForgotPassword";
 import InterestedDashboard from "./pages/adminportal/InterestedDashboard";
+import InterestedDashboardEmail from "./pages/adminportal/InterestedDashboardEmail";
 import Login from "./pages/adminportal/Login";
 import Bookings from "./pages/adminportal/Bookings";
 import Profile from "./pages/adminportal/Profile";
@@ -104,6 +105,7 @@ function App() {
     { path: "/dashboard", element: <Dashboard /> },
     { path: "/drivers", element: <Drivers /> },
     { path: "/interested-users", element: <InterestedDashboard /> },
+    { path: "/interested-users-email", element: <InterestedDashboardEmail /> },
     { path: "/bookings", element: <Bookings /> },
     { path: "/services", element: <Services /> },
     { path: "/service-areas", element: <ServiceAreas /> },
