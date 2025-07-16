@@ -17,17 +17,21 @@ import ConfirmModal from "../../components/adminportal/ConfirmModal";
 
 const Areas = () => {
   const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [tehsils, setTehsils] = useState([]);
   const [villages, setVillages] = useState([]);
 
+  const [substation, setSubstation] = useState([]);
   const [selectedState, setSelectedState] = useState(28);
-  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedTehsil, setSelectedTehsil] = useState("");
+
   const [selectedVillage, setSelectedVillage] = useState("");
 
   const handleDrawerClose = () => {
     setDrawerOpen("");
-    setIsEditMode(false); // ✅ Reset the mode
-    setFormData(null); // ✅ Optional: Clear form data
+    setIsEditMode(false);
+    setFormData(null);
   };
 
   //  useEffect(() => {
@@ -57,55 +61,125 @@ const Areas = () => {
 
   // Fetch cities when state changes
   useEffect(() => {
-    const fetchCities = async () => {
+    const fetchDistricts = async () => {
       try {
         const response = await apiRequest({
-          url: `/location/cities/${selectedState}`,
+          url: `/location/districts/${selectedState}`,
           method: "get",
         });
-
         if (response.success) {
-          setCities(response.data); // or response.data.data depending on your API structure
+          setDistricts(response.data);
         } else {
-          toast.error(response.message || "Failed to fetch cities.");
+          toast.error(response.message || "Failed to fetch districts.");
         }
       } catch (error) {
-        const msg = error?.response?.data?.message || "Something went wrong.";
-        toast.error(msg);
+        toast.error("Failed to fetch districts.");
       }
     };
 
     if (selectedState) {
-      fetchCities();
+      fetchDistricts();
+      setSelectedDistrict("");
+      setTehsils([]);
+      setVillages([]);
     }
   }, [selectedState]);
+
+  useEffect(() => {
+    const fetchTehsils = async () => {
+      try {
+        const response = await apiRequest({
+          url: `/location/tehsils/${selectedDistrict}`,
+          method: "get",
+        });
+        if (response.success) {
+          setTehsils(response.data);
+        } else {
+          toast.error(response.message || "Failed to fetch tehsils.");
+        }
+      } catch (error) {
+        toast.error("Failed to fetch tehsils.");
+      }
+    };
+
+    if (selectedDistrict) {
+      fetchTehsils();
+      setSelectedTehsil("");
+      setVillages([]);
+    }
+  }, [selectedDistrict]);
 
   useEffect(() => {
     const fetchVillages = async () => {
       try {
         const response = await apiRequest({
-          url: `/location/get-villages/${selectedCity}`,
+          url: `/location/villages/${selectedTehsil}`,
           method: "get",
         });
-
         if (response.success) {
-          setVillages(response.data); // or response.data.data depending on your API shape
+          setVillages(response.data);
         } else {
           toast.error(response.message || "Failed to fetch villages.");
         }
       } catch (error) {
-        const msg = error?.response?.data?.message || "Something went wrong.";
+        toast.error("Failed to fetch villages.");
+      }
+    };
+
+    if (selectedTehsil) {
+      fetchVillages();
+      setSelectedVillage("");
+    }
+  }, [selectedTehsil]);
+
+  useEffect(() => {
+    const fetchSubstation = async () => {
+      try {
+        const response = await apiRequest({
+          url: `/substations`,
+          method: "get",
+        });
+
+        if (response.success) {
+          setSubstation(response.data);
+        } else {
+          toast.error(response.message || "Failed to fetch substations.");
+        }
+      } catch (error) {
+        const msg =
+          error?.response?.data?.message || "Failed to fetch substations.";
         toast.error(msg);
       }
     };
 
-    if (selectedCity) {
-      fetchVillages();
-    } else {
-      setVillages([]);
-      setSelectedVillage("");
-    }
-  }, [selectedCity]);
+    fetchSubstation();
+  }, []);
+
+  const handleEditArea = async (row) => {
+    setIsEditMode(true);
+    setFormData(row);
+    setDrawerOpen(true); // Open drawer first
+
+    setSelectedDistrict(row.district_id);
+
+    // Fetch tehsils based on district_id
+    const tehsilRes = await apiRequest({
+      url: `/location/tehsils/${row.district_id}`,
+      method: "get",
+    });
+    if (tehsilRes.success) setTehsils(tehsilRes.data);
+
+    setSelectedTehsil(row.tehsil_id);
+
+    // Fetch villages based on tehsil_id
+    const villageRes = await apiRequest({
+      url: `/location/villages/${row.tehsil_id}`,
+      method: "get",
+    });
+    if (villageRes.success) setVillages(villageRes.data);
+
+    setSelectedVillage(row.village_id);
+  };
 
   const [submitLoading, setSubmitLoading] = useState(false);
 
@@ -124,7 +198,8 @@ const Areas = () => {
     if (value === "add") {
       setIsEditMode(false); // ✅ ensure it's add mode
       setFormData({}); // ✅ reset form
-      setSelectedCity("");
+      setSelectedDistrict("");
+      setSelectedTehsil("");
       setSelectedVillage("");
     }
     setDrawerOpen(value);
@@ -177,9 +252,11 @@ const Areas = () => {
   console.log(isEditMode);
   const handleSubmit = async (formdata) => {
     const data = {
-      city_id: selectedCity,
       state_id: selectedState,
+      district_id: selectedDistrict,
+      tehsil_id: selectedTehsil,
       village_id: selectedVillage,
+      substation_id: formdata?.substation_id,
       is_enabled: formdata?.is_enabled,
     };
 
@@ -233,9 +310,11 @@ const Areas = () => {
       width: 60,
       sortable: false,
     },
-    { field: "city_name", headerName: "City", width: 150 },
     { field: "state_name", headerName: "State", width: 150 },
+    { field: "district_name", headerName: "District", width: 150 },
+    { field: "tehsil_name", headerName: "Tehsil", width: 150 },
     { field: "village_name", headerName: "village", width: 150 },
+    { field: "substation_name", headerName: "Substation", width: 150 },
 
     {
       field: "is_enabled",
@@ -245,42 +324,15 @@ const Areas = () => {
         const isEnabled = params.row.is_enabled === 1;
 
         return (
-          <div
-            className={`flex items-center rounded-full w-28 h-10 cursor-pointer transition-all duration-300 ${
-              isEnabled
-                ? "bg-green-700 justify-start"
-                : "bg-red-700 justify-end"
-            }`}
-            onClick={() => handleStatusToggle(params.row.id, isEnabled)}
-          >
-            {isEnabled ? (
-              <>
-                <div
-                  className="w-10 h-10 bg-gradient-to-tr from-gray-300 to-gray-100 rounded-full shadow-inner ml-0"
-                  style={{
-                    boxShadow:
-                      "inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff",
-                  }}
-                ></div>
-                <span className="text-white text-base font-normal ml-4">
-                  Enable
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="text-white text-base font-normal mr-4">
-                  Disable
-                </span>
-                <div
-                  className="w-10 h-10 bg-gradient-to-tr from-gray-300 to-gray-100 rounded-full shadow-inner mr-0"
-                  style={{
-                    boxShadow:
-                      "inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff",
-                  }}
-                ></div>
-              </>
-            )}
-          </div>
+          <label className="relative inline-flex items-center cursor-pointer w-16">
+            <input
+              type="checkbox"
+              className="sr-only peer"
+              checked={isEnabled}
+              onChange={() => handleStatusToggle(params.row.id, isEnabled)}
+            />
+            <div className="w-11 h-6 bg-gray-400 peer-checked:bg-green-600 rounded-full peer-focus:ring-2 peer-focus:ring-green-500 transition-colors duration-300 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5" />
+          </label>
         );
       },
     },
@@ -292,13 +344,7 @@ const Areas = () => {
       renderCell: (params) => (
         <div className="flex items-center gap-2 h-full">
           <button
-            onClick={() => {
-              setIsEditMode(true);
-              setFormData(params.row); // row = your current row data
-              setSelectedCity(params.row.city_id);
-              setSelectedVillage(params.row.village_id);
-              toggleDrawer(true); // open anchor
-            }}
+            onClick={() => handleEditArea(params.row)}
             className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
           >
             Edit
@@ -363,17 +409,33 @@ const Areas = () => {
 
       <TextField
         select
-        label="City"
+        label="District"
         fullWidth
         required
-        value={selectedCity}
-        onChange={(e) => setSelectedCity(e.target.value)}
-        disabled={!selectedState}
+        value={selectedDistrict}
+        onChange={(e) => setSelectedDistrict(e.target.value)}
         margin="normal"
       >
-        {cities.map((city) => (
-          <MenuItem key={city.id} value={city.id}>
-            {city.name}
+        {districts.map((district) => (
+          <MenuItem key={district.id} value={district.id}>
+            {district.name}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        select
+        label="Tehsil"
+        fullWidth
+        required
+        value={selectedTehsil}
+        onChange={(e) => setSelectedTehsil(e.target.value)}
+        disabled={!selectedDistrict}
+        margin="normal"
+      >
+        {tehsils.map((tehsil) => (
+          <MenuItem key={tehsil.id} value={tehsil.id}>
+            {tehsil.name}
           </MenuItem>
         ))}
       </TextField>
@@ -385,12 +447,30 @@ const Areas = () => {
         required
         value={selectedVillage}
         onChange={(e) => setSelectedVillage(e.target.value)}
-        disabled={!selectedCity}
+        disabled={!selectedTehsil}
         margin="normal"
       >
         {villages.map((village) => (
           <MenuItem key={village.id} value={village.id}>
             {village.name}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        select
+        label="Substation"
+        name="substation_id"
+        value={formData.substation_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, substation_id: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        {substation.map((sub) => (
+          <MenuItem key={sub.id} value={sub.id}>
+            {sub.name}
           </MenuItem>
         ))}
       </TextField>
@@ -427,17 +507,33 @@ const Areas = () => {
 
       <TextField
         select
-        label="City"
+        label="District"
         fullWidth
         required
-        value={selectedCity}
-        onChange={(e) => setSelectedCity(e.target.value)}
-        disabled={!selectedState}
+        value={selectedDistrict}
+        onChange={(e) => setSelectedDistrict(e.target.value)}
         margin="normal"
       >
-        {cities.map((city) => (
-          <MenuItem key={city.id} value={city.id}>
-            {city.name}
+        {districts.map((district) => (
+          <MenuItem key={district.id} value={district.id}>
+            {district.name}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        select
+        label="Tehsil"
+        fullWidth
+        required
+        value={selectedTehsil}
+        onChange={(e) => setSelectedTehsil(e.target.value)}
+        disabled={!selectedDistrict}
+        margin="normal"
+      >
+        {tehsils.map((tehsil) => (
+          <MenuItem key={tehsil.id} value={tehsil.id}>
+            {tehsil.name}
           </MenuItem>
         ))}
       </TextField>
@@ -449,12 +545,30 @@ const Areas = () => {
         required
         value={selectedVillage}
         onChange={(e) => setSelectedVillage(e.target.value)}
-        disabled={!selectedCity}
+        disabled={!selectedTehsil}
         margin="normal"
       >
         {villages.map((village) => (
           <MenuItem key={village.id} value={village.id}>
             {village.name}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        select
+        label="Substation"
+        name="substation_id"
+        value={formData.substation_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, substation_id: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        {substation.map((sub) => (
+          <MenuItem key={sub.id} value={sub.id}>
+            {sub.name}
           </MenuItem>
         ))}
       </TextField>

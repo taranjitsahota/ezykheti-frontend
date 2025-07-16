@@ -18,6 +18,20 @@ const Header = ({ toggleSidebar }) => {
     { name: "confirmPassword", label: "Confirm Password", type: "password" },
   ];
 
+   const [profilePhoto, setProfilePhoto] = useState(localStorage.getItem("profile_photo"));
+
+
+   useEffect(() => {
+    const interval = setInterval(() => {
+      const latestPhoto = localStorage.getItem("profile_photo");
+      if (latestPhoto !== profilePhoto) {
+        setProfilePhoto(latestPhoto);
+      }
+    }, 1000); // check every second
+
+    return () => clearInterval(interval);
+  }, [profilePhoto]);
+
   const handleSubmit = async (data) => {
     const { oldPassword, newPassword, confirmPassword } = data;
     const user_id = localStorage.getItem("user_id");
@@ -66,7 +80,7 @@ const Header = ({ toggleSidebar }) => {
   };
 
   const username = localStorage.getItem("username");
-  const profilePhoto = localStorage.getItem("profile_photo");
+  // const profilePhoto = localStorage.getItem("profile_photo");
 
   const navigate = useNavigate();
 

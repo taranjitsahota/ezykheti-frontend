@@ -11,6 +11,7 @@ import ComingSoonNotice from "./components/ComingSoonNotice";
 
 import Admins from "./pages/adminportal/admins";
 import Areas from "./pages/adminportal/Areas";
+import Substations from "./pages/adminportal/Substations";
 import AssignBookings from "./pages/adminportal/AssignBookings";
 import BusinessTimings from "./pages/adminportal/BusinessTimings";
 import Crops from "./pages/adminportal/Crops";
@@ -99,6 +100,7 @@ function App() {
     { path: "/admins", element: <Admins /> },
     { path: "/equipments", element: <Equipment /> },
     { path: "/areas", element: <Areas /> },
+    { path: "/substations", element: <Substations /> },
     { path: "/assign-bookings", element: <AssignBookings /> },
     { path: "/business-timings", element: <BusinessTimings /> },
     { path: "/crops", element: <Crops /> },

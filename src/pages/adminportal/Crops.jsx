@@ -31,31 +31,29 @@ const Crops = () => {
     setDrawerOpen(value);
   };
 
-
   const handleStatusToggle = async (id, currentStatus) => {
-      const newStatus = currentStatus ? 0 : 1;
-  
-      try {
-        const response = await apiRequest({
-          url: `/crops/${id}`, // Use `id` passed to the function
-          method: "put",
-          data: {
-            is_enabled: newStatus, // Send the toggled status
-          },
-        });
-  
-        if (response.success) {
-          toast.success("Crop status updated successfully!");
-          handleAdminList(); // Refresh the list or rows
-        } else {
-          toast.error(response.message || "Failed to update status.");
-        }
-      } catch (error) {
-        const msg = error?.response?.data?.message || "Something went wrong.";
-        toast.error(msg);
-      }
-    };
+    const newStatus = currentStatus ? 0 : 1;
 
+    try {
+      const response = await apiRequest({
+        url: `/crops/${id}`, // Use `id` passed to the function
+        method: "put",
+        data: {
+          is_enabled: newStatus, // Send the toggled status
+        },
+      });
+
+      if (response.success) {
+        toast.success("Crop status updated successfully!");
+        handleAdminList(); // Refresh the list or rows
+      } else {
+        toast.error(response.message || "Failed to update status.");
+      }
+    } catch (error) {
+      const msg = error?.response?.data?.message || "Something went wrong.";
+      toast.error(msg);
+    }
+  };
 
   const handleDelete = async () => {
     if (!deleteId) return; // Ensure deleteId is available
@@ -141,9 +139,7 @@ const Crops = () => {
       sortable: false,
     },
     { field: "name", headerName: "Name", width: 150 },
-    // { field: "email", headerName: "Email", width: 200 },
-    // { field: "contact_number", headerName: "Contact", width: 150 },
-    // { field: "role", headerName: "Role", width: 100 },
+
     {
       field: "is_enabled",
       headerName: "Status",
@@ -152,42 +148,15 @@ const Crops = () => {
         const isEnabled = params.row.is_enabled === 1;
 
         return (
-          <div
-            className={`flex items-center rounded-full w-28 h-10 cursor-pointer transition-all duration-300 ${
-              isEnabled
-                ? "bg-green-700 justify-start"
-                : "bg-red-700 justify-end"
-            }`}
-            onClick={() => handleStatusToggle(params.row.id, isEnabled)}
-          >
-            {isEnabled ? (
-              <>
-                <div
-                  className="w-10 h-10 bg-gradient-to-tr from-gray-300 to-gray-100 rounded-full shadow-inner ml-0"
-                  style={{
-                    boxShadow:
-                      "inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff",
-                  }}
-                ></div>
-                <span className="text-white text-base font-normal ml-4">
-                  Enable
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="text-white text-base font-normal mr-4">
-                  Disable
-                </span>
-                <div
-                  className="w-10 h-10 bg-gradient-to-tr from-gray-300 to-gray-100 rounded-full shadow-inner mr-0"
-                  style={{
-                    boxShadow:
-                      "inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff",
-                  }}
-                ></div>
-              </>
-            )}
-          </div>
+          <label className="relative inline-flex items-center cursor-pointer w-16">
+            <input
+              type="checkbox"
+              className="sr-only peer"
+              checked={isEnabled}
+              onChange={() => handleStatusToggle(params.row.id, isEnabled)}
+            />
+            <div className="w-11 h-6 bg-gray-400 peer-checked:bg-green-600 rounded-full peer-focus:ring-2 peer-focus:ring-green-500 transition-colors duration-300 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5" />
+          </label>
         );
       },
     },
@@ -260,7 +229,7 @@ const Crops = () => {
         fullWidth
         required
       />
-   <TextField
+      <TextField
         select
         label="Status"
         name="is_enabled"
@@ -271,8 +240,6 @@ const Crops = () => {
         <MenuItem value={1}>True</MenuItem>
         <MenuItem value={0}>False</MenuItem>
       </TextField>
-      
-
     </>
   );
 
@@ -287,11 +254,11 @@ const Crops = () => {
         fullWidth
         required
       />
-       <TextField
+      <TextField
         select
         label="Status"
         name="is_enabled"
-       value={Number(formData.is_enabled)}
+        value={Number(formData.is_enabled)}
         onChange={(e) =>
           setFormData({ ...formData, is_enabled: Number(e.target.value) })
         }

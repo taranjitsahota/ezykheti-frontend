@@ -24,6 +24,7 @@ const ServiceAreas = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({});
 
+  const [substation, setSubstation] = useState([]);
   const [equipment, setEquipment] = useState([]);
   const [selectedEquipmentId, setSelectedEquipmentId] = useState(null);
   const [serviceList, setServiceList] = useState([]);
@@ -68,6 +69,29 @@ const ServiceAreas = () => {
       toast.error(msg);
     }
   };
+
+  useEffect(() => {
+    const fetchSubstation = async () => {
+      try {
+        const response = await apiRequest({
+          url: `/substations`,
+          method: "get",
+        });
+
+        if (response.success) {
+          setSubstation(response.data);
+        } else {
+          toast.error(response.message || "Failed to fetch substations.");
+        }
+      } catch (error) {
+        const msg =
+          error?.response?.data?.message || "Failed to fetch substations.";
+        toast.error(msg);
+      }
+    };
+
+    fetchSubstation();
+  }, []);
 
   useEffect(() => {
     fetchAreas();
@@ -157,6 +181,7 @@ const ServiceAreas = () => {
       equipment_id: formdata?.equipment_id,
       area_id: formdata?.area_id,
       service_id: formdata?.service_id,
+      substation_id: formdata?.substation_id,
       is_enabled: formdata?.is_enabled,
     };
 
@@ -210,20 +235,17 @@ const ServiceAreas = () => {
     { field: "service", headerName: "Service", width: 150 },
     {
       field: "area",
-      headerName: "Area (State > City > Village)",
+      headerName: "Area (State > District > Tehsil > Village)",
       width: 250,
       renderCell: (params) => {
         const state = params.row.state || "";
-        const city = params.row.city || "";
+        const District = params.row.district || "";
+        const Tehsil = params.row.tehsil || "";
         const village = params.row.village || "";
-        return <span>{`${state} > ${city} > ${village}`}</span>;
+        return <span>{`${state} > ${District} > ${Tehsil} > ${village}`}</span>;
       },
     },
-
-    // { field: "service_id", headerName: "Service", width: 150 },
-    // { field: "city", headerName: "City", width: 150 },
-    // { field: "state", headerName: "State", width: 150 },
-    // { field: "village", headerName: "Village", width: 150 },
+    { field: "substation", headerName: "Substation", width: 150 },
 
     {
       field: "is_enabled",
@@ -233,42 +255,15 @@ const ServiceAreas = () => {
         const isEnabled = params.row.is_enabled === 1;
 
         return (
-          <div
-            className={`flex items-center rounded-full w-28 h-10 cursor-pointer transition-all duration-300 ${
-              isEnabled
-                ? "bg-green-700 justify-start"
-                : "bg-red-700 justify-end"
-            }`}
-            onClick={() => handleStatusToggle(params.row.id, isEnabled)}
-          >
-            {isEnabled ? (
-              <>
-                <div
-                  className="w-10 h-10 bg-gradient-to-tr from-gray-300 to-gray-100 rounded-full shadow-inner ml-0"
-                  style={{
-                    boxShadow:
-                      "inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff",
-                  }}
-                ></div>
-                <span className="text-white text-base font-normal ml-4">
-                  Enable
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="text-white text-base font-normal mr-4">
-                  Disable
-                </span>
-                <div
-                  className="w-10 h-10 bg-gradient-to-tr from-gray-300 to-gray-100 rounded-full shadow-inner mr-0"
-                  style={{
-                    boxShadow:
-                      "inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff",
-                  }}
-                ></div>
-              </>
-            )}
-          </div>
+          <label className="relative inline-flex items-center cursor-pointer w-16">
+            <input
+              type="checkbox"
+              className="sr-only peer"
+              checked={isEnabled}
+              onChange={() => handleStatusToggle(params.row.id, isEnabled)}
+            />
+            <div className="w-11 h-6 bg-gray-400 peer-checked:bg-green-600 rounded-full peer-focus:ring-2 peer-focus:ring-green-500 transition-colors duration-300 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5" />
+          </label>
         );
       },
     },
@@ -380,7 +375,7 @@ const ServiceAreas = () => {
 
       <TextField
         select
-        label="Area (State > City > Village)"
+        label="Area (State > District > Tehsil > Village)"
         name="area_id"
         fullWidth
         required
@@ -390,9 +385,27 @@ const ServiceAreas = () => {
       >
         {areaList.map((area) => (
           <MenuItem key={area.id} value={area.id}>
-            {`${area.state_name || ""} > ${area.city_name || ""} > ${
-              area.village_name || ""
-            }`}
+            {`${area.state_name || ""} > ${area.district_name || ""} > ${
+              area.tehsil_name || ""
+            } > ${area.village_name || ""}`}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        select
+        label="Substation"
+        name="substation_id"
+        value={formData.substation_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, substation_id: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        {substation.map((sub) => (
+          <MenuItem key={sub.id} value={sub.id}>
+            {sub.name}
           </MenuItem>
         ))}
       </TextField>
@@ -471,6 +484,24 @@ const ServiceAreas = () => {
             {`${area.state_name || ""} > ${area.city_name || ""} > ${
               area.village_name || ""
             }`}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        select
+        label="Substation"
+        name="substation_id"
+        value={formData.substation_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, substation_id: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        {substation.map((sub) => (
+          <MenuItem key={sub.id} value={sub.id}>
+            {sub.name}
           </MenuItem>
         ))}
       </TextField>

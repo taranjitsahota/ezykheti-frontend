@@ -16,10 +16,30 @@ import { Box, Typography, TextField, Grid, Button } from "@mui/material";
 import MapIcon from "@mui/icons-material/Map";
 
 const AssignBookings = () => {
+  const [submitLoading, setSubmitLoading] = useState(false);
+
   const [formData, setFormData] = useState({});
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const [rows, setRows] = React.useState([]);
+
+  const [drivers, setDrivers] = useState([]);
+
+  useEffect(() => {
+    const fetchDrivers = async () => {
+      try {
+        const response = await apiRequest({
+          url: "/driver-list",
+          method: "get",
+        });
+        setDrivers(response.data);
+      } catch (error) {
+        console.error("Failed to fetch drivers", error);
+      }
+    };
+
+    fetchDrivers();
+  }, []);
 
   const handleSubmit = async (formdata) => {
     const data = {
@@ -30,7 +50,7 @@ const AssignBookings = () => {
 
     try {
       setSubmitLoading(true);
-
+      console.log(data);
       const response = await apiRequest({
         url: `/assign-driver`,
         method: "put",
@@ -228,26 +248,22 @@ const AssignBookings = () => {
       />
 
       {/* PIN and Contact */}
-      <Grid container spacing={0}>
-        <Grid item xs={2}>
-          <TextField
-            label="PIN Code"
-            fullWidth
-            value={formData?.pin_code || ""}
-            margin="normal"
-            disabled
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <TextField
-            label="Contact Number"
-            fullWidth
-            value={formData?.contact_number || ""}
-            margin="normal"
-            disabled
-          />
-        </Grid>
-      </Grid>
+      <div style={{ display: "flex", gap: "1rem" }}>
+        <TextField
+          label="PIN Code"
+          value={formData?.pin_code || ""}
+          disabled
+          style={{ flex: 1 }}
+          margin="normal"
+        />
+        <TextField
+          label="Contact Number"
+          value={formData?.contact_number || ""}
+          disabled
+          style={{ flex: 1 }}
+          margin="normal"
+        />
+      </div>
 
       {/* Address */}
       <TextField
@@ -266,68 +282,57 @@ const AssignBookings = () => {
       </Typography>
 
       {/* Crop and Service */}
-      <Grid container spacing={0}>
-        <Grid item xs={6}>
-          <TextField
-            label="Crop"
-            fullWidth
-            value={formData?.crop_name || ""}
-            margin="normal"
-            disabled
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            label="Service"
-            fullWidth
-            value={formData?.service_name || ""}
-            margin="normal"
-            disabled
-          />
-        </Grid>
-      </Grid>
+      <div style={{ display: "flex", gap: "1rem" }}>
+        <TextField
+          label="Crop"
+          fullWidth
+          value={formData?.crop_name || ""}
+          margin="normal"
+          disabled
+        />
+
+        <TextField
+          label="Service"
+          fullWidth
+          value={formData?.service_name || ""}
+          margin="normal"
+          disabled
+        />
+      </div>
 
       {/* Equipment and Land Area */}
-      <Grid container spacing={0}>
-        <Grid item xs={6}>
-          <TextField
-            label="Equipment"
-            fullWidth
-            value={formData?.equipment_name || ""}
-            margin="normal"
-            disabled
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            label="Land Area"
-            fullWidth
-            value={formData?.land_area || ""}
-            margin="normal"
-            disabled
-          />
-        </Grid>
-      </Grid>
-      <Grid container spacing={0}>
-        <Grid item xs={6}>
-          <TextField
-            label="Start Date and Time"
-            fullWidth
-            value={formData?.start_time || ""}
-            margin="normal"
-            disabled
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            label="End Date and Time"
-            fullWidth
-            value={formData?.end_time || ""}
-            margin="normal"
-            disabled
-          />
-        </Grid>
-      </Grid>
+      <div style={{ display: "flex", gap: "1rem" }}>
+        <TextField
+          label="Equipment"
+          fullWidth
+          value={formData?.equipment_name || ""}
+          margin="normal"
+          disabled
+        />
+        <TextField
+          label="Land Area"
+          fullWidth
+          value={formData?.land_area || ""}
+          margin="normal"
+          disabled
+        />
+      </div>
+      <div style={{ display: "flex", gap: "1rem" }}>
+        <TextField
+          label="Start Date and Time"
+          fullWidth
+          value={formData?.start_time || ""}
+          margin="normal"
+          disabled
+        />
+        <TextField
+          label="End Date and Time"
+          fullWidth
+          value={formData?.end_time || ""}
+          margin="normal"
+          disabled
+        />
+      </div>
       <TextField
         label="Notes"
         fullWidth
@@ -343,46 +348,55 @@ const AssignBookings = () => {
       </Typography>
 
       {/* Map Preview + Assign Driver */}
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Typography variant="subtitle1" sx={{ mb: 1 }}>
-            Map Preview
-          </Typography>
+      <Grid container spacing={4} alignItems="flex-start">
+        {/* Left Block: Map Preview */}
+        <Grid item xs={12} sm={6}>
+          <Typography variant="subtitle1">Map Preview</Typography>
           <Button
             variant="outlined"
-            fullWidth
             startIcon={<MapIcon />}
             sx={{
+              mt: 1,
               backgroundColor: "#D2FFB5",
               borderColor: "#B5F59F",
               color: "#222",
+              whiteSpace: "nowrap",
             }}
           >
             View Full Map
           </Button>
         </Grid>
-        <Grid>
-          <Typography variant="subtitle1">
-            Assign Driver
-          </Typography>
-          <TextField select fullWidth defaultValue="">
+
+        {/* Right Block: Assign Driver */}
+        <Grid item xs={12} sm={6}>
+          <Typography variant="subtitle1">Assign Driver</Typography>
+          <TextField
+            select
+            fullWidth
+            name="driver_id"
+            defaultValue={formData?.driver_id || ""}
+          >
             <MenuItem value="">Select available driver</MenuItem>
-            {/* Add driver options dynamically if needed */}
+            {drivers.map((driver) => (
+              <MenuItem key={driver.id} value={driver.id}>
+                {driver.name}
+              </MenuItem>
+            ))}
           </TextField>
         </Grid>
       </Grid>
+      <input type="hidden" name="booking_id" value={formData?.booking_id || formData?.id || ""} />
+
 
       {/* Admin Notes */}
-      <Typography variant="subtitle1" sx={{ mt: 3, mb: 1 }}>
-        Admin Notes
-      </Typography>
       <TextField
         fullWidth
+        name="admin_note"
         placeholder="Enter any internal instructions to driver..."
         margin="normal"
         multiline
         minRows={3}
-        value={formData?.admin_note || ""}
+        defaultValue={formData?.admin_note || ""}
       />
 
       {/* Payments */}

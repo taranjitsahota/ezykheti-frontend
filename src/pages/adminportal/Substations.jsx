@@ -15,10 +15,8 @@ import { Dialog, DialogTitle, DialogContent } from "@mui/material";
 import Anchor from "../../components/adminportal/Anchor";
 import ConfirmModal from "../../components/adminportal/ConfirmModal";
 
-const Services = () => {
+const Substations = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
-
-  const [substation, setSubstation] = useState([]);
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -26,29 +24,8 @@ const Services = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({});
 
-  const [equipment, setEquipment] = useState([]);
-
-  useEffect(() => {
-    const fetchEquipment = async () => {
-      try {
-        const response = await apiRequest({
-          url: `/equipments`,
-          method: "get",
-        });
-
-        if (response.success) {
-          setEquipment(response.data);
-        } else {
-          toast.error(response.message || "Failed to fetch equipments.");
-        }
-      } catch (error) {
-        const msg = error?.response?.data?.message || "Something went wrong.";
-        toast.error(msg);
-      }
-    };
-
-    fetchEquipment();
-  }, []);
+  const [substations, setSubstation] = useState([]);
+  const [selectedSubstationId, setSelectedSubstationId] = useState(null);
 
   useEffect(() => {
     const fetchSubstation = async () => {
@@ -64,8 +41,7 @@ const Services = () => {
           toast.error(response.message || "Failed to fetch substations.");
         }
       } catch (error) {
-        const msg =
-          error?.response?.data?.message || "Failed to fetch substations.";
+        const msg = error?.response?.data?.message || "Something went wrong.";
         toast.error(msg);
       }
     };
@@ -77,6 +53,7 @@ const Services = () => {
     if (value === "add") {
       setIsEditMode(false); // ✅ ensure it's add mode
       setFormData({}); // ✅ reset form
+      setSelectedSubstationId(null);
     }
     setDrawerOpen(value);
   };
@@ -86,7 +63,7 @@ const Services = () => {
 
     try {
       const response = await apiRequest({
-        url: `/services/${id}`, // Use `id` passed to the function
+        url: `/substations/${id}`, // Use `id` passed to the function
         method: "put",
         data: {
           is_enabled: newStatus, // Send the toggled status
@@ -94,7 +71,7 @@ const Services = () => {
       });
 
       if (response.success) {
-        toast.success("Service status updated successfully!");
+        toast.success("Substation status updated successfully!");
         handleAdminList(); // Refresh the list or rows
       } else {
         toast.error(response.message || "Failed to update status.");
@@ -110,12 +87,12 @@ const Services = () => {
 
     try {
       const response = await apiRequest({
-        url: `/services/${deleteId}`, // Dynamic URL using deleteId
+        url: `/substations/${deleteId}`, // Dynamic URL using deleteId
         method: "delete",
       });
 
       if (response.success) {
-        toast.success("Service area deleted successfully!");
+        toast.success("Substation deleted successfully!");
         handleAdminList(); // Refresh list of admins or any data
       } else {
         toast.error(response.message || "Failed to delete.");
@@ -128,9 +105,8 @@ const Services = () => {
 
   const handleSubmit = async (formdata) => {
     const data = {
-      equipment_id: formdata?.equipment_id,
-      substation_id: formdata?.substation_id,
-      category: formdata?.category,
+      name: formdata?.name,
+      location: formdata?.location,
       is_enabled: formdata?.is_enabled,
     };
 
@@ -138,9 +114,7 @@ const Services = () => {
       setSubmitLoading(true);
 
       const response = await apiRequest({
-        url: isEditMode
-          ? `/services/${formData.id}` // replace with your actual edit API URL
-          : "/services",
+        url: isEditMode ? `/substations/${formData.id}` : "/substations",
         method: isEditMode ? "put" : "post",
         data: data,
       });
@@ -148,8 +122,8 @@ const Services = () => {
       if (response.success) {
         toast.success(
           isEditMode
-            ? "Service updated successfully!"
-            : "Service created successfully!"
+            ? "Substation updated successfully!"
+            : "Substation created successfully!"
         );
         setDrawerOpen("");
         setIsEditMode(false);
@@ -164,9 +138,6 @@ const Services = () => {
       setSubmitLoading(false);
     }
   };
-
-  //   const [showPassword, setShowPassword] = useState(false);
-  //   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [rows, setRows] = React.useState([]);
 
@@ -185,9 +156,13 @@ const Services = () => {
       width: 60,
       sortable: false,
     },
-    { field: "equipment_name", headerName: "Equipment", width: 150 },
-    { field: "category", headerName: "Service", width: 150 },
-    { field: "substation_name", headerName: "Substation", width: 150 },
+    { field: "name", headerName: "Substation", width: 150 },
+    {
+      field: "location",
+      headerName: "Location",
+      width: 150,
+      renderCell: (params) => params.row.location || "-",
+    },
 
     {
       field: "is_enabled",
@@ -212,14 +187,14 @@ const Services = () => {
 
     {
       field: "action",
-      headerName: "Action Button",
+      headerName: "Actions",
       width: 150,
       renderCell: (params) => (
         <div className="flex items-center gap-2 h-full">
           <button
             onClick={() => {
               setIsEditMode(true);
-              setFormData(params.row);
+              setFormData(params.row); // row = your current row data
               toggleDrawer(true); // open anchor
             }}
             className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
@@ -245,14 +220,14 @@ const Services = () => {
     setLoading(true);
     try {
       const response = await apiRequest({
-        url: "/services",
+        url: "/substations",
         method: "get",
       });
 
       if (response.success) {
         setRows(response.data || []);
       } else {
-        toast.error(response.message || "Failed to fetch Services.");
+        toast.error(response.message || "Failed to fetch Substations.");
       }
     } catch (error) {
       const msg =
@@ -270,60 +245,25 @@ const Services = () => {
     handleAdminList();
   }, []);
 
-  const serviceareasFormContent = (
+  const substationFormContent = (
     <>
       <TextField
-        select
-        label="Service Name"
-        name="category"
+        label="Substation Name"
+        name="name"
         fullWidth
         required
-        value={formData.category || ""}
-        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+        value={formData.name || ""}
+        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         margin="normal"
-      >
-        <MenuItem value="Cultivation">Cultivation</MenuItem>
-        <MenuItem value="Transportation">Transportation</MenuItem>
-        <MenuItem value="Harvesting">Harvesting</MenuItem>
-      </TextField>
-
+      />
       <TextField
-        select
-        label="Equipment"
-        name="equipment_id"
+        label="Location"
+        name="location"
         fullWidth
-        required
-        value={formData.equipment_id || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, equipment_id: e.target.value })
-        }
-        // disabled={!selectedState}
+        value={formData.location || ""}
+        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
         margin="normal"
-      >
-        {equipment.map((equipment) => (
-          <MenuItem key={equipment.id} value={equipment.id}>
-            {equipment.name}
-          </MenuItem>
-        ))}
-      </TextField>
-
-      <TextField
-        select
-        label="Substation"
-        name="substation_id"
-        value={formData.substation_id || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, substation_id: e.target.value })
-        }
-        fullWidth
-        required
-      >
-        {substation.map((sub) => (
-          <MenuItem key={sub.id} value={sub.id}>
-            {sub.name}
-          </MenuItem>
-        ))}
-      </TextField>
+      />
 
       <TextField
         select
@@ -331,9 +271,9 @@ const Services = () => {
         name="is_enabled"
         fullWidth
         required
-        value={formData.is_enabled ?? 1}
+        value={formData.is_enabled ?? ""}
         onChange={(e) =>
-          setFormData({ ...formData, is_enabled: parseInt(e.target.value) })
+          setFormData({ ...formData, is_enabled: Number(e.target.value) })
         }
       >
         <MenuItem value={1}>True</MenuItem>
@@ -342,59 +282,25 @@ const Services = () => {
     </>
   );
 
-  const serviceareasFormContentEdit = (
+  const substationFormContentEdit = (
     <>
       <TextField
-        select
-        label="Service Name"
-        name="category"
+        label="Substation Name"
+        name="name"
         fullWidth
         required
-        value={formData.category || ""}
-        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+        value={formData.name || ""}
+        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         margin="normal"
-      >
-        <MenuItem value="Cultivation">Cultivation</MenuItem>
-        <MenuItem value="Transportation">Transportation</MenuItem>
-        <MenuItem value="Harvesting">Harvesting</MenuItem>
-      </TextField>
-
+      />
       <TextField
-        select
-        label="Equipment"
-        name="equipment_id"
+        label="Location"
+        name="location"
         fullWidth
-        required
-        value={formData.equipment_id || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, equipment_id: e.target.value })
-        }
+        value={formData.location || ""}
+        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
         margin="normal"
-      >
-        {equipment.map((equipment) => (
-          <MenuItem key={equipment.id} value={equipment.id}>
-            {equipment.name}
-          </MenuItem>
-        ))}
-      </TextField>
-
-      <TextField
-        select
-        label="Substation"
-        name="substation_id"
-        value={formData.substation_id || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, substation_id: e.target.value })
-        }
-        fullWidth
-        required
-      >
-        {substation.map((sub) => (
-          <MenuItem key={sub.id} value={sub.id}>
-            {sub.name}
-          </MenuItem>
-        ))}
-      </TextField>
+      />
 
       <TextField
         select
@@ -416,8 +322,8 @@ const Services = () => {
 
   return (
     <DashboardLayout
-      pageTitle="Services"
-      add="Add Services"
+      pageTitle="Substations"
+      add="Add Substations"
       toggleDrawer={toggleDrawer}
       drawerOpen={drawerOpen}
       submitLoading={submitLoading}
@@ -433,10 +339,10 @@ const Services = () => {
           toggleDrawer={toggleDrawer}
           formContent={
             drawerOpen === "add"
-              ? serviceareasFormContent
-              : serviceareasFormContentEdit
+              ? substationFormContent
+              : substationFormContentEdit
           }
-          add={drawerOpen === "add" ? "Add Services" : "Edit Services"}
+          add={drawerOpen === "add" ? "Add Substation" : "Edit Substation"}
           handleSubmit={handleSubmit}
           loading={submitLoading}
           formData={drawerOpen !== "add" && formData}
@@ -468,4 +374,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default Substations;

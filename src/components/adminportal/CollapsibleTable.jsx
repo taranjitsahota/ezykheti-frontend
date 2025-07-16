@@ -84,9 +84,17 @@ const CollapsibleBookingTable = ({ rows }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, index) => (
-            <CollapsibleRow key={index} row={row} index={index} />
-          ))}
+          {rows.length > 0 ? (
+            rows.map((row, index) => (
+              <CollapsibleRow key={index} row={row} index={index} />
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={6} align="center">
+                No bookings found
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

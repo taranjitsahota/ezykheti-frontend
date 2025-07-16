@@ -95,7 +95,10 @@
   transition: border-color 0.2s ease;
 }
 
-
+.admin-textfield.no-margin-top {
+  margin-top: 5px !important;
+  min-width: 200px;
+}
 .admin-textfield {
   background-color: white;
   border: 1px solid #D5D5D5;

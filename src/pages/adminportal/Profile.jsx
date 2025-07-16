@@ -14,7 +14,7 @@ const Profile = () => {
     email: "",
     contact_number: "",
   });
-
+  // console.log(editUser.name);
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     const id = localStorage.getItem("user_id");
@@ -29,6 +29,7 @@ const Profile = () => {
 
       if (response.success) {
         toast.success("Profile updated successfully!");
+        localStorage.setItem("username", editUser.name);
         handleUserProfile();
         setIsModalOpen(false);
       } else {
@@ -84,7 +85,7 @@ const Profile = () => {
 
       if (response.success) {
         toast.success("Profile picture updated!");
-        handleUserProfile(); // Refresh user data
+        // handleUserProfile(); // Refresh user data
       } else {
         toast.error(response.error || "Upload failed.");
       }

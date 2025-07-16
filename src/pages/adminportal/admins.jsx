@@ -19,7 +19,7 @@ const Admins = () => {
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-
+  const [substation, setSubstation] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({});
   const toggleDrawer = (value) => {
@@ -56,6 +56,7 @@ const Admins = () => {
       name: formdata?.name,
       email: formdata?.email,
       contact_number: formdata?.contact_number,
+      substation_id: formdata?.substation_id,
       password: formdata?.password,
       password_confirmation: formdata?.confirm_password,
       role: "admin",
@@ -98,6 +99,29 @@ const Admins = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchSubstation = async () => {
+      try {
+        const response = await apiRequest({
+          url: `/substations`,
+          method: "get",
+        });
+
+        if (response.success) {
+          setSubstation(response.data);
+        } else {
+          toast.error(response.message || "Failed to fetch substations.");
+        }
+      } catch (error) {
+        const msg =
+          error?.response?.data?.message || "Failed to fetch substations.";
+        toast.error(msg);
+      }
+    };
+
+    fetchSubstation();
+  }, []);
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -121,6 +145,7 @@ const Admins = () => {
     { field: "name", headerName: "Name", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
     { field: "contact_number", headerName: "Contact", width: 150 },
+    { field: "substation", headerName: "Substation", width: 150 },
     { field: "role", headerName: "Role", width: 100 },
     {
       field: "action",
@@ -207,8 +232,25 @@ const Admins = () => {
         fullWidth
         // margin="normal"
         required
-         inputProps={{ maxLength: 10, pattern: "[0-9]{10}" }}
+        //  inputProps={{ maxLength: 10, pattern: "[0-9]{10}" }}
       />
+      <TextField
+        select
+        label="Substation"
+        name="substation_id"
+        value={formData.substation_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, substation_id: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        {substation.map((sub) => (
+          <MenuItem key={sub.id} value={sub.id}>
+            {sub.name}
+          </MenuItem>
+        ))}
+      </TextField>
       <TextField
         placeholder="Enter Password"
         label="Password"
@@ -345,6 +387,23 @@ const Admins = () => {
         fullWidth
         required
       />
+      <TextField
+        select
+        label="Substation"
+        name="substation_id"
+        value={formData.substation_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, substation_id: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        {substation.map((sub) => (
+          <MenuItem key={sub.id} value={sub.id}>
+            {sub.name}
+          </MenuItem>
+        ))}
+      </TextField>
     </>
   );
 

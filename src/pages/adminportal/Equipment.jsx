@@ -30,6 +30,7 @@ const Equipment = () => {
   const [deleteId, setDeleteId] = useState(null);
 
   const [isEditMode, setIsEditMode] = useState(false);
+  const [substation, setSubstation] = useState([]);
   const [formData, setFormData] = useState({});
 
   const [previewImage, setPreviewImage] = useState(null);
@@ -37,6 +38,29 @@ const Equipment = () => {
   const handleImagePreview = (url) => {
     setPreviewImage(url);
   };
+
+  useEffect(() => {
+    const fetchSubstation = async () => {
+      try {
+        const response = await apiRequest({
+          url: `/substations`,
+          method: "get",
+        });
+
+        if (response.success) {
+          setSubstation(response.data);
+        } else {
+          toast.error(response.message || "Failed to fetch substations.");
+        }
+      } catch (error) {
+        const msg =
+          error?.response?.data?.message || "Failed to fetch substations.";
+        toast.error(msg);
+      }
+    };
+
+    fetchSubstation();
+  }, []);
 
   const toggleDrawer = (value) => {
     if (value === "add") {
@@ -110,6 +134,10 @@ const Equipment = () => {
       formdata.minutes_per_kanal?.toString() || "0"
     );
     formDataToSend.append("inventory", formdata.inventory?.toString() || "0");
+    formDataToSend.append(
+      "substation_id",
+      formdata.substation_id?.toString() || "0"
+    );
     formDataToSend.append("is_enabled", Number(formdata.is_enabled).toString());
     formDataToSend.append("image", formdata.image);
 
@@ -196,6 +224,7 @@ const Equipment = () => {
     { field: "min_kanal", headerName: "Min Kanal", width: 150 },
     { field: "minutes_per_kanal", headerName: "Minutes Per Kanal", width: 150 },
     { field: "inventory", headerName: "Inventory", width: 150 },
+    { field: "substation_name", headerName: "Substation", width: 150 },
     {
       field: "is_enabled",
       headerName: "Status",
@@ -204,42 +233,15 @@ const Equipment = () => {
         const isEnabled = params.row.is_enabled === 1;
 
         return (
-          <div
-            className={`flex items-center rounded-full w-28 h-10 cursor-pointer transition-all duration-300 ${
-              isEnabled
-                ? "bg-green-700 justify-start"
-                : "bg-red-700 justify-end"
-            }`}
-            onClick={() => handleStatusToggle(params.row.id, isEnabled)}
-          >
-            {isEnabled ? (
-              <>
-                <div
-                  className="w-10 h-10 bg-gradient-to-tr from-gray-300 to-gray-100 rounded-full shadow-inner ml-0"
-                  style={{
-                    boxShadow:
-                      "inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff",
-                  }}
-                ></div>
-                <span className="text-white text-base font-normal ml-4">
-                  Enable
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="text-white text-base font-normal mr-4">
-                  Disable
-                </span>
-                <div
-                  className="w-10 h-10 bg-gradient-to-tr from-gray-300 to-gray-100 rounded-full shadow-inner mr-0"
-                  style={{
-                    boxShadow:
-                      "inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff",
-                  }}
-                ></div>
-              </>
-            )}
-          </div>
+          <label className="relative inline-flex items-center cursor-pointer w-16">
+            <input
+              type="checkbox"
+              className="sr-only peer"
+              checked={isEnabled}
+              onChange={() => handleStatusToggle(params.row.id, isEnabled)}
+            />
+            <div className="w-11 h-6 bg-gray-400 peer-checked:bg-green-600 rounded-full peer-focus:ring-2 peer-focus:ring-green-500 transition-colors duration-300 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5" />
+          </label>
         );
       },
     },
@@ -379,6 +381,24 @@ const Equipment = () => {
 
       <TextField
         select
+        label="Substation"
+        name="substation_id"
+        value={formData.substation_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, substation_id: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        {substation.map((sub) => (
+          <MenuItem key={sub.id} value={sub.id}>
+            {sub.name}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        select
         label="Status"
         name="is_enabled"
         fullWidth
@@ -446,6 +466,24 @@ const Equipment = () => {
         fullWidth
         required
       />
+
+         <TextField
+        select
+        label="Substation"
+        name="substation_id"
+        value={formData.substation_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, substation_id: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        {substation.map((sub) => (
+          <MenuItem key={sub.id} value={sub.id}>
+            {sub.name}
+          </MenuItem>
+        ))}
+      </TextField>
 
       <Box mt={4} mb={4}>
         <input
