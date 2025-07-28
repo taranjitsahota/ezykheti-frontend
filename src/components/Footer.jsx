@@ -111,7 +111,7 @@ const Footer = () => {
       </div>
       <div className="flex flex-col md:flex-row justify-center items-center text-center mt-8 mb-4 border-t border-gray-600 pt-8 gap-4 md:gap-8">
         <p className="text-black">
-          &copy; {new Date().getFullYear()} Ezykheti Agri Services Pvt Ltd. All
+          &copy; {new Date().getFullYear()} DWIJAS AGRO SERVICES PRIVATE LIMITED. All
           rights reserved.
         </p>
         <div className="flex gap-6">

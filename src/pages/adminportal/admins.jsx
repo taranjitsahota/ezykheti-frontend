@@ -75,6 +75,7 @@ const Admins = () => {
               name: formData.name,
               email: formData.email,
               contact_number: formData.contact_number,
+              substation_id: formData.substation_id,
             }
           : data,
       });

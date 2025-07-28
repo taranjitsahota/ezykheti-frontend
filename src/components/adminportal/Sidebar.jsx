@@ -79,11 +79,11 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
     <aside
       ref={sidebarRef}
       className={`
-    w-28 fixed admin-wrapper bg-[var(--sidebar-bg-color)] border-r border-[var(--border-bg-color)] fixed md:relative z-20 group transform transition-transform duration-300 ease-in-out z-30
-   ${isOpen ? "translate-x-0" : "-translate-x-full"}
-   transition-transform duration-300 ease-in-out
-    w-34
-    md:relative z-30 md:translate-x-0 md:w-55 border-r shadow-sm
+    w-28 md:w-55 h-screen flex flex-col
+    fixed admin-wrapper bg-[var(--sidebar-bg-color)] border-r border-[var(--border-bg-color)]
+    transform transition-transform duration-300 ease-in-out z-30
+    ${isOpen ? "translate-x-0" : "-translate-x-full"}
+    md:relative md:translate-x-0 shadow-sm
   `}
     >
       <div className="md:hidden flex justify-end p-4 z-30">
@@ -112,69 +112,73 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
           className="h-10 transition-all duration-300 ease-in-out group-hover:block"
         />
       </div>
-      <nav className="mt-4 space-y-1">
-        {[
-          { to: "/dashboard", icon: <LayoutDashboard />, label: "Dashboard" },
-          { to: "/substations", icon: <Cpu />, label: "Substations" },
-          { to: "/areas", icon: <Network />, label: "Areas" },
-          { to: "/equipments", icon: <Tractor />, label: "Equipments" },
-          { to: "/services", icon: <Workflow />, label: "Services" },
-          {
-            to: "/service-areas",
-            icon: <LocateFixed />,
-            label: "Service Areas",
-          },
-          { to: "/crops", icon: <Sprout />, label: "Crops" },
-          { to: "/bookings", icon: <CalendarPlus />, label: "Bookings" },
-          {
-            to: "/assign-bookings",
-            icon: <UserCheck />,
-            label: "Assign Bookings",
-          },
-          {
-            to: "/business-timings",
-            icon: <CalendarDays />,
-            label: "Buisness Timings",
-          },
-          {
-            to: "/interested-users",
-            icon: <Heart />,
-            label: "Interested users",
-          },
-          {
-            to: "/interested-users-email",
-            icon: <MailOpen />,
-            label: "Interested users Email",
-          },
-          { to: "/admins", icon: <UserRound />, label: "Admins" },
-          { to: "/drivers", icon: <SteeringWheelIcon />, label: "Drivers" },
-          { to: "/users", icon: <Users />, label: "Users" },
-          // {
-          //   to: "/attachments",
-          //   icon: <Puzzle />,
-          //   label: "Attachment",
-          // },
-        ].map(({ to, icon, label }) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) =>
-              `relative block py-2 group/nav overflow-hidden text-center transition-colors duration-300 ${
-                isActive ? "bg-[var(--primary-color)] text-white" : ""
-              }`
-            }
-          >
-            <div className="absolute bottom-0 left-0 w-full h-0 bg-[var(--primary-color)] text-white transition-all duration-600 ease-in-out group-hover/nav:h-full text-white z-0"></div>
+      <div className="flex-1 overflow-y-auto">
+        <nav className="mt-4 space-y-1">
+          {[
+            { to: "/dashboard", icon: <LayoutDashboard />, label: "Dashboard" },
+            { to: "/substations", icon: <Cpu />, label: "Substations" },
+            { to: "/areas", icon: <Network />, label: "Areas" },
+            { to: "/equipments", icon: <Tractor />, label: "Equipments" },
+            { to: "/services", icon: <Workflow />, label: "Services" },
+            {
+              to: "/service-areas",
+              icon: <LocateFixed />,
+              label: "Service Areas",
+            },
+            { to: "/crops", icon: <Sprout />, label: "Crops" },
+            { to: "/bookings", icon: <CalendarPlus />, label: "Bookings" },
+            {
+              to: "/assign-bookings",
+              icon: <UserCheck />,
+              label: "Assign Bookings",
+            },
+            {
+              to: "/business-timings",
+              icon: <CalendarDays />,
+              label: "Buisness Timings",
+            },
+            {
+              to: "/interested-users",
+              icon: <Heart />,
+              label: "Interested users",
+            },
+            {
+              to: "/interested-users-email",
+              icon: <MailOpen />,
+              label: "Interested users Email",
+            },
+            { to: "/admins", icon: <UserRound />, label: "Admins" },
+            { to: "/drivers", icon: <SteeringWheelIcon />, label: "Drivers" },
+            { to: "/users", icon: <Users />, label: "Users" },
+            // {
+            //   to: "/attachments",
+            //   icon: <Puzzle />,
+            //   label: "Attachment",
+            // },
+          ].map(({ to, icon, label }) => (
+            <NavLink
+              key={to}
+              to={to}
+              className={({ isActive }) =>
+                `relative block py-2 group/nav overflow-hidden text-center transition-colors duration-300 ${
+                  isActive ? "bg-[var(--primary-color)] text-white" : ""
+                }`
+              }
+            >
+              <div className="absolute bottom-0 left-0 w-full h-0 bg-[var(--primary-color)] text-white transition-all duration-600 ease-in-out group-hover/nav:h-full text-white z-0"></div>
 
-            <div className="relative z-10 flex items-center space-x-3 pl-4">
-              <div className="text-[var(--warning-color)] text-xl">{icon}</div>
-              <span className="text-sm font-medium group-hover/nav:text-white">
-                {label}
-              </span>
-            </div>
-          </NavLink>
-        ))}
-      </nav>
+              <div className="relative z-10 flex items-center space-x-3 pl-4">
+                <div className="text-[var(--warning-color)] text-xl">
+                  {icon}
+                </div>
+                <span className="text-sm font-medium group-hover/nav:text-white">
+                  {label}
+                </span>
+              </div>
+            </NavLink>
+          ))}
+        </nav>
+      </div>
     </aside>
   );
 };

@@ -4,6 +4,14 @@ import DashboardLayout from "../../layouts/DashboardLayout";
 import { ArrowUp } from "lucide-react";
 import { toast } from "react-toastify";
 import { apiRequest } from "../../utils/apiService";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 const Dashboard = () => {
   // const locations = [
@@ -26,6 +34,8 @@ const Dashboard = () => {
   const [farmers, setFarmers] = useState(null);
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [bookingTrendData, setBookingTrendData] = useState([]);
 
   const fallback = (value) =>
     value === null || value === undefined ? "-" : value;
@@ -54,6 +64,46 @@ const Dashboard = () => {
     } else {
       setIsAuthenticated(true);
       fetchDashboardMetrics();
+    }
+  }, []);
+
+  const dummyBookingTrendData = [
+  { date: "2025-01", count: 20 },
+  { date: "2025-02", count: 35 },
+  { date: "2025-03", count: 45 },
+  { date: "2025-04", count: 32 },
+  { date: "2025-05", count: 50 },
+  { date: "2025-06", count: 28 },
+];
+
+
+  const fetchBookingsTrend = async () => {
+    try {
+      const res = await apiRequest({
+        url: "/bookings-trend?range=monthly", // or 'daily'
+        method: "get",
+      });
+
+      if (res && Array.isArray(res)) {
+        setBookingTrendData(res);
+      } else {
+        toast.error("Failed to fetch booking trend data");
+         setBookingTrendData(dummyBookingTrendData);
+      }
+    } catch (err) {
+      toast.error("Error loading booking trend");
+       setBookingTrendData(dummyBookingTrendData);
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("auth_token");
+    if (!token) {
+      navigate("/admin");
+    } else {
+      setIsAuthenticated(true);
+      fetchDashboardMetrics();
+      fetchBookingsTrend(); // add this
     }
   }, []);
 
@@ -143,6 +193,8 @@ const Dashboard = () => {
           </div>
         </div>
 
+      
+
         {/* Right Side - Tall Box */}
         <div className="bg-white rounded-xl p-6 shadow md:row-span-2 flex flex-col">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">
@@ -171,6 +223,30 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+        <div className="md:col-span-4">
+          <div className="mt-10 bg-white p-6 rounded-xl shadow">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+              Monthly Booking Trends
+            </h2>
+            {bookingTrendData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={bookingTrendData}>
+                  <XAxis dataKey="date" />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="count"
+                    stroke="#82ca9d"
+                    strokeWidth={2}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <p>No booking trend data available.</p>
+            )}
+          </div>
+        </div>
     </DashboardLayout>
   );
 };

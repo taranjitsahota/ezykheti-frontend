@@ -42,7 +42,7 @@ const DashboardLayout = ({
   }, [isSidebarOpen]);
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <Sidebar
         isOpen={isSidebarOpen}
         sidebarRef={sidebarRef}

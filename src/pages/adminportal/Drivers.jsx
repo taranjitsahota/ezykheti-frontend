@@ -16,6 +16,7 @@ import ConfirmModal from "../../components/adminportal/ConfirmModal";
 
 const Drivers = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [substation, setSubstation] = useState([]);
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -59,6 +60,7 @@ const Drivers = () => {
       contact_number: formdata?.contact_number,
       password: formdata?.password,
       password_confirmation: formdata?.confirm_password,
+      substation_id: formdata?.substation_id,
       role: "driver",
     };
 
@@ -68,13 +70,14 @@ const Drivers = () => {
       const response = await apiRequest({
         url: isEditMode
           ? `/users/${formData.id}` // replace with your actual edit API URL
-          : "/users",
+          : "/register-superadmin-admin",
         method: isEditMode ? "put" : "post",
         data: isEditMode
           ? {
               name: formData.name,
               email: formData.email,
               contact_number: formData.contact_number,
+              substation_id: formData.substation_id,
             }
           : data,
       });
@@ -98,6 +101,29 @@ const Drivers = () => {
       setSubmitLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchSubstation = async () => {
+      try {
+        const response = await apiRequest({
+          url: `/substations`,
+          method: "get",
+        });
+
+        if (response.success) {
+          setSubstation(response.data);
+        } else {
+          toast.error(response.message || "Failed to fetch substations.");
+        }
+      } catch (error) {
+        const msg =
+          error?.response?.data?.message || "Failed to fetch substations.";
+        toast.error(msg);
+      }
+    };
+
+    fetchSubstation();
+  }, []);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -123,6 +149,8 @@ const Drivers = () => {
     { field: "email", headerName: "Email", width: 200 },
     { field: "contact_number", headerName: "Contact", width: 150 },
     { field: "role", headerName: "Role", width: 100 },
+    { field: "substation", headerName: "Substation", width: 150 },
+
     {
       field: "action",
       headerName: "Action Button",
@@ -208,7 +236,7 @@ const Drivers = () => {
         fullWidth
         // margin="normal"
         required
-         inputProps={{ maxLength: 10, pattern: "[0-9]{10}" }}
+        inputProps={{ maxLength: 10, pattern: "[0-9]{10}" }}
       />
       <TextField
         placeholder="Enter Password"
@@ -276,41 +304,23 @@ const Drivers = () => {
         }}
       />
 
-      {/* <FormControlLabel
-        control={
-          <Checkbox
-            name="role"
-            required
-            sx={{
-              color: "var(--menu-color)",
-              "&.Mui-checked": {
-                color: "var(--primary-color)",
-              },
-            }}
-          />
+      <TextField
+        select
+        label="Substation"
+        name="substation_id"
+        value={formData.substation_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, substation_id: e.target.value })
         }
-        label={<span className="admin-label">Role</span>}
-      /> */}
-      {/* <FormControl fullWidth required variant="standard">
-        <InputLabel className="admin-label" shrink>
-          Role
-        </InputLabel>
-        <Select
-          name="role"
-          displayEmpty
-          disableUnderline
-          className="admin-textfield"
-          defaultValue=""
-        >
-          <MenuItem value="" disabled>
-            Select a role
+        fullWidth
+        required
+      >
+        {substation.map((sub) => (
+          <MenuItem key={sub.id} value={sub.id}>
+            {sub.name}
           </MenuItem>
-          <MenuItem value="superadmin">Super Admin</MenuItem>
-          <MenuItem value="admin">Admin</MenuItem>
-          <MenuItem value="editor">Driver</MenuItem>
-          <MenuItem value="editor">User</MenuItem>
-        </Select>
-      </FormControl> */}
+        ))}
+      </TextField>
     </>
   );
 
@@ -346,6 +356,23 @@ const Drivers = () => {
         fullWidth
         required
       />
+      <TextField
+        select
+        label="Substation"
+        name="substation_id"
+        value={formData.substation_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, substation_id: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        {substation.map((sub) => (
+          <MenuItem key={sub.id} value={sub.id}>
+            {sub.name}
+          </MenuItem>
+        ))}
+      </TextField>
     </>
   );
 
