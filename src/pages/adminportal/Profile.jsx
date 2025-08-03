@@ -12,7 +12,7 @@ const Profile = () => {
     name: "",
     dob: "",
     email: "",
-    contact_number: "",
+    phone: "",
   });
   // console.log(editUser.name);
   const handleProfileUpdate = async (e) => {
@@ -141,7 +141,7 @@ const Profile = () => {
           name: response.data.name || "",
           dob: response.data.dob || "",
           email: response.data.email || "",
-          contact_number: response.data.contact_number || "",
+          phone: response.data.phone || "",
         });
 
         localStorage.setItem(
@@ -293,7 +293,7 @@ const Profile = () => {
             {/* <Info label="Last Name" value={user.lastName} /> */}
             <Info label="Date of Birth" value={user.dob} />
             <Info label="Email Address" value={user.email} />
-            <Info label="Phone No." value={user.contact_number} />
+            <Info label="Phone No." value={user.phone} />
             <Info label="User Role" value={user.role} />
           </div>
         </section>
@@ -392,9 +392,9 @@ const Profile = () => {
                <input
                  type="tel"
                  placeholder="Please enter your phone number"
-                  value={editUser.contact_number}
+                  value={editUser.phone}
                   onChange={(e) =>
-                    setEditUser({ ...editUser, contact_number: e.target.value })
+                    setEditUser({ ...editUser, phone: e.target.value })
                   }
                   required
                  className="border border-orange-400 rounded px-3 py-2 text-lg focus:outline-none focus:ring-1 focus:ring-orange-400"
@@ -472,9 +472,9 @@ const Profile = () => {
                 <input
                   type="text"
                   className="w-full border rounded px-3 py-2"
-                  value={editUser.contact_number}
+                  value={editUser.phone}
                   onChange={(e) =>
-                    setEditUser({ ...editUser, contact_number: e.target.value })
+                    setEditUser({ ...editUser, phone: e.target.value })
                   }
                   required
                 />

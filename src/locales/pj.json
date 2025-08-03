@@ -214,12 +214,12 @@
   "super_seeder_price": "ਰੁ. 250 ਪ੍ਰਤੀ ਕਨਾਲ",
   "super_seeder_conditions": "ਘੱਟੋ ਘੱਟ 4 ਕਨਾਲ",
 
-  "rotavator": "ਰੋਟਾਵੇਟਰ (7 ਫੁੱਟ)",
+  "rotavator": "ਰੋਟਾਵੇਟਰ (8/10 ਫੁੱਟ)",
   "rotavator_price": "ਰੁ. 600 ਪ੍ਰਤੀ 30 ਮਿੰਟ",
   "rotavator_conditions": "-",
 
   "cultivator": "ਕਲਟੀਵੇਟਰ",
-  "cultivator_price": "ਰੁ. 90 ਪ੍ਰਤੀ ਕਨਾਲ",
+  "cultivator_price": "ਰੁ. 80 ਪ੍ਰਤੀ ਕਨਾਲ",
   "cultivator_conditions": "ਘੱਟੋ ਘੱਟ 4 ਕਨਾਲ",
 
   "potato_planter": "ਆਲੂ ਲਗਾਉਣ ਵਾਲੀ ਮਸ਼ੀਨ",
@@ -231,15 +231,15 @@
   "pneumatic_planter_conditions": "ਘੱਟੋ ਘੱਟ 4 ਕਨਾਲ",
 
   "automatic_paddy_planter": "ਆਟੋਮੈਟਿਕ ਧਾਣੀ ਲਗਾਉਣ ਵਾਲੀ ਮਸ਼ੀਨ",
-  "automatic_paddy_planter_price": "ਰੁ. 200 ਪ੍ਰਤੀ ਕਨਾਲ",
+  "automatic_paddy_planter_price": "ਰੁ. 275 ਪ੍ਰਤੀ ਕਨਾਲ",
   "automatic_paddy_planter_conditions": "-",
 
   "trencher": "ਟ੍ਰੈਂਚਰ",
-  "trencher_price": "ਤੈਅ ਕੀਤਾ ਜਾਣਾ",
+  "trencher_price": "ਰੁ. 80 ਪ੍ਰਤੀ ਕਨਾਲ",
   "trencher_conditions": "-",
 
   "automatic_boom_sprayer": "ਆਟੋਮੈਟਿਕ ਬੂਮ ਸਪਰੇਅਰ",
-  "automatic_boom_sprayer_price": "ਰੁ. 300 ਪ੍ਰਤੀ ਏਕੜ",
+  "automatic_boom_sprayer_price": "ਰੁ. 500 ਪ੍ਰਤੀ ਏਕੜ",
   "automatic_boom_sprayer_conditions": "-",
 
   "drone_sprayer": "ਡਰੋਨ ਸਪਰੇਅਰ",
@@ -249,11 +249,11 @@
   "harvesting_equipment_table": "ਕਟਾਈ ਉਪਕਰਣ",
 
   "wheat_combine_harvester": "ਗਹੂੰ ਕਟਾਈ ਕੰਬਾਈਨ",
-  "wheat_combine_harvester_price": "ਰੁ. 250 ਪ੍ਰਤੀ ਕਨਾਲ",
+  "wheat_combine_harvester_price": "ਰੁ. 225 ਪ੍ਰਤੀ ਕਨਾਲ",
   "wheat_combine_harvester_conditions": "ਘੱਟੋ ਘੱਟ 4 ਕਨਾਲ",
 
   "paddy_combine_harvester": "ਧਾਣੀ ਕਟਾਈ ਕੰਬਾਈਨ",
-  "paddy_combine_harvester_price": "ਰੁ. 300 ਪ੍ਰਤੀ ਕਨਾਲ",
+  "paddy_combine_harvester_price": "ਰੁ. 250 ਪ੍ਰਤੀ ਕਨਾਲ",
   "paddy_combine_harvester_conditions": "ਘੱਟੋ ਘੱਟ 4 ਕਨਾਲ",
 
   "sugarcane_harvester": "ਗੰਨਾ ਕਟਾਈ ਮਸ਼ੀਨ",
@@ -304,28 +304,28 @@
   "disc_harrow_price": "ਰੁ. 125 ਪ੍ਰਤੀ ਕਨਾਲ",
 
   "drone_spraying": "ਡਰੋਨ ਛਿੜਕਾਅ",
-  "drone_spraying_price": "ਰੁ. 800 ਪ੍ਰਤੀ ਏਕੜ",
+  "drone_spraying_price": "ਰੁ. 500 ਪ੍ਰਤੀ ਏਕੜ",
 
   "combine_harvester": "ਕੰਬਾਈਨ ਹਾਰਵੇਸਟਰ",
-  "combine_harvester_price": "ਗੇਹੂੰ: ਰੁ. 2000 ਪ੍ਰਤੀ ਏਕੜ, ਧਾਨ: ਰੁ. 2200 ਪ੍ਰਤੀ ਏਕੜ",
+  "combine_harvester_price": "ਗੇਹੂੰ: ਰੁ. 1800 ਪ੍ਰਤੀ ਏਕੜ, ਧਾਨ: ਰੁ. 2000 ਪ੍ਰਤੀ ਏਕੜ",
 
   "super_seeder1": "ਸੁਪਰ ਸੀਡਰ",
-  "super_seeder_price1": "ਰੁ. 250 ਪ੍ਰਤੀ ਕਨਾਲ",
+  "super_seeder_price1": "ਰੁ. 220 ਪ੍ਰਤੀ ਕਨਾਲ",
 
   "tractor_mounted_boom_sprayer": "ਟ੍ਰੈਕਟਰ ਮਾਊਂਟ ਬੂਮ ਸਪ੍ਰੇਅਰ",
-  "tractor_mounted_boom_sprayer_price": "ਤਯ ਹੋਣਾ ਬਾਕੀ ਹੈ",
+  "tractor_mounted_boom_sprayer_price": "ਰੁ. 500 ਪ੍ਰਤੀ ਏਕੜ",
 
   "rice_planter": "ਧਾਨ ਰੋਪਣ ਵਾਲੀ ਮਸ਼ੀਨ",
-  "rice_planter_price": "ਤਯ ਹੋਣਾ ਬਾਕੀ ਹੈ",
+  "rice_planter_price": "Rs. 2200 per Acre(With 2 Labours, without paddy paneeri)",
 
   "baler_rectangular": "ਚੌਰਸ ਬੇਲਰ",
   "baler_rectangular_price": "ਤਯ ਹੋਣਾ ਬਾਕੀ ਹੈ",
 
   "sugar_cane_trench": "ਗੰਨੇ ਦੀ ਖਾਲ",
-  "sugar_cane_trench_price": "ਰੁ. 100 ਪ੍ਰਤੀ ਕਨਾਲ",
+  "sugar_cane_trench_price": "ਰੁ. 80 ਪ੍ਰਤੀ ਕਨਾਲ",
 
   "sugar_cane_trencher": "ਗੰਨੇ ਦੀ ਟ੍ਰੈਂਚਿੰਗ ਮਸ਼ੀਨ",
-  "sugar_cane_trencher_price": "ਰੁ. 100 ਪ੍ਰਤੀ ਕਨਾਲ",
+  "sugar_cane_trencher_price": "ਰੁ. 80 ਪ੍ਰਤੀ ਕਨਾਲ",
 
   "download_rate_pdf_link": "ਰੇਟ ਪੀ.ਡੀ.ਐਫ ਡਾਊਨਲੋਡ ਕਰੋ",
 

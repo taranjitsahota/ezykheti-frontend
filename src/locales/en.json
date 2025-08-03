@@ -186,7 +186,7 @@
 
   "early_bird_discount": "Early Bird Discount",
   "early_bird_discount_description1": "Subscribe before",
-  "early_bird_discount_description2": "1st June 2025 ",
+  "early_bird_discount_description2": "1st October 2025 ",
   "early_bird_discount_description3": "and get",
   "early_bird_discount_description4": "10%",
   "early_bird_discount_description5": "off.",
@@ -220,12 +220,12 @@
   "super_seeder_price": "Rs. 250 per Kanal",
   "super_seeder_conditions": "Minimum 4 Kanals",
 
-  "rotavator": "Rotavator (7 feet)",
+  "rotavator": "Rotavator (8/10 feet)",
   "rotavator_price": "Rs. 600 per 30 mins",
   "rotavator_conditions": "-",
 
   "cultivator": "Cultivator",
-  "cultivator_price": "Rs. 90 per Kanal",
+  "cultivator_price": "Rs. 80 per Kanal",
   "cultivator_conditions": "Minimum 4 Kanals",
 
   "potato_planter": "Potato Planter",
@@ -237,15 +237,15 @@
   "pneumatic_planter_conditions": "Minimum 4 Kanals",
 
   "automatic_paddy_planter": "Automatic Paddy Planter",
-  "automatic_paddy_planter_price": "Rs. 200 per Kanal",
+  "automatic_paddy_planter_price": "Rs. 275 per Kanal",
   "automatic_paddy_planter_conditions": "-",
 
   "trencher": "Trencher",
-  "trencher_price": "Rs. 100 per Kanal",
+  "trencher_price": "Rs. 80 per Kanal",
   "trencher_conditions": "-",
 
   "automatic_boom_sprayer": "Automatic Boom Sprayer",
-  "automatic_boom_sprayer_price": "Rs. 300 per Acre",
+  "automatic_boom_sprayer_price": "Rs. 500 per Acre",
   "automatic_boom_sprayer_conditions": "-",
 
   "drone_sprayer": "Drone Sprayer",
@@ -255,11 +255,11 @@
   "harvesting_equipment_table": "Harvesting Equipment",
 
   "wheat_combine_harvester": "Wheat Combine Harvester",
-  "wheat_combine_harvester_price": "Rs. 250 per Kanal",
+  "wheat_combine_harvester_price": "Rs. 225 per Kanal",
   "wheat_combine_harvester_conditions": "Minimum 4 Kanals",
 
   "paddy_combine_harvester": "Paddy Combine Harvester",
-  "paddy_combine_harvester_price": "Rs. 300 per Kanal",
+  "paddy_combine_harvester_price": "Rs. 250 per Kanal",
   "paddy_combine_harvester_conditions": "Minimum 4 Kanals",
 
   "sugarcane_harvester": "Sugarcane Harvester",
@@ -310,28 +310,28 @@
   "disc_harrow_price": "Rs. 125 per Kanal",
 
   "drone_spraying": "Drone Spraying",
-  "drone_spraying_price": "Rs. 800 per Acre",
+  "drone_spraying_price": "Rs. 500 per Acre",
 
   "combine_harvester": "Combine Harvester",
-  "combine_harvester_price": "Wheat: Rs. 2000 per Acre, Paddy: Rs. 2200 per Acre",
+  "combine_harvester_price": "Wheat: Rs. 1800 per Acre, Paddy: Rs. 2000 per Acre",
 
   "super_seeder1": "Super Seeder",
-  "super_seeder_price1": "Rs. 250 per Kanal",
+  "super_seeder_price1": "Rs. 220 per Kanal",
 
   "tractor_mounted_boom_sprayer": "Tractor Mounted Boom Sprayer",
-  "tractor_mounted_boom_sprayer_price": "TBC",
+  "tractor_mounted_boom_sprayer_price": "Rs. 500 per Acre",
 
   "rice_planter": "Rice Planter",
-  "rice_planter_price": "TBC",
+  "rice_planter_price": "Rs. 2200 per Acre(With 2 Labours, without paddy paneeri)",
 
   "baler_rectangular": "Baler Rectangular",
   "baler_rectangular_price": "TBC",
 
   "sugar_cane_trench": "Sugar Cane Trench",
-  "sugar_cane_trench_price": "Rs. 100 per Kanal",
+  "sugar_cane_trench_price": "Rs. 80 per Kanal",
 
   "sugar_cane_trencher": "Sugar Cane Trencher",
-  "sugar_cane_trencher_price": "Rs. 100 per Kanal",
+  "sugar_cane_trencher_price": "Rs. 80 per Kanal",
 
   "download_rate_pdf_link": "Download Rates PDF",
 

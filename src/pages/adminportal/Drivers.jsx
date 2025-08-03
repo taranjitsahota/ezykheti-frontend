@@ -57,7 +57,7 @@ const Drivers = () => {
     const data = {
       name: formdata?.name,
       email: formdata?.email,
-      contact_number: formdata?.contact_number,
+      phone: formdata?.phone,
       password: formdata?.password,
       password_confirmation: formdata?.confirm_password,
       substation_id: formdata?.substation_id,
@@ -76,7 +76,7 @@ const Drivers = () => {
           ? {
               name: formData.name,
               email: formData.email,
-              contact_number: formData.contact_number,
+              phone: formData.phone,
               substation_id: formData.substation_id,
             }
           : data,
@@ -147,7 +147,7 @@ const Drivers = () => {
     },
     { field: "name", headerName: "Name", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
-    { field: "contact_number", headerName: "Contact", width: 150 },
+    { field: "phone", headerName: "Contact", width: 150 },
     { field: "role", headerName: "Role", width: 100 },
     { field: "substation", headerName: "Substation", width: 150 },
 
@@ -232,7 +232,7 @@ const Drivers = () => {
       <TextField
         placeholder="Enter contact number"
         label="Contact Number"
-        name="contact_number"
+        name="phone"
         fullWidth
         // margin="normal"
         required
@@ -348,10 +348,10 @@ const Drivers = () => {
       <TextField
         placeholder="Enter contact number"
         label="Contact Number"
-        name="contact_number"
-        defaultValue={formData.contact_number || ""}
+        name="phone"
+        defaultValue={formData.phone || ""}
         onChange={(e) =>
-          setFormData({ ...formData, contact_number: e.target.value })
+          setFormData({ ...formData, phone: e.target.value })
         }
         fullWidth
         required

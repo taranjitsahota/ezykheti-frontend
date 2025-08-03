@@ -211,12 +211,12 @@
   "super_seeder_price": "₹250 प्रति कनाल",
   "super_seeder_conditions": "न्यूनतम 4 कनाल",
 
-  "rotavator": "रोटावेटर (7 फीट)",
+  "rotavator": "रोटावेटर (8/10 फीट)",
   "rotavator_price": "₹600 प्रति 30 मिनट",
   "rotavator_conditions": "-",
 
   "cultivator": "कल्टीवेटर",
-  "cultivator_price": "₹90 प्रति कनाल",
+  "cultivator_price": "₹80 प्रति कनाल",
   "cultivator_conditions": "न्यूनतम 4 कनाल",
 
   "potato_planter": "आलू प्लांटर",
@@ -228,15 +228,15 @@
   "pneumatic_planter_conditions": "न्यूनतम 4 कनाल",
 
   "automatic_paddy_planter": "ऑटोमैटिक धान प्लांटर",
-  "automatic_paddy_planter_price": "₹200 प्रति कनाल",
+  "automatic_paddy_planter_price": "₹275 प्रति कनाल",
   "automatic_paddy_planter_conditions": "-",
 
   "trencher": "ट्रेंचर",
-  "trencher_price": "जल्द घोषित किया जाएगा",
+  "trencher_price": "₹80 प्रति कनाल",
   "trencher_conditions": "-",
 
   "automatic_boom_sprayer": "ऑटोमैटिक बूम स्प्रेयर",
-  "automatic_boom_sprayer_price": "₹300 प्रति एकड़",
+  "automatic_boom_sprayer_price": "₹500 प्रति एकड़",
   "automatic_boom_sprayer_conditions": "-",
 
   "drone_sprayer": "ड्रोन स्प्रेयर",
@@ -246,11 +246,11 @@
   "harvesting_equipment_table": "फसल कटाई उपकरण",
 
   "wheat_combine_harvester": "गेहूं कॉम्बाइन हार्वेस्टर",
-  "wheat_combine_harvester_price": "₹250 प्रति कनाल",
+  "wheat_combine_harvester_price": "₹225 प्रति कनाल",
   "wheat_combine_harvester_conditions": "न्यूनतम 4 कनाल",
 
   "paddy_combine_harvester": "धान कॉम्बाइन हार्वेस्टर",
-  "paddy_combine_harvester_price": "₹300 प्रति कनाल",
+  "paddy_combine_harvester_price": "₹250 प्रति कनाल",
   "paddy_combine_harvester_conditions": "न्यूनतम 4 कनाल",
 
   "sugarcane_harvester": "गन्ना हार्वेस्टर",
@@ -301,19 +301,19 @@
   "disc_harrow_price": "रु. 125 प्रति कनाल",
 
   "drone_spraying": "ड्रोन स्प्रेइंग",
-  "drone_spraying_price": "रु. 800 प्रति एकड़",
+  "drone_spraying_price": "रु. 500 प्रति एकड़",
 
   "combine_harvester": "कंबाइन हार्वेस्टर",
-  "combine_harvester_price": "गेहूं: रु. 2000 प्रति एकड़, धान: रु. 2200 प्रति एकड़",
+  "combine_harvester_price": "गेहूं: रु. 1800 प्रति एकड़, धान: रु. 2000 प्रति एकड़",
 
   "super_seeder1": "सुपर सीडर",
-  "super_seeder_price1": "रु. 250 प्रति कनाल",
+  "super_seeder_price1": "रु. 220 प्रति कनाल",
 
   "tractor_mounted_boom_sprayer": "ट्रैक्टर माउंटेड बूम स्प्रेयर",
-  "tractor_mounted_boom_sprayer_price": "निर्धारित होना बाकी है",
+  "tractor_mounted_boom_sprayer_price": "Rs. 500 प्रति एकड़",
 
   "rice_planter": "धान रोपाई मशीन",
-  "rice_planter_price": "निर्धारित होना बाकी है",
+  "rice_planter_price": "Rs. 2200 per Acre(With 2 Labours, without paddy paneeri)",
 
   "baler_rectangular": "आयताकार बेलर",
   "baler_rectangular_price": "निर्धारित होना बाकी है",

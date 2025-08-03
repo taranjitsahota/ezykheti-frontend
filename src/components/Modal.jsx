@@ -50,7 +50,7 @@ export default function ContactModal({ onClose }) {
       const data = {
         name: values.farmerName,
         email: values.email,
-        contact_number: values.contactNumber,
+        phone: values.contactNumber,
         village_name: values.villageName,
         pincode: values.pincode,
         district: values.district,

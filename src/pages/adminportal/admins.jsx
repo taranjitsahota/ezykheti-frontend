@@ -55,7 +55,7 @@ const Admins = () => {
     const data = {
       name: formdata?.name,
       email: formdata?.email,
-      contact_number: formdata?.contact_number,
+      phone: formdata?.phone,
       substation_id: formdata?.substation_id,
       password: formdata?.password,
       password_confirmation: formdata?.confirm_password,
@@ -74,7 +74,7 @@ const Admins = () => {
           ? {
               name: formData.name,
               email: formData.email,
-              contact_number: formData.contact_number,
+              phone: formData.phone,
               substation_id: formData.substation_id,
             }
           : data,
@@ -145,7 +145,7 @@ const Admins = () => {
     },
     { field: "name", headerName: "Name", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
-    { field: "contact_number", headerName: "Contact", width: 150 },
+    { field: "phone", headerName: "Contact", width: 150 },
     { field: "substation", headerName: "Substation", width: 150 },
     { field: "role", headerName: "Role", width: 100 },
     {
@@ -229,7 +229,7 @@ const Admins = () => {
       <TextField
         placeholder="Enter contact number"
         label="Contact Number"
-        name="contact_number"
+        name="phone"
         fullWidth
         // margin="normal"
         required
@@ -380,10 +380,10 @@ const Admins = () => {
       <TextField
         placeholder="Enter contact number"
         label="Contact Number"
-        name="contact_number"
-        defaultValue={formData.contact_number || ""}
+        name="phone"
+        defaultValue={formData.phone || ""}
         onChange={(e) =>
-          setFormData({ ...formData, contact_number: e.target.value })
+          setFormData({ ...formData, phone: e.target.value })
         }
         fullWidth
         required

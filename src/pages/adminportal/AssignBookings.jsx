@@ -258,7 +258,7 @@ const AssignBookings = () => {
         />
         <TextField
           label="Contact Number"
-          value={formData?.contact_number || ""}
+          value={formData?.phone || ""}
           disabled
           style={{ flex: 1 }}
           margin="normal"

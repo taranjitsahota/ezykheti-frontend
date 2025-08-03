@@ -25,6 +25,7 @@ const languages = [
   { code: "en", label: "EN" },
   { code: "hn", label: "हिन्दी" },
   { code: "pj", label: "ਪੰਜਾਬੀ" },
+  { code: "gj", label: "ગુજરાતી" },
 ];
 
 const Navbar = () => {

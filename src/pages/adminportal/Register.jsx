@@ -22,7 +22,7 @@ const Register = () => {
     const registerSchema = Yup.object().shape({
         name: Yup.string().required("Required"),
         email: Yup.string().email("Invalid email").required("Required"),
-        contact_number: Yup.string().required("Required"),
+        phone: Yup.string().required("Required"),
         country_code: Yup.string().required("Required"),
         password: Yup.string().min(8, "Too short").required("Required"),
         password_confirmation: Yup.string()
@@ -46,7 +46,7 @@ const Register = () => {
             <div className="w-96 p-6 bg-white rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold text-center">Register</h2>
                 <Formik
-                    initialValues={{ name: "", email: "", password: "", password_confirmation: "", country_code: "", contact_number: "" }}
+                    initialValues={{ name: "", email: "", password: "", password_confirmation: "", country_code: "", phone: "" }}
                     validationSchema={registerSchema}
                     onSubmit={handleRegister}
                 >
@@ -72,8 +72,8 @@ const Register = () => {
                             <ErrorMessage name="country_code" component="div" className="text-red-500 text-sm" />
 
                             <label className="block font-medium mt-3">Contact Number</label>
-                            <Field name="contact_number" type="text" className="w-full px-3 py-2 border rounded" />
-                            <ErrorMessage name="contact_number" component="div" className="text-red-500 text-sm" />
+                            <Field name="phone" type="text" className="w-full px-3 py-2 border rounded" />
+                            <ErrorMessage name="phone" component="div" className="text-red-500 text-sm" />
 
                             <label className="block font-medium mt-3">Password</label>
                             <Field name="password" type="password" className="w-full px-3 py-2 border rounded" />

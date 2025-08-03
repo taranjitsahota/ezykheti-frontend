@@ -15,7 +15,7 @@ const Registration = () => {
   const formik = useFormik({
     initialValues: {
       farmer_name: "",
-      contact_number: "",
+      phone: "",
       email: "",
       village_name: "",
       pincode: "",
@@ -25,7 +25,7 @@ const Registration = () => {
     },
     validationSchema: Yup.object({
       farmer_name: Yup.string().required("Farmer name is required"),
-      contact_number: Yup.string()
+      phone: Yup.string()
         .matches(/^[0-9]{10}$/, "Enter a valid 10-digit number")
         .required("Contact number is required"),
       email: Yup.string().email("Invalid email address").nullable(),
@@ -44,7 +44,7 @@ const Registration = () => {
       const data = {
         name: values.farmer_name,
         email: values.email,
-        contact_number: values.contact_number,
+        phone: values.phone,
         village_name: values.village_name,
         pincode: values.pincode,
         district: values.district,
@@ -133,9 +133,9 @@ const Registration = () => {
             {[
               { name: "farmer_name", type: "text", label: t("farmer_name") },
               {
-                name: "contact_number",
+                name: "phone",
                 type: "text",
-                label: t("contact_number"),
+                label: t("phone"),
               },
               { name: "email", type: "email", label: t("email_optional") },
               { name: "village_name", type: "text", label: t("village_name") },
