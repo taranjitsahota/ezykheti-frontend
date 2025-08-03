@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import { useState, useEffect, useRef } from "react";
 import { Camera, Pencil, X, Calendar } from "lucide-react";
 import { User } from "lucide-react";
+import "react-phone-input-2/lib/style.css";
+import PhoneInput from "react-phone-input-2";
 
 const Profile = () => {
   const [editUser, setEditUser] = useState({
@@ -18,13 +20,17 @@ const Profile = () => {
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     const id = localStorage.getItem("user_id");
+    const payload = {
+      ...editUser,
+      phone: phone.startsWith("+") ? phone.slice(1) : phone,
+    };
 
     try {
       setLoading(true);
       const response = await apiRequest({
         url: `/users/${id}`,
         method: "put",
-        data: editUser,
+        data: payload,
       });
 
       if (response.success) {
@@ -45,6 +51,8 @@ const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fileInputRef = useRef(null);
+  const [phone, setPhone] = useState("");
+  const [country, setCountry] = useState("in"); // default India
 
   const [showMenu, setShowMenu] = useState(false);
 
@@ -351,83 +359,84 @@ const Profile = () => {
             >
               <X className="w-5 h-5" />
             </button>
- <form onSubmit={handleProfileUpdate} className="space-y-5">
-               <div className="flex flex-col">
-                 <label htmlFor="name" className="text-sm mb-1">
+            <form onSubmit={handleProfileUpdate} className="space-y-5">
+              <div className="flex flex-col">
+                <label htmlFor="name" className="text-sm mb-1">
                   Name
-                 </label>
-                 <input
-                   type="text"
-                    value={editUser.name}
+                </label>
+                <input
+                  type="text"
+                  value={editUser.name}
                   onChange={(e) =>
                     setEditUser({ ...editUser, name: e.target.value })
                   }
                   required
-                   placeholder="Please enter your name"
-                   className="border border-orange-400 rounded px-3 py-2 text-lg focus:outline-none focus:ring-1 focus:ring-orange-400"
-                 />
-               </div>
-             
-   
-             <div className="flex flex-col">
-               <label htmlFor="email" className="text-sm mb-1">
-                 Email Address
-               </label>
-               <input
-                 value={editUser.email}
+                  placeholder="Please enter your name"
+                  className="border border-orange-400 rounded px-3 py-2 text-lg focus:outline-none focus:ring-1 focus:ring-orange-400"
+                />
+              </div>
+
+              <div className="flex flex-col">
+                <label htmlFor="email" className="text-sm mb-1">
+                  Email Address
+                </label>
+                <input
+                  value={editUser.email}
                   onChange={(e) =>
                     setEditUser({ ...editUser, email: e.target.value })
                   }
                   required
-                 type="email"
-                 placeholder="Please enter your email address"
-                 className="border border-orange-400 rounded px-3 py-2 text-lg focus:outline-none focus:ring-1 focus:ring-orange-400"
-               />
-             </div>
-   
-             <div className="flex flex-col">
-               <label htmlFor="phone" className="text-sm mb-1">
-                 Phone Number
-               </label>
-               <input
-                 type="tel"
-                 placeholder="Please enter your phone number"
-                  value={editUser.phone}
-                  onChange={(e) =>
-                    setEditUser({ ...editUser, phone: e.target.value })
-                  }
-                  required
-                 className="border border-orange-400 rounded px-3 py-2 text-lg focus:outline-none focus:ring-1 focus:ring-orange-400"
-               />
-             </div>
-   
-             <div className="flex flex-col">
-               <label htmlFor="dob" className="text-sm mb-1">
-                 Date of Birth
-               </label>
-               <div className="relative">
-                 <input
-                   type="text"
-                   placeholder="Please enter your D.O.B"
-                     value={editUser.dob}
-                  onChange={(e) =>
-                    setEditUser({ ...editUser, dob: e.target.value })
-                  }
-                   className="border border-gray-300 rounded px-3 py-2 pr-10 text-lg w-full focus:outline-none focus:ring-1 focus:ring-orange-400"
-                 />
-                 <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 text-lg pointer-events-none " />
-               </div>
-             </div>
-   
-             <div className="flex justify-end">
-               <button
-                 type="submit"
-                 className="bg-orange-400 text-white px-4 py-2 rounded text-sm hover:bg-orange-500"
-               >
-                 Save Changes
-               </button>
-             </div>
-           </form>
+                  type="email"
+                  placeholder="Please enter your email address"
+                  className="border border-orange-400 rounded px-3 py-2 text-lg focus:outline-none focus:ring-1 focus:ring-orange-400"
+                />
+              </div>
+
+              <div className="flex flex-col">
+                <label htmlFor="phone" className="text-sm mb-1">
+                  Phone Number
+                </label>
+                <PhoneInput
+                  country={country}
+                  value={phone}
+                  onChange={(value, data) => {
+                    setCountry(data.countryCode); // sets country for flag
+                    setPhone(value); // sets full number correctly
+                  }}
+                  enableSearch={true}
+                  containerClass="w-full"
+                  inputClass="!w-full !h-[42px] !text-base !border !border-orange-400 !rounded-md"
+                  buttonClass="!border !border-orange-400 !rounded-l-md"
+                />
+              </div>
+
+              <div className="flex flex-col">
+                <label htmlFor="dob" className="text-sm mb-1">
+                  Date of Birth
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Please enter your D.O.B"
+                    value={editUser.dob}
+                    onChange={(e) =>
+                      setEditUser({ ...editUser, dob: e.target.value })
+                    }
+                    className="border border-gray-300 rounded px-3 py-2 pr-10 text-lg w-full focus:outline-none focus:ring-1 focus:ring-orange-400"
+                  />
+                  <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 text-lg pointer-events-none " />
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="bg-orange-400 text-white px-4 py-2 rounded text-sm hover:bg-orange-500"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
             {/* <form onSubmit={handleProfileUpdate} className="space-y-4">
               <div>
                 <label className="block mb-1 font-medium">Name</label>
