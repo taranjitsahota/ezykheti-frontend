@@ -43,7 +43,7 @@ const Bookings = () => {
     { field: "end_time", headerName: "End Time", width: 150 },
     { field: "duration", headerName: "Duration", width: 150 },
     { field: "amount", headerName: "Amount", width: 150 },
-    { field: "status", headerName: "Status", width: 150 },
+    { field: "payment_status", headerName: "Payment Status", width: 150 },
     { field: "booking_status", headerName: "Booking Status", width: 150 },
     {field: "created_at", headerName: "Requested Date", width: 150},
   ];

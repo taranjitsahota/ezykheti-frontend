@@ -22,7 +22,7 @@ const Areas = () => {
   const [villages, setVillages] = useState([]);
 
   const [substation, setSubstation] = useState([]);
-  const [selectedState, setSelectedState] = useState(28);
+  const [selectedState, setSelectedState] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedTehsil, setSelectedTehsil] = useState("");
 
@@ -34,30 +34,27 @@ const Areas = () => {
     setFormData(null);
   };
 
-  //  useEffect(() => {
-  // const fetchStates = async () => {
-  //   try {
-  //     const response = await apiRequest({
-  //       url: `/location/states`,
-  //       method: "get",
-  //     });
-
-  //     if (response.success) {
-  //       setStates(response.data); // or response.data.data depending on your API structure
-  //     } else {
-  //       toast.error(response.message || "Failed to fetch states.");
-  //     }
-  //   } catch (error) {
-  //     const msg = error?.response?.data?.message || "Something went wrong.";
-  //     toast.error(msg);
-  //   }
-  // };
-
   useEffect(() => {
-    setSelectedState(28); // Punjab ID
-  }, []);
+    const fetchStates = async () => {
+      try {
+        const response = await apiRequest({
+          url: `/location/states`,
+          method: "get",
+        });
 
-  // }, []);
+        if (response.success) {
+          setStates(response.data); // or response.data.data depending on your API structure
+        } else {
+          toast.error(response.message || "Failed to fetch states.");
+        }
+      } catch (error) {
+        const msg = error?.response?.data?.message || "Something went wrong.";
+        toast.error(msg);
+      }
+    };
+
+    fetchStates();
+  }, []);
 
   // Fetch cities when state changes
   useEffect(() => {
@@ -401,10 +398,14 @@ const Areas = () => {
         fullWidth
         required
         value={selectedState}
-        disabled
+        onChange={(e) => setSelectedState(e.target.value)}
         margin="normal"
       >
-        <MenuItem value={28}>Punjab</MenuItem>
+        {states.map((state) => (
+          <MenuItem key={state.id} value={state.id}>
+            {state.name}
+          </MenuItem>
+        ))}
       </TextField>
 
       <TextField
@@ -499,10 +500,14 @@ const Areas = () => {
         fullWidth
         required
         value={selectedState}
-        disabled
+        onChange={(e) => setSelectedState(e.target.value)}
         margin="normal"
       >
-        <MenuItem value={28}>Punjab</MenuItem>
+        {states.map((state) => (
+          <MenuItem key={state.id} value={state.id}>
+            {state.name}
+          </MenuItem>
+        ))}
       </TextField>
 
       <TextField

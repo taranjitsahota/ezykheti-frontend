@@ -46,7 +46,7 @@ function CollapsibleRow({ row, index }) {
                   <TableRow><TableCell>End Time</TableCell><TableCell>{row.end_time}</TableCell></TableRow>
                   <TableRow><TableCell>Duration</TableCell><TableCell>{row.duration}</TableCell></TableRow>
                   <TableRow><TableCell>Amount</TableCell><TableCell>{row.amount}</TableCell></TableRow>
-                  <TableRow><TableCell>Payment Status</TableCell><TableCell>{row.status}</TableCell></TableRow>
+                  <TableRow><TableCell>Payment Status</TableCell><TableCell>{row.payment_status}</TableCell></TableRow>
                   <TableRow><TableCell>Booking Status</TableCell><TableCell>{row.booking_status}</TableCell></TableRow>
                   <TableRow><TableCell>Requested Date</TableCell><TableCell>{row.created_at}</TableCell></TableRow>
                 </TableBody>
