@@ -31,6 +31,7 @@ const Equipment = () => {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [substation, setSubstation] = useState([]);
+  const [services, setServices] = useState([]);
   const [formData, setFormData] = useState({});
 
   const [previewImage, setPreviewImage] = useState(null);
@@ -60,6 +61,29 @@ const Equipment = () => {
     };
 
     fetchSubstation();
+  }, []);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await apiRequest({
+          url: `/services`,
+          method: "get",
+        });
+
+        if (response.success) {
+          setServices(response.data);
+        } else {
+          toast.error(response.message || "Failed to fetch services.");
+        }
+      } catch (error) {
+        const msg =
+          error?.response?.data?.message || "Failed to fetch services.";
+        toast.error(msg);
+      }
+    };
+
+    fetchServices();
   }, []);
 
   const toggleDrawer = (value) => {
@@ -128,6 +152,7 @@ const Equipment = () => {
       "price_per_kanal",
       formdata.price_per_kanal?.toString() || "0"
     );
+    formDataToSend.append("service_id", formdata.service_id?.toString() || "0");
     formDataToSend.append("min_kanal", formdata.min_kanal?.toString() || "0");
     formDataToSend.append(
       "minutes_per_kanal",
@@ -144,12 +169,6 @@ const Equipment = () => {
     if (isEditMode) {
       formDataToSend.append("_method", "PUT");
     }
-
-    // 🔍 Debug FormData
-    for (let pair of formDataToSend.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-    // return;
 
     try {
       setSubmitLoading(true);
@@ -204,6 +223,7 @@ const Equipment = () => {
       sortable: false,
     },
     { field: "name", headerName: "Name", width: 150 },
+    { field: "service_name", headerName: "Service Name", width: 150 },
     {
       field: "image",
       headerName: "Image",
@@ -306,15 +326,91 @@ const Equipment = () => {
     handleAdminList();
   }, []);
 
+  const equipmentsByService = {
+    Cultivation: [
+      "Super Seeder (7 feet)",
+      "Rotavator (8/10 feet)",
+      "Cultivator",
+      "Potato Planter",
+      "Pneumatic Planter",
+      "Automatic Paddy Planter",
+      "Trencher",
+      "Automatic Boom Sprayer",
+      "Drone Sprayer",
+    ],
+    Harvesting: [
+      "Wheat Combine Harvester",
+      "Paddy Combine Harvester",
+      "Sugarcane Harvester",
+      "Automatic Potato Digger & Grader",
+      "Pneumatic Planter",
+    ],
+    Transportation: [
+      "Trolley Bed (5 feet high)",
+      "PTO Trolley for Sugarcane",
+      "Tata 207 or UTE",
+      "Additional Mileage Charge",
+    ],
+  };
+
+  const selectedService = services.find((s) => s.id === formData.service_id);
+
+  const equipments = selectedService
+    ? equipmentsByService[selectedService.name] || []
+    : [];
+
   const equipmentFormContent = (
     <>
       <TextField
-        label="Name"
-        placeholder="Enter name"
-        name="name"
+        select
+        label="Select Service"
+        name="service_id"
+        value={formData.service_id || ""}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            service_id: Number(e.target.value),
+            equipment_id: "",
+          })
+        }
         fullWidth
         required
-      />
+        margin="normal"
+      >
+        {services.map((service) => (
+          <MenuItem key={service.id} value={service.id}>
+            {service.name}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        select
+        label="Select Equipment"
+        name="name"
+        value={formData.name || ""}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            name: e.target.value,
+          })
+        }
+        fullWidth
+        required
+        margin="normal"
+        disabled={!formData.service_id}
+      >
+        {equipments.length > 0 ? (
+          equipments.map((name) => (
+            <MenuItem key={name} value={name}>
+              {name}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disabled>No equipment found</MenuItem>
+        )}
+      </TextField>
+
       <TextField
         label="Price Per Kanal"
         placeholder="Enter price per kanal"
@@ -366,7 +462,11 @@ const Equipment = () => {
           onChange={(e) => {
             const file = e.target.files[0];
             if (file) {
-              setFormData({ ...formData, image: file });
+              setFormData({
+                ...formData,
+                image: file,
+                imagePreview: URL.createObjectURL(file),
+              });
             }
           }}
           style={{ display: "none" }}
@@ -377,6 +477,23 @@ const Equipment = () => {
             Upload Image
           </Button>
         </label>
+        {/* Show selected file name */}
+        {formData.image && (
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            Selected: {formData.image.name}
+          </Typography>
+        )}
+
+        {/* Show image preview */}
+        {formData.imagePreview && (
+          <Box mt={2}>
+            <img
+              src={formData.imagePreview}
+              alt="Preview"
+              style={{ maxWidth: "200px", borderRadius: "8px" }}
+            />
+          </Box>
+        )}
       </Box>
 
       <TextField
@@ -414,14 +531,55 @@ const Equipment = () => {
   const equipmentFormContentEdit = (
     <>
       <TextField
-        label="Name"
-        placeholder="Enter name"
-        name="name"
-        defaultValue={formData.name || ""}
-        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        select
+        label="Select Service"
+        name="service_id"
+        value={formData.service_id || ""}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            service_id: Number(e.target.value),
+            name: "", // reset equipment when service changes
+          })
+        }
         fullWidth
         required
-      />
+        margin="normal"
+      >
+        {services.map((service) => (
+          <MenuItem key={service.id} value={service.id}>
+            {service.name}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        select
+        label="Select Equipment"
+        name="name"
+        value={formData.name || ""}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            name: e.target.value,
+          })
+        }
+        fullWidth
+        required
+        margin="normal"
+        disabled={!formData.service_id}
+      >
+        {equipments.length > 0 ? (
+          equipments.map((name) => (
+            <MenuItem key={name} value={name}>
+              {name}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disabled>No equipment found</MenuItem>
+        )}
+      </TextField>
+
       <TextField
         label="Price Per Kanal"
         placeholder="Enter price per kanal"
@@ -467,7 +625,7 @@ const Equipment = () => {
         required
       />
 
-         <TextField
+      <TextField
         select
         label="Substation"
         name="substation_id"

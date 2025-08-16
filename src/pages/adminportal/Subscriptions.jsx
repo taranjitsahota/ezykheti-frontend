@@ -14,7 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import Anchor from "../../components/adminportal/Anchor";
 import ConfirmModal from "../../components/adminportal/ConfirmModal";
 
-const InterestedDashboard = () => {
+const Subscriptions = () => {
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -25,13 +25,13 @@ const InterestedDashboard = () => {
 
     try {
       const response = await apiRequest({
-        url: `/interested-users/${deleteId}`, // Dynamic URL using deleteId
+        url: `/subscriptions/${deleteId}`, // Dynamic URL using deleteId
         method: "delete",
       });
 
       if (response.success) {
-        toast.success("Interested User deleted successfully!");
-        handleAdminList(); // Refresh list of admins or any data
+        toast.success("Subscription deleted successfully!");
+        handleSubscriptionList(); // Refresh list of admins or any data
       } else {
         toast.error(response.message || "Failed to delete.");
       }
@@ -59,12 +59,15 @@ const InterestedDashboard = () => {
       sortable: false,
     },
     { field: "name", headerName: "Name", width: 150 },
-    { field: "contact", headerName: "Contact", width: 150 },
-    { field: "state_name", headerName: "State", width: 150 },
-    { field: "district_name", headerName: "District", width: 150 },
-    { field: "tehsil_name", headerName: "Tehsil", width: 150 },
-    {field: "village_name", headerName: "Village", width: 150},
-    {field: "requested_date", headerName: "Requested Date", width: 150},
+    { field: "phone", headerName: "Contact", width: 150 },
+    { field: "plan_type", headerName: "Plan Type", width: 150 },
+    { field: "kanals", headerName: "Kanals", width: 150 },
+    { field: "total_price", headerName: "Total Price", width: 150 },
+    {field: "status", headerName: "Status", width: 150},
+    {field: "price_per_kanal", headerName: "Price Per Kanal", width: 150},
+    {field: "location", headerName: "Location", width: 150},
+    {field: "start_date", headerName: "Start Date", width: 150},
+    {field: "end_date", headerName: "End Date", width: 150},
     {
       field: "action",
       headerName: "Action Button",
@@ -87,18 +90,18 @@ const InterestedDashboard = () => {
     },
   ];
 
-  const handleAdminList = async () => {
+  const handleSubscriptionList = async () => {
     setLoading(true);
     try {
       const response = await apiRequest({
-        url: "/interested-users",
+        url: "/subscriptions",
         method: "get",
       });
 
       if (response.success) {
         setRows(response.data || []);
       } else {
-        toast.error(response.message || "Failed to fetch interested users.");
+        toast.error(response.message || "Failed to fetch subscriptions.");
       }
     } catch (error) {
       const msg =
@@ -113,15 +116,15 @@ const InterestedDashboard = () => {
   };
 
   useEffect(() => {
-    handleAdminList();
+    handleSubscriptionList();
   }, []);
 
   return (
     <DashboardLayout
     showAddButton={false}
     showFilterButton={false}
-      pageTitle="Interested Users"
-      add="Add Admin"
+      pageTitle="Subscriptions"
+      add="Add subscription"
       toggleDrawer={false}
       drawerOpen={false}
       submitLoading={false}
@@ -160,4 +163,4 @@ const InterestedDashboard = () => {
   );
 };
 
-export default InterestedDashboard;
+export default Subscriptions;

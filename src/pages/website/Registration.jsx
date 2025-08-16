@@ -51,7 +51,6 @@ const Registration = () => {
         area_of_land: values.area_of_land,
         land_unit: values.land_unit,
       };
-      console.log(data);
 
       try {
         setSubmitLoading(true);

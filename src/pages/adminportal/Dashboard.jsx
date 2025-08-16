@@ -160,7 +160,7 @@ const Dashboard = () => {
           {/* Small Box 2 */}
           <div className="bg-white rounded-xl p-6 shadow">
             <p className="text-sm text-gray-500">Total Subscription</p>
-            <h2 className="text-2xl font-semibold mt-2">105,206</h2>
+            <h2 className="text-2xl font-semibold mt-2">{fallback(subscriptions)}</h2>
             <PercentageIncrease percentage={50} />
           </div>
 

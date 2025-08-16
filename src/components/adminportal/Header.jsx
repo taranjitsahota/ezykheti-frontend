@@ -75,7 +75,6 @@ const Header = ({ toggleSidebar }) => {
       }
     } catch (err) {
       toast.error("Something went wrong while changing password.");
-      console.error(err);
     }
   };
 

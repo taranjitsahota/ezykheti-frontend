@@ -117,12 +117,12 @@ const Pricing = () => {
       </div>
       <div className="admin-wrapper bg-white py-20 px-4 md:px-10">
         <section className="max-w-7xl mx-auto">
-          <h2 className="text-center  text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-center  text-4xl md:text-5xl font-bold mb-24">
             {t("pay_as_you_go")}
-          </h2>
-          <p className=" text-center text-lg  mb-16">
+          </h1>
+          <h2 className="text-center  text-3xl md:text-4xl font-bold mb-14">
             {t("cultivation_equipment_table")}
-          </p>
+          </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
             {[
@@ -192,43 +192,43 @@ const Pricing = () => {
           </div>
         </section>
       </div>
-      
+
       <div className="bg-white py-20 px-4 md:px-10">
         <section className="max-w-7xl mx-auto">
-          <h2 className="text-center  text-4xl md:text-5xl font-bold mb-4">
-          {t("harvesting_equipment_table")}
+          <h2 className="text-center  text-3xl md:text-4xl font-bold mb-14">
+            {t("harvesting_equipment_table")}
           </h2>
-          <p className=" text-center text-lg  mb-16">
+          {/* <p className=" text-center text-lg  mb-16">
             {t("cultivation_equipment_table")}
-          </p>
+          </p> */}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-          {[
-            {
-              service: t("wheat_combine_harvester"),
-              price: t("wheat_combine_harvester_price"),
-              condition: t("wheat_combine_harvester_conditions"),
-            },
-            {
-              service: t("paddy_combine_harvester"),
-              price: t("paddy_combine_harvester_price"),
-              condition: t("paddy_combine_harvester_conditions"),
-            },
-            {
-              service: t("sugarcane_harvester"),
-              price: t("sugarcane_harvester_price"),
-              condition: t("sugarcane_harvester_conditions"),
-            },
-            {
-              service: t("automatic_potato_digger_grader"),
-              price: t("automatic_potato_digger_grader_price"),
-              condition: t("automatic_potato_digger_grader_conditions"),
-            },
-            {
-              service: t("pneumatic_planter"),
-              price: t("pneumatic_planter_price"),
-              condition: t("pneumatic_planter_conditions"),
-            },
+            {[
+              {
+                service: t("wheat_combine_harvester"),
+                price: t("wheat_combine_harvester_price"),
+                condition: t("wheat_combine_harvester_conditions"),
+              },
+              {
+                service: t("paddy_combine_harvester"),
+                price: t("paddy_combine_harvester_price"),
+                condition: t("paddy_combine_harvester_conditions"),
+              },
+              {
+                service: t("sugarcane_harvester"),
+                price: t("sugarcane_harvester_price"),
+                condition: t("sugarcane_harvester_conditions"),
+              },
+              {
+                service: t("automatic_potato_digger_grader"),
+                price: t("automatic_potato_digger_grader_price"),
+                condition: t("automatic_potato_digger_grader_conditions"),
+              },
+              {
+                service: t("pneumatic_planter"),
+                price: t("pneumatic_planter_price"),
+                condition: t("pneumatic_planter_conditions"),
+              },
             ].map((item, idx) => (
               <div
                 key={idx}
@@ -248,41 +248,40 @@ const Pricing = () => {
               </div>
             ))}
           </div>
-          
         </section>
       </div>
 
       <div className="bg-white py-20 px-4 md:px-10">
         <section className="max-w-7xl mx-auto">
-          <h2 className="text-center  text-4xl md:text-5xl font-bold mb-4">
-          {t("transportation_services_table")}
+          <h2 className="text-center  text-3xl md:text-4xl font-bold mb-14">
+            {t("transportation_services_table")}
           </h2>
           {/* <p className=" text-center text-lg  mb-16">
             {t("cultivation_equipment_table")}
           </p> */}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-          {[
-            {
-              service: t("trolley_bed"),
-              price: t("trolley_bed_price"),
-              condition: t("trolley_bed_conditions"),
-            },
-            {
-              service: t("pto_trolley_sugarcane"),
-              price: t("pto_trolley_sugarcane_price"),
-              condition: t("pto_trolley_sugarcane_conditions"),
-            },
-            {
-              service: t("tata_207_ute"),
-              price: t("tata_207_ute_price"),
-              condition: t("tata_207_ute_conditions"),
-            },
-            {
-              service: t("additional_mileage_charge"),
-              price: t("additional_mileage_charge_price"),
-              condition: t("additional_mileage_charge_conditions"),
-            },
+            {[
+              {
+                service: t("trolley_bed"),
+                price: t("trolley_bed_price"),
+                condition: t("trolley_bed_conditions"),
+              },
+              {
+                service: t("pto_trolley_sugarcane"),
+                price: t("pto_trolley_sugarcane_price"),
+                condition: t("pto_trolley_sugarcane_conditions"),
+              },
+              {
+                service: t("tata_207_ute"),
+                price: t("tata_207_ute_price"),
+                condition: t("tata_207_ute_conditions"),
+              },
+              {
+                service: t("additional_mileage_charge"),
+                price: t("additional_mileage_charge_price"),
+                condition: t("additional_mileage_charge_conditions"),
+              },
             ].map((item, idx) => (
               <div
                 key={idx}
@@ -313,7 +312,8 @@ const Pricing = () => {
         Download Rates PDF
       </a>
     </div>
-  );z
+  );
+  z;
 };
 
 export default Pricing;

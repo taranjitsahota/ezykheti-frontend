@@ -13,6 +13,7 @@ import Admins from "./pages/adminportal/admins";
 import Areas from "./pages/adminportal/Areas";
 import Substations from "./pages/adminportal/Substations";
 import AssignBookings from "./pages/adminportal/AssignBookings";
+import Subscriptions from "./pages/adminportal/Subscriptions";
 import BusinessTimings from "./pages/adminportal/BusinessTimings";
 import Crops from "./pages/adminportal/Crops";
 import Dashboard from "./pages/adminportal/Dashboard";
@@ -102,6 +103,7 @@ function App() {
     { path: "/areas", element: <Areas /> },
     { path: "/substations", element: <Substations /> },
     { path: "/assign-bookings", element: <AssignBookings /> },
+    { path: "/subscriptions", element: <Subscriptions /> },
     { path: "/business-timings", element: <BusinessTimings /> },
     { path: "/crops", element: <Crops /> },
     { path: "/dashboard", element: <Dashboard /> },
@@ -113,10 +115,6 @@ function App() {
     { path: "/service-areas", element: <ServiceAreas /> },
     { path: "/users", element: <Users /> },
     { path: "/profile", element: <Profile /> },
-    // { path: "/admins", element: <Admins /> },
-    // { path: "/admins", element: <Admins /> },
-    // { path: "/admins", element: <Admins /> },
-    // add more protected routes here
   ];
 
   const showHeaderFooter = showHeaderFooterRoutes.includes(location.pathname);

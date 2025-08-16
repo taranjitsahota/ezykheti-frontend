@@ -5,6 +5,7 @@ import BasicTable from "../../components/adminportal/BasicTable";
 import { apiRequest } from "../../utils/apiService";
 import { toast } from "react-toastify";
 import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { Select, MenuItem, InputLabel, FormControl } from "@mui/material";
@@ -13,6 +14,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Anchor from "../../components/adminportal/Anchor";
 import ConfirmModal from "../../components/adminportal/ConfirmModal";
+import { countryCodes } from "../../data/countryCodes";
 
 const Admins = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -52,10 +54,13 @@ const Admins = () => {
   };
 
   const handleSubmit = async (formdata) => {
+    const buildCleanPhone = (code, number) =>
+      (code + number).replace(/\s+/g, "").replace(/^\+/, "");
+
     const data = {
       name: formdata?.name,
       email: formdata?.email,
-      phone: formdata?.phone,
+      phone: buildCleanPhone(formdata.country_code, formdata.phone),
       substation_id: formdata?.substation_id,
       password: formdata?.password,
       password_confirmation: formdata?.confirm_password,
@@ -74,7 +79,7 @@ const Admins = () => {
           ? {
               name: formData.name,
               email: formData.email,
-              phone: formData.phone,
+              phone: buildCleanPhone(formData.country_code, formData.phone),
               substation_id: formData.substation_id,
             }
           : data,
@@ -157,7 +162,26 @@ const Admins = () => {
           <button
             onClick={() => {
               setIsEditMode(true);
-              setFormData(params.row); // row = your current row data
+              const row = params.row;
+
+              // Try to split phone
+              const matchedCode = countryCodes.find((c) =>
+                row.phone?.startsWith(c.code)
+              );
+
+              if (matchedCode) {
+                setFormData({
+                  ...row,
+                  country_code: matchedCode.code,
+                  phone: row.phone.slice(matchedCode.code.length),
+                });
+              } else {
+                setFormData({
+                  ...row,
+                  country_code: "",
+                  phone: row.phone,
+                });
+              }
               toggleDrawer(true); // open anchor
             }}
             className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
@@ -226,15 +250,36 @@ const Admins = () => {
         // margin="normal"
         required
       />
-      <TextField
-        placeholder="Enter contact number"
-        label="Contact Number"
-        name="phone"
-        fullWidth
-        // margin="normal"
-        required
-        //  inputProps={{ maxLength: 10, pattern: "[0-9]{10}" }}
-      />
+      <Box className="flex gap-2 w-full">
+        <TextField
+          select
+          label="Code"
+          name="country_code"
+          value={formData.country_code || ""}
+          onChange={(e) =>
+            setFormData({ ...formData, country_code: e.target.value })
+          }
+          sx={{ minWidth: "90px" }}
+          required
+        >
+          {countryCodes.map((c) => (
+            <MenuItem key={c.code} value={c.code}>
+              {c.label}
+            </MenuItem>
+          ))}
+        </TextField>
+
+        <TextField
+          placeholder="Enter contact number"
+          label="Contact Number"
+          name="phone"
+          value={formData.phone || ""}
+          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          fullWidth
+          required
+          inputProps={{ maxLength: 15, pattern: "[0-9]*" }}
+        />
+      </Box>
       <TextField
         select
         label="Substation"
@@ -377,17 +422,36 @@ const Admins = () => {
         fullWidth
         required
       />
-      <TextField
-        placeholder="Enter contact number"
-        label="Contact Number"
-        name="phone"
-        defaultValue={formData.phone || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, phone: e.target.value })
-        }
-        fullWidth
-        required
-      />
+      <Box className="flex gap-2 w-full">
+        <TextField
+          select
+          label="Code"
+          name="country_code"
+          value={formData.country_code || ""}
+          onChange={(e) =>
+            setFormData({ ...formData, country_code: e.target.value })
+          }
+          sx={{ minWidth: "90px" }}
+          required
+        >
+          {countryCodes.map((c) => (
+            <MenuItem key={c.code} value={c.code}>
+              {c.label}
+            </MenuItem>
+          ))}
+        </TextField>
+
+        <TextField
+          placeholder="Enter contact number"
+          label="Contact Number"
+          name="phone"
+          value={formData.phone || ""}
+          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          fullWidth
+          required
+          inputProps={{ maxLength: 15, pattern: "[0-9]*" }}
+        />
+      </Box>
       <TextField
         select
         label="Substation"

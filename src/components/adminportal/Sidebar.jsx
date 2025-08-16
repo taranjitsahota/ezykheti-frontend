@@ -38,7 +38,6 @@ import {
   Sprout,
   Map,
   MapPin,
-  // Tool,
   Settings,
   Workflow,
   Sparkles,
@@ -48,10 +47,9 @@ import {
   Leaf,
   User,
   UserRound,
-  // CalendarDays,
   UsersRound,
-  // SteeringWheel,
   Clock,
+  CreditCard,
 } from "lucide-react";
 
 const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
@@ -118,8 +116,8 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
             { to: "/dashboard", icon: <LayoutDashboard />, label: "Dashboard" },
             { to: "/substations", icon: <Cpu />, label: "Substations" },
             { to: "/areas", icon: <Network />, label: "Areas" },
-            { to: "/equipments", icon: <Tractor />, label: "Equipments" },
             { to: "/services", icon: <Workflow />, label: "Services" },
+            { to: "/equipments", icon: <Tractor />, label: "Equipments" },
             {
               to: "/service-areas",
               icon: <LocateFixed />,
@@ -132,9 +130,10 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
               icon: <UserCheck />,
               label: "Assign Bookings",
             },
+            { to: "/subscriptions", icon: <CreditCard />, label: "Subscriptions" },
             {
               to: "/business-timings",
-              icon: <CalendarDays />,
+              icon: <Clock />,
               label: "Buisness Timings",
             },
             {

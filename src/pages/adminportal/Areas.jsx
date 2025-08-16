@@ -157,6 +157,14 @@ const Areas = () => {
     setFormData(row);
     setDrawerOpen(true); // Open drawer first
 
+    setSelectedState(row.state_id);
+
+    const districtRes = await apiRequest({
+      url: `/location/districts/${row.state_id}`,
+      method: "get",
+    });
+
+    if (districtRes.success) setDistricts(districtRes.data);
     setSelectedDistrict(row.district_id);
 
     // Fetch tehsils based on district_id
@@ -246,7 +254,6 @@ const Areas = () => {
       toast.error(msg);
     }
   };
-  console.log(isEditMode);
   const handleSubmit = async (formdata) => {
     const data = {
       state_id: selectedState,

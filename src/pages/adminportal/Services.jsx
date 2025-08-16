@@ -18,7 +18,7 @@ import ConfirmModal from "../../components/adminportal/ConfirmModal";
 const Services = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
 
-  const [substation, setSubstation] = useState([]);
+  // const [substation, setSubstation] = useState([]);
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -26,52 +26,52 @@ const Services = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({});
 
-  const [equipment, setEquipment] = useState([]);
+  // const [equipment, setEquipment] = useState([]);
 
-  useEffect(() => {
-    const fetchEquipment = async () => {
-      try {
-        const response = await apiRequest({
-          url: `/equipments`,
-          method: "get",
-        });
+  // useEffect(() => {
+  //   const fetchEquipment = async () => {
+  //     try {
+  //       const response = await apiRequest({
+  //         url: `/equipments`,
+  //         method: "get",
+  //       });
 
-        if (response.success) {
-          setEquipment(response.data);
-        } else {
-          toast.error(response.message || "Failed to fetch equipments.");
-        }
-      } catch (error) {
-        const msg = error?.response?.data?.message || "Something went wrong.";
-        toast.error(msg);
-      }
-    };
+  //       if (response.success) {
+  //         setEquipment(response.data);
+  //       } else {
+  //         toast.error(response.message || "Failed to fetch equipments.");
+  //       }
+  //     } catch (error) {
+  //       const msg = error?.response?.data?.message || "Something went wrong.";
+  //       toast.error(msg);
+  //     }
+  //   };
 
-    fetchEquipment();
-  }, []);
+  //   fetchEquipment();
+  // }, []);
 
-  useEffect(() => {
-    const fetchSubstation = async () => {
-      try {
-        const response = await apiRequest({
-          url: `/substations`,
-          method: "get",
-        });
+  // useEffect(() => {
+  //   const fetchSubstation = async () => {
+  //     try {
+  //       const response = await apiRequest({
+  //         url: `/substations`,
+  //         method: "get",
+  //       });
 
-        if (response.success) {
-          setSubstation(response.data);
-        } else {
-          toast.error(response.message || "Failed to fetch substations.");
-        }
-      } catch (error) {
-        const msg =
-          error?.response?.data?.message || "Failed to fetch substations.";
-        toast.error(msg);
-      }
-    };
+  //       if (response.success) {
+  //         setSubstation(response.data);
+  //       } else {
+  //         toast.error(response.message || "Failed to fetch substations.");
+  //       }
+  //     } catch (error) {
+  //       const msg =
+  //         error?.response?.data?.message || "Failed to fetch substations.";
+  //       toast.error(msg);
+  //     }
+  //   };
 
-    fetchSubstation();
-  }, []);
+  //   fetchSubstation();
+  // }, []);
 
   const toggleDrawer = (value) => {
     if (value === "add") {
@@ -128,9 +128,7 @@ const Services = () => {
 
   const handleSubmit = async (formdata) => {
     const data = {
-      equipment_id: formdata?.equipment_id,
-      substation_id: formdata?.substation_id,
-      category: formdata?.category,
+      name: formdata?.name,
       is_enabled: formdata?.is_enabled,
     };
 
@@ -185,9 +183,9 @@ const Services = () => {
       width: 60,
       sortable: false,
     },
-    { field: "equipment_name", headerName: "Equipment", width: 150 },
-    { field: "category", headerName: "Service", width: 150 },
-    { field: "substation_name", headerName: "Substation", width: 150 },
+    // { field: "equipment_name", headerName: "Equipment", width: 150 },
+    { field: "name", headerName: "Service", width: 150 },
+    // { field: "substation_name", headerName: "Substation", width: 150 },
 
     {
       field: "is_enabled",
@@ -275,7 +273,7 @@ const Services = () => {
       <TextField
         select
         label="Service Name"
-        name="category"
+        name="name"
         fullWidth
         required
         value={formData.category || ""}
@@ -287,7 +285,7 @@ const Services = () => {
         <MenuItem value="Harvesting">Harvesting</MenuItem>
       </TextField>
 
-      <TextField
+      {/* <TextField
         select
         label="Equipment"
         name="equipment_id"
@@ -323,7 +321,7 @@ const Services = () => {
             {sub.name}
           </MenuItem>
         ))}
-      </TextField>
+      </TextField> */}
 
       <TextField
         select
@@ -347,11 +345,11 @@ const Services = () => {
       <TextField
         select
         label="Service Name"
-        name="category"
+        name="name"
         fullWidth
         required
-        value={formData.category || ""}
-        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+        value={formData.name || ""}
+        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         margin="normal"
       >
         <MenuItem value="Cultivation">Cultivation</MenuItem>
@@ -359,7 +357,7 @@ const Services = () => {
         <MenuItem value="Harvesting">Harvesting</MenuItem>
       </TextField>
 
-      <TextField
+      {/* <TextField
         select
         label="Equipment"
         name="equipment_id"
@@ -394,7 +392,7 @@ const Services = () => {
             {sub.name}
           </MenuItem>
         ))}
-      </TextField>
+      </TextField> */}
 
       <TextField
         select

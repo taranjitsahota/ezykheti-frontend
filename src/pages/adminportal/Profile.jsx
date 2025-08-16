@@ -16,7 +16,6 @@ const Profile = () => {
     email: "",
     phone: "",
   });
-  // console.log(editUser.name);
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     const id = localStorage.getItem("user_id");

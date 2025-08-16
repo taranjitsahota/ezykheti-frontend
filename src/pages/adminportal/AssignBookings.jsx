@@ -50,7 +50,6 @@ const AssignBookings = () => {
 
     try {
       setSubmitLoading(true);
-      console.log(data);
       const response = await apiRequest({
         url: `/assign-driver`,
         method: "put",

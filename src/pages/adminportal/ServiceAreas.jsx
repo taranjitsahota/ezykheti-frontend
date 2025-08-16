@@ -30,27 +30,23 @@ const ServiceAreas = () => {
   const [serviceList, setServiceList] = useState([]);
   const [areaList, setAreaList] = useState([]);
 
-  useEffect(() => {
-    const fetchEquipment = async () => {
-      try {
-        const response = await apiRequest({
-          url: `/equipments`,
-          method: "get",
-        });
+  const fetchEquipmentByService = async (serviceId) => {
+    try {
+      const response = await apiRequest({
+        url: `/equipment-by-service-id/${serviceId}`,
+        method: "get",
+      });
 
-        if (response.success) {
-          setEquipment(response.data);
-        } else {
-          toast.error(response.message || "Failed to fetch equipments.");
-        }
-      } catch (error) {
-        const msg = error?.response?.data?.message || "Something went wrong.";
-        toast.error(msg);
+      if (response.success) {
+        setEquipment(response.data); // Set fetched equipments
+      } else {
+        toast.error(response.message || "Failed to fetch equipments.");
       }
-    };
-
-    fetchEquipment();
-  }, []);
+    } catch (error) {
+      const msg = error?.response?.data?.message || "Something went wrong.";
+      toast.error(msg);
+    }
+  };
 
   const fetchAreas = async () => {
     try {
@@ -99,11 +95,9 @@ const ServiceAreas = () => {
 
   useEffect(() => {
     const fetchServices = async () => {
-      if (!selectedEquipmentId) return;
-
       try {
         const response = await apiRequest({
-          url: `/service-by-equipment-id/${selectedEquipmentId}`,
+          url: `/services`,
           method: "get",
         });
 
@@ -214,6 +208,32 @@ const ServiceAreas = () => {
     }
   };
 
+  const handleEditServiceArea = async (row) => {
+    setFormData({ ...row });
+
+    try {
+      const equipmentRes = await apiRequest({
+        url: `/equipment-by-service-id/${row.service_id}`,
+        method: "get",
+      });
+      if (equipmentRes.success) {
+        setEquipment(equipmentRes.data || []);
+        setFormData((prev) => ({
+          ...prev,
+          equipment_id: row.equipment_id || "",
+        }));
+      } else {
+        toast.error(equipmentRes.message || "Failed to fetch equipments");
+        setEquipment([]);
+      }
+    } catch (error) {
+      const msg =
+        error?.response?.data?.message || "Failed to fetch equipments";
+      toast.error(msg);
+      setEquipment([]);
+    }
+  };
+
   const [rows, setRows] = React.useState([]);
 
   const rowsWithSerial = rows.map((row, index) => ({
@@ -277,8 +297,8 @@ const ServiceAreas = () => {
           <button
             onClick={() => {
               setIsEditMode(true);
-              setFormData(params.row); // row = your current row data
-              setSelectedEquipmentId(params.row.equipment_id);
+              // setFormData(params.row); // row = your current row data
+              handleEditServiceArea(params.row);
               toggleDrawer(true); // open anchor
             }}
             className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
@@ -329,8 +349,42 @@ const ServiceAreas = () => {
     handleAdminList();
   }, []);
 
+  useEffect(() => {
+    if (formData?.service_id) {
+      fetchEquipmentByService(formData.service_id);
+    } else {
+      setEquipment([]);
+    }
+  }, [formData?.service_id]);
+
   const serviceareasFormContent = (
     <>
+      <TextField
+        select
+        label="Service"
+        name="service_id"
+        fullWidth
+        required
+        value={formData.service_id || ""}
+        onChange={(e) => {
+          const serviceId = e.target.value;
+          setFormData({ ...formData, service_id: serviceId, equipment_id: "" });
+
+          // Fetch equipments for the selected service
+          fetchEquipmentByService(serviceId);
+
+          // Reset equipment field
+          setFormData((prev) => ({ ...prev, equipment_id: "" }));
+        }}
+        margin="normal"
+      >
+        {serviceList.map((service) => (
+          <MenuItem key={service.id} value={service.id}>
+            {service.name}
+          </MenuItem>
+        ))}
+      </TextField>
+
       <TextField
         select
         label="Equipment"
@@ -341,34 +395,13 @@ const ServiceAreas = () => {
         onChange={(e) => {
           const id = e.target.value;
           setFormData({ ...formData, equipment_id: e.target.value });
-          setSelectedEquipmentId(id);
         }}
-        // disabled={!selectedState}
+        disabled={!formData.service_id}
         margin="normal"
       >
         {equipment.map((equipment) => (
           <MenuItem key={equipment.id} value={equipment.id}>
             {equipment.name}
-          </MenuItem>
-        ))}
-      </TextField>
-
-      <TextField
-        select
-        label="Service"
-        name="service_id"
-        fullWidth
-        required
-        value={formData.service_id || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, service_id: e.target.value })
-        }
-        margin="normal"
-        disabled={!formData.equipment_id}
-      >
-        {serviceList.map((service) => (
-          <MenuItem key={service.id} value={service.id}>
-            {service.category}
           </MenuItem>
         ))}
       </TextField>
@@ -431,27 +464,6 @@ const ServiceAreas = () => {
     <>
       <TextField
         select
-        label="Equipment"
-        name="equipment_id"
-        fullWidth
-        required
-        value={formData.equipment_id || ""}
-        onChange={(e) => {
-          const id = e.target.value;
-          setFormData({ ...formData, equipment_id: e.target.value });
-          setSelectedEquipmentId(id);
-        }}
-        // disabled={!selectedState}
-        margin="normal"
-      >
-        {equipment.map((equipment) => (
-          <MenuItem key={equipment.id} value={equipment.id}>
-            {equipment.name}
-          </MenuItem>
-        ))}
-      </TextField>
-      <TextField
-        select
         label="Service"
         name="service_id"
         fullWidth
@@ -464,14 +476,38 @@ const ServiceAreas = () => {
       >
         {serviceList.map((service) => (
           <MenuItem key={service.id} value={service.id}>
-            {service.category}
+            {service.name}
           </MenuItem>
         ))}
       </TextField>
 
       <TextField
         select
-        label="Area (State > City > Village)"
+        label="Equipment"
+        name="equipment_id"
+        fullWidth
+        required
+        value={formData.equipment_id || ""}
+        onChange={(e) => {
+          setFormData({ ...formData, equipment_id: e.target.value });
+        }}
+        disabled={!formData.service_id}
+        margin="normal"
+      >
+        {equipment.length > 0 ? (
+          equipment.map((eq) => (
+            <MenuItem key={eq.id} value={eq.id}>
+              {eq.name}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disabled>Loading equipments...</MenuItem>
+        )}
+      </TextField>
+
+      <TextField
+        select
+        label="Area (State > District > Tehsil > Village)"
         name="area_id"
         fullWidth
         required
@@ -481,9 +517,9 @@ const ServiceAreas = () => {
       >
         {areaList.map((area) => (
           <MenuItem key={area.id} value={area.id}>
-            {`${area.state_name || ""} > ${area.city_name || ""} > ${
-              area.village_name || ""
-            }`}
+            {`${area.state_name || ""} > ${area.district_name || ""} > ${
+              area.tehsil_name || ""
+            } > ${area.village_name || ""}`}
           </MenuItem>
         ))}
       </TextField>
