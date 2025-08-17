@@ -3,15 +3,6 @@ import { NavLink } from "react-router-dom";
 import logo from "../../assets/images/logo/Logo.png";
 
 import {
-  // LayoutDashboard,
-  // User,
-  // Tractor,
-  Puzzle,
-  // Map,
-  // Sprout,
-  // CalendarCheck,
-} from "lucide-react";
-import {
   LayoutDashboard,
   Cpu,
   Tractor,
@@ -73,6 +64,110 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
     </svg>
   );
 
+  const role = localStorage.getItem("user_role");
+
+  const allRoutes = [
+    {
+      to: "/dashboard",
+      icon: <LayoutDashboard />,
+      label: "Dashboard",
+      roles: ["superadmin", "admin"],
+    },
+    {
+      to: "/substations",
+      icon: <Cpu />,
+      label: "Substations",
+      roles: ["superadmin"],
+    },
+    {
+      to: "/areas",
+      icon: <Network />,
+      label: "Areas",
+      roles: ["superadmin", "admin"],
+    },
+    {
+      to: "/services",
+      icon: <Workflow />,
+      label: "Services",
+      roles: ["superadmin", "admin"],
+    },
+    {
+      to: "/equipments",
+      icon: <Tractor />,
+      label: "Equipments",
+      roles: ["superadmin", "admin"],
+    },
+    {
+      to: "/service-areas",
+      icon: <LocateFixed />,
+      label: "Service Areas",
+      roles: ["superadmin", "admin"],
+    },
+    {
+      to: "/crops",
+      icon: <Sprout />,
+      label: "Crops",
+      roles: ["superadmin", "admin"],
+    },
+    {
+      to: "/bookings",
+      icon: <CalendarPlus />,
+      label: "Bookings",
+      roles: ["superadmin", "admin"],
+    },
+    {
+      to: "/assign-bookings",
+      icon: <UserCheck />,
+      label: "Assign Bookings",
+      roles: ["superadmin"],
+    },
+    {
+      to: "/subscriptions",
+      icon: <CreditCard />,
+      label: "Subscriptions",
+      roles: ["superadmin"],
+    },
+    {
+      to: "/business-timings",
+      icon: <Clock />,
+      label: "Business Timings",
+      roles: ["superadmin"],
+    },
+    {
+      to: "/interested-users",
+      icon: <Heart />,
+      label: "Interested Users",
+      roles: ["superadmin"],
+    },
+    {
+      to: "/interested-users-email",
+      icon: <MailOpen />,
+      label: "Interested Users Email",
+      roles: ["superadmin"],
+    },
+    {
+      to: "/admins",
+      icon: <UserRound />,
+      label: "Admins",
+      roles: ["superadmin"],
+    },
+    {
+      to: "/drivers",
+      icon: <SteeringWheelIcon />,
+      label: "Drivers",
+      roles: ["superadmin", "admin"],
+    },
+    {
+      to: "/users",
+      icon: <Users />,
+      label: "Users",
+      roles: ["superadmin", "admin"],
+    },
+  ];
+
+  // 🔹 Filter routes based on role
+  const visibleRoutes = allRoutes.filter((route) => route.roles.includes(role));
+
   return (
     <aside
       ref={sidebarRef}
@@ -112,49 +207,7 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
       </div>
       <div className="flex-1 overflow-y-auto">
         <nav className="mt-4 space-y-1">
-          {[
-            { to: "/dashboard", icon: <LayoutDashboard />, label: "Dashboard" },
-            { to: "/substations", icon: <Cpu />, label: "Substations" },
-            { to: "/areas", icon: <Network />, label: "Areas" },
-            { to: "/services", icon: <Workflow />, label: "Services" },
-            { to: "/equipments", icon: <Tractor />, label: "Equipments" },
-            {
-              to: "/service-areas",
-              icon: <LocateFixed />,
-              label: "Service Areas",
-            },
-            { to: "/crops", icon: <Sprout />, label: "Crops" },
-            { to: "/bookings", icon: <CalendarPlus />, label: "Bookings" },
-            {
-              to: "/assign-bookings",
-              icon: <UserCheck />,
-              label: "Assign Bookings",
-            },
-            { to: "/subscriptions", icon: <CreditCard />, label: "Subscriptions" },
-            {
-              to: "/business-timings",
-              icon: <Clock />,
-              label: "Buisness Timings",
-            },
-            {
-              to: "/interested-users",
-              icon: <Heart />,
-              label: "Interested users",
-            },
-            {
-              to: "/interested-users-email",
-              icon: <MailOpen />,
-              label: "Interested users Email",
-            },
-            { to: "/admins", icon: <UserRound />, label: "Admins" },
-            { to: "/drivers", icon: <SteeringWheelIcon />, label: "Drivers" },
-            { to: "/users", icon: <Users />, label: "Users" },
-            // {
-            //   to: "/attachments",
-            //   icon: <Puzzle />,
-            //   label: "Attachment",
-            // },
-          ].map(({ to, icon, label }) => (
+          {visibleRoutes.map(({ to, icon, label }) => (
             <NavLink
               key={to}
               to={to}

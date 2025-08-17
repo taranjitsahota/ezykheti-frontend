@@ -30,39 +30,55 @@ const ServiceAreas = () => {
   const [serviceList, setServiceList] = useState([]);
   const [areaList, setAreaList] = useState([]);
 
-  const fetchEquipmentByService = async (serviceId) => {
+  const role = localStorage.getItem("user_role");
+  const isSuperAdmin = role === "superadmin";
+  const loggedSubstationId = localStorage.getItem("substation_id");
+
+  const fetchEquipmentByService = async (serviceId, substationId) => {
+    if (!serviceId || !substationId) {
+      setEquipment([]);
+      return;
+    }
     try {
       const response = await apiRequest({
-        url: `/equipment-by-service-id/${serviceId}`,
+        url: `/equipment-by-service-id/${serviceId}/${substationId}`,
         method: "get",
       });
 
-      if (response.success) {
-        setEquipment(response.data); // Set fetched equipments
+      if (response.success ?? response.status) {
+        setEquipment(Array.isArray(response.data) ? response.data : []);
       } else {
         toast.error(response.message || "Failed to fetch equipments.");
+        setEquipment([]);
       }
     } catch (error) {
       const msg = error?.response?.data?.message || "Something went wrong.";
       toast.error(msg);
+      setEquipment([]);
     }
   };
 
-  const fetchAreas = async () => {
+  const fetchAreas = async (substationId) => {
+    if (!substationId) {
+      setAreaList([]);
+      return;
+    }
     try {
       const response = await apiRequest({
-        url: `/areas`, // Update this to match your filtered endpoint
+        url: `/area-by-substation-id/${substationId}`,
         method: "get",
       });
 
       if (response.success) {
-        setAreaList(response.data);
+        setAreaList(Array.isArray(response.data) ? response.data : []);
       } else {
         toast.error(response.message || "Failed to fetch areas.");
+        setAreaList([]);
       }
     } catch (error) {
       const msg = error?.response?.data?.message || "Something went wrong.";
       toast.error(msg);
+      setAreaList([]);
     }
   };
 
@@ -90,10 +106,6 @@ const ServiceAreas = () => {
   }, []);
 
   useEffect(() => {
-    fetchAreas();
-  }, []);
-
-  useEffect(() => {
     const fetchServices = async () => {
       try {
         const response = await apiRequest({
@@ -118,8 +130,20 @@ const ServiceAreas = () => {
 
   const toggleDrawer = (value) => {
     if (value === "add") {
-      setIsEditMode(false); // ✅ ensure it's add mode
-      setFormData({}); // ✅ reset form
+      setIsEditMode(false);
+
+      if (!isSuperAdmin && loggedSubstationId) {
+        // Admin: prefill substation and fetch areas
+        setFormData({ substation_id: loggedSubstationId });
+        setEquipment([]);
+        fetchAreas(loggedSubstationId);
+      } else {
+        // Superadmin or no logged substation
+        setFormData({});
+        setAreaList([]);
+        setEquipment([]);
+      }
+
       setSelectedEquipmentId(null);
     }
     setDrawerOpen(value);
@@ -209,29 +233,29 @@ const ServiceAreas = () => {
   };
 
   const handleEditServiceArea = async (row) => {
-    setFormData({ ...row });
+    // determine substation to use (superadmin: row.substation_id, admin: loggedSubstationId)
+    const substationId = isSuperAdmin ? row.substation_id : loggedSubstationId;
 
-    try {
-      const equipmentRes = await apiRequest({
-        url: `/equipment-by-service-id/${row.service_id}`,
-        method: "get",
-      });
-      if (equipmentRes.success) {
-        setEquipment(equipmentRes.data || []);
-        setFormData((prev) => ({
-          ...prev,
-          equipment_id: row.equipment_id || "",
-        }));
-      } else {
-        toast.error(equipmentRes.message || "Failed to fetch equipments");
-        setEquipment([]);
-      }
-    } catch (error) {
-      const msg =
-        error?.response?.data?.message || "Failed to fetch equipments";
-      toast.error(msg);
+    // fetch areas for that substation (populates area dropdown)
+    if (substationId) {
+      await fetchAreas(substationId);
+    } else {
+      setAreaList([]);
+    }
+
+    // fetch equipment for the row's service + substation
+    if (row.service_id && substationId) {
+      await fetchEquipmentByService(row.service_id, substationId);
+    } else {
       setEquipment([]);
     }
+
+    // now set the form (so dropdowns have values)
+    setFormData({
+      ...row,
+      substation_id: substationId,
+      equipment_id: row.equipment_id || "",
+    });
   };
 
   const [rows, setRows] = React.useState([]);
@@ -350,15 +374,58 @@ const ServiceAreas = () => {
   }, []);
 
   useEffect(() => {
-    if (formData?.service_id) {
-      fetchEquipmentByService(formData.service_id);
-    } else {
+    if (!formData?.service_id) {
       setEquipment([]);
+      return;
     }
-  }, [formData?.service_id]);
+
+    const substationId = isSuperAdmin
+      ? formData.substation_id
+      : loggedSubstationId;
+    if (!substationId) {
+      setEquipment([]);
+      return;
+    }
+
+    fetchEquipmentByService(formData.service_id, substationId);
+  }, [
+    formData?.service_id,
+    formData?.substation_id,
+    loggedSubstationId,
+    isSuperAdmin,
+  ]);
 
   const serviceareasFormContent = (
     <>
+      {isSuperAdmin && (
+        <TextField
+          select
+          label="Substation"
+          name="substation_id"
+          value={formData.substation_id || ""}
+          onChange={(e) => {
+            const subId = e.target.value;
+            setFormData((prev) => ({
+              ...prev,
+              substation_id: subId,
+              service_id: "",
+              equipment_id: "",
+              area_id: "",
+            }));
+            setEquipment([]);
+            setAreaList([]);
+            if (subId) fetchAreas(subId);
+          }}
+          fullWidth
+          required
+        >
+          {substation.map((sub) => (
+            <MenuItem key={sub.id} value={sub.id}>
+              {sub.name}
+            </MenuItem>
+          ))}
+        </TextField>
+      )}
       <TextField
         select
         label="Service"
@@ -368,13 +435,22 @@ const ServiceAreas = () => {
         value={formData.service_id || ""}
         onChange={(e) => {
           const serviceId = e.target.value;
-          setFormData({ ...formData, service_id: serviceId, equipment_id: "" });
-
-          // Fetch equipments for the selected service
-          fetchEquipmentByService(serviceId);
-
-          // Reset equipment field
-          setFormData((prev) => ({ ...prev, equipment_id: "" }));
+          setFormData((prev) => ({
+            ...prev,
+            service_id: serviceId,
+            equipment_id: "", // reset equipment
+          }));
+          // const substationId = formData.substation_id || null;
+          const substationId = isSuperAdmin
+            ? formData.substation_id
+            : loggedSubstationId;
+          // Pass correct substation_id (either from state or fallback)
+          if (substationId) {
+            fetchEquipmentByService(serviceId, substationId);
+          } else {
+            // if superadmin hasn't chosen substation yet, clear equipments
+            setEquipment([]);
+          }
         }}
         margin="normal"
       >
@@ -393,17 +469,23 @@ const ServiceAreas = () => {
         required
         value={formData.equipment_id || ""}
         onChange={(e) => {
-          const id = e.target.value;
           setFormData({ ...formData, equipment_id: e.target.value });
         }}
         disabled={!formData.service_id}
         margin="normal"
       >
-        {equipment.map((equipment) => (
-          <MenuItem key={equipment.id} value={equipment.id}>
-            {equipment.name}
-          </MenuItem>
-        ))}
+        {equipment.length > 0 ? (
+          equipment.map((equip) => (
+            <MenuItem key={equip.id} value={equip.id}>
+              {equip.name}{" "}
+              {/* {equip.substation_name
+                ? `(${equip.substation_name})`
+                : "(no data)"} */}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem>No equipment found for the selected service</MenuItem>
+        )}
       </TextField>
 
       <TextField
@@ -427,24 +509,6 @@ const ServiceAreas = () => {
 
       <TextField
         select
-        label="Substation"
-        name="substation_id"
-        value={formData.substation_id || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, substation_id: e.target.value })
-        }
-        fullWidth
-        required
-      >
-        {substation.map((sub) => (
-          <MenuItem key={sub.id} value={sub.id}>
-            {sub.name}
-          </MenuItem>
-        ))}
-      </TextField>
-
-      <TextField
-        select
         label="Status"
         name="is_enabled"
         fullWidth
@@ -462,6 +526,31 @@ const ServiceAreas = () => {
 
   const serviceareasFormContentEdit = (
     <>
+      {isSuperAdmin && (
+        <TextField
+          select
+          label="Substation"
+          name="substation_id"
+          value={formData.substation_id || ""}
+          onChange={(e) => {
+            setFormData({
+              ...formData,
+              substation_id: e.target.value,
+              service_id: "",
+              equipment_id: "",
+            });
+            setEquipment([]);
+          }}
+          fullWidth
+          required
+        >
+          {substation.map((sub) => (
+            <MenuItem key={sub.id} value={sub.id}>
+              {sub.name}
+            </MenuItem>
+          ))}
+        </TextField>
+      )}
       <TextField
         select
         label="Service"
@@ -520,24 +609,6 @@ const ServiceAreas = () => {
             {`${area.state_name || ""} > ${area.district_name || ""} > ${
               area.tehsil_name || ""
             } > ${area.village_name || ""}`}
-          </MenuItem>
-        ))}
-      </TextField>
-
-      <TextField
-        select
-        label="Substation"
-        name="substation_id"
-        value={formData.substation_id || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, substation_id: e.target.value })
-        }
-        fullWidth
-        required
-      >
-        {substation.map((sub) => (
-          <MenuItem key={sub.id} value={sub.id}>
-            {sub.name}
           </MenuItem>
         ))}
       </TextField>

@@ -15,10 +15,8 @@ import Anchor from "../../components/adminportal/Anchor";
 import ConfirmModal from "../../components/adminportal/ConfirmModal";
 
 const Subscriptions = () => {
-
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-
 
   const handleDelete = async () => {
     if (!deleteId) return; // Ensure deleteId is available
@@ -63,19 +61,17 @@ const Subscriptions = () => {
     { field: "plan_type", headerName: "Plan Type", width: 150 },
     { field: "kanals", headerName: "Kanals", width: 150 },
     { field: "total_price", headerName: "Total Price", width: 150 },
-    {field: "status", headerName: "Status", width: 150},
-    {field: "price_per_kanal", headerName: "Price Per Kanal", width: 150},
-    {field: "location", headerName: "Location", width: 150},
-    {field: "start_date", headerName: "Start Date", width: 150},
-    {field: "end_date", headerName: "End Date", width: 150},
+    { field: "status", headerName: "Status", width: 150 },
+    { field: "price_per_kanal", headerName: "Price Per Kanal", width: 150 },
+    { field: "location", headerName: "Location", width: 150 },
+    { field: "start_date", headerName: "Start Date", width: 150 },
+    { field: "end_date", headerName: "End Date", width: 150 },
     {
       field: "action",
       headerName: "Action Button",
       width: 150,
       renderCell: (params) => (
         <div className="flex items-center gap-2 h-full">
-          
-
           <button
             onClick={() => {
               setDeleteId(params.row.id);
@@ -121,14 +117,13 @@ const Subscriptions = () => {
 
   return (
     <DashboardLayout
-    showAddButton={false}
-    showFilterButton={false}
+      showAddButton={false}
+      showFilterButton={false}
       pageTitle="Subscriptions"
       add="Add subscription"
       toggleDrawer={false}
       drawerOpen={false}
       submitLoading={false}
-
     >
       <div
         className={`flex-1 overflow-y-auto ${
@@ -136,7 +131,6 @@ const Subscriptions = () => {
         }`}
         style={{ opacity: 1 }}
       >
-        
         <div>
           <ConfirmModal
             show={showConfirm}

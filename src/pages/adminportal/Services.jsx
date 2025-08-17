@@ -208,35 +208,35 @@ const Services = () => {
       },
     },
 
-    {
-      field: "action",
-      headerName: "Action Button",
-      width: 150,
-      renderCell: (params) => (
-        <div className="flex items-center gap-2 h-full">
-          <button
-            onClick={() => {
-              setIsEditMode(true);
-              setFormData(params.row);
-              toggleDrawer(true); // open anchor
-            }}
-            className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
-          >
-            Edit
-          </button>
+    // {
+    //   field: "action",
+    //   headerName: "Action Button",
+    //   width: 150,
+    //   renderCell: (params) => (
+    //     <div className="flex items-center gap-2 h-full">
+    //       {/* <button
+    //         onClick={() => {
+    //           setIsEditMode(true);
+    //           setFormData(params.row);
+    //           toggleDrawer(true); // open anchor
+    //         }}
+    //         className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
+    //       >
+    //         Edit
+    //       </button> */}
 
-          <button
-            onClick={() => {
-              setDeleteId(params.row.id);
-              setShowConfirm(true);
-            }}
-            className="bg-[#D24545] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
-          >
-            Delete
-          </button>
-        </div>
-      ),
-    },
+    //       {/* <button
+    //         onClick={() => {
+    //           setDeleteId(params.row.id);
+    //           setShowConfirm(true);
+    //         }}
+    //         className="bg-[#D24545] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
+    //       >
+    //         Delete
+    //       </button> */}
+    //     </div>
+    //   ),
+    // },
   ];
 
   const handleAdminList = async () => {
@@ -416,9 +416,12 @@ const Services = () => {
     <DashboardLayout
       pageTitle="Services"
       add="Add Services"
+      showAddButton={false}
+      showFilterButton={false}
       toggleDrawer={toggleDrawer}
       drawerOpen={drawerOpen}
       submitLoading={submitLoading}
+      
     >
       <div
         className={`flex-1 overflow-y-auto ${

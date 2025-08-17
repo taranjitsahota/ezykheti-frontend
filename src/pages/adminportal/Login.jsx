@@ -47,6 +47,7 @@ const Login = () => {
           localStorage.setItem("user_role", response.data.role || "user");
           localStorage.setItem("username", response.data.name || "Guest");
           localStorage.setItem("user_id", response.data.id);
+          localStorage.setItem("substation_id", response.data.substation_id ?? "");
            localStorage.setItem(
           "profile_photo",
           response.data.profile_photo_url || ""
