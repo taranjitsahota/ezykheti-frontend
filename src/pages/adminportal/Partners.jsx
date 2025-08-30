@@ -15,15 +15,28 @@ import Anchor from "../../components/adminportal/Anchor";
 import ConfirmModal from "../../components/adminportal/ConfirmModal";
 import { countryCodes } from "../../data/countryCodes";
 
-const Drivers = () => {
+const Partners = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
   // const [substation, setSubstation] = useState([]);
-  const [partners, setPartners] = useState([]);
+
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
   const [isEditMode, setIsEditMode] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirm_password: "",
+    company_name: "",
+    address: "",
+    is_driver: 0,
+    is_individual: 0,
+    country_code: "",
+    license_number: "",
+    experience_years: "",
+  });
 
   const toggleDrawer = (value) => {
     if (value === "add") {
@@ -38,12 +51,12 @@ const Drivers = () => {
 
     try {
       const response = await apiRequest({
-        url: `/drivers/${deleteId}`, // Dynamic URL using deleteId
+        url: `/partners/${deleteId}`, // Dynamic URL using deleteId
         method: "delete",
       });
 
       if (response.success) {
-        toast.success("Driver deleted successfully!");
+        toast.success("Partner deleted successfully!");
         handleAdminList(); // Refresh list of admins or any data
       } else {
         toast.error(response.message || "Failed to delete.");
@@ -64,9 +77,12 @@ const Drivers = () => {
       phone: buildCleanPhone(formdata.country_code, formdata.phone),
       password: formdata?.password,
       password_confirmation: formdata?.confirm_password,
-      experience_years: formdata?.experience_years,
+      company_name: formdata?.company_name,
+      is_driver: formdata?.is_driver,
+      is_individual: formdata?.is_individual,
+      address: formdata?.address,
       license_number: formdata?.license_number,
-      partner_id: formdata?.partner_id,
+      experience_years: formdata?.experience_years,
       // substation_id: formdata?.substation_id,
     };
 
@@ -75,17 +91,20 @@ const Drivers = () => {
 
       const response = await apiRequest({
         url: isEditMode
-          ? `/drivers/${formData.id}` // replace with your actual edit API URL
-          : "/drivers",
+          ? `/partners/${formData.id}` // replace with your actual edit API URL
+          : "/partners",
         method: isEditMode ? "put" : "post",
         data: isEditMode
           ? {
               name: formData.name,
               email: formData.email,
               phone: buildCleanPhone(formData.country_code, formData.phone),
+              company_name: formData.company_name,
+              is_driver: formData.is_driver,
+              is_individual: formData.is_individual,
+              address: formData.address,
               license_number: formData.license_number,
               experience_years: formData.experience_years,
-              partner_id: formData.partner_id,
               // substation_id: formData.substation_id,
             }
           : data,
@@ -94,8 +113,8 @@ const Drivers = () => {
       if (response.success) {
         toast.success(
           isEditMode
-            ? "Driver updated successfully!"
-            : "Driver created successfully!"
+            ? "Partner updated successfully!"
+            : "Partner created successfully!"
         );
         setDrawerOpen("");
         setIsEditMode(false);
@@ -157,10 +176,10 @@ const Drivers = () => {
     { field: "name", headerName: "Name", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
     { field: "phone", headerName: "Contact", width: 150 },
-    { field: "partner_name", headerName: "Partner", width: 150 },
-    { field: "license_number", headerName: "License Number", width: 150 },
-    { field: "experience_years", headerName: "Experience Years", width: 150 },
-    { field: "status", headerName: "Status", width: 150 },
+    { field: "company_name", headerName: "Company Name", width: 150 },
+    { field: "address", headerName: "Address", width: 150 },
+    { field: "is_driver", headerName: "Is Driver", width: 150 },
+    { field: "is_individual", headerName: "Is Individual", width: 150 },
     // { field: "substation", headerName: "Substation", width: 150 },
 
     {
@@ -213,39 +232,18 @@ const Drivers = () => {
     },
   ];
 
-  const fetchPartners = async () => {
-    try {
-      const response = await apiRequest({
-        url: `/partners`,
-        method: "get",
-      });
-
-      if (response.success) {
-        setPartners(response.data);
-      } else {
-        toast.error(response.message || "Failed to fetch partners.");
-      }
-    } catch (error) {
-      const msg = error?.response?.data?.message || "Failed to fetch partners.";
-      toast.error(msg);
-    }
-  };
-  useEffect(() => {
-    fetchPartners();
-  }, []);
-
   const handleAdminList = async () => {
     setLoading(true);
     try {
       const response = await apiRequest({
-        url: "/drivers",
+        url: "/partners",
         method: "get",
       });
 
       if (response.success) {
         setRows(response.data || []);
       } else {
-        toast.error(response.message || "Failed to fetch drivers.");
+        toast.error(response.message || "Failed to fetch partners.");
       }
     } catch (error) {
       const msg =
@@ -263,7 +261,7 @@ const Drivers = () => {
     handleAdminList();
   }, []);
 
-  const driverFormContent = (
+  const partnerFormContent = (
     <>
       <TextField
         label="Name"
@@ -291,7 +289,7 @@ const Drivers = () => {
             setFormData({ ...formData, country_code: e.target.value })
           }
           sx={{ minWidth: "90px" }}
-          required
+          // required
         >
           {countryCodes.map((c) => (
             <MenuItem key={c.code} value={c.code}>
@@ -378,46 +376,80 @@ const Drivers = () => {
       />
 
       <TextField
-        label="License Number"
-        placeholder="Enter license number"
-        name="license_number"
-        value={formData.license_number || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, license_number: e.target.value })
-        }
+        type="text"
+        label="Company Name"
+        placeholder="Enter Company Name"
+        name="company_name"
         fullWidth
-        required
+        // required
       />
 
       <TextField
-        label="Experience Years"
-        placeholder="Enter experience years"
-        name="experience_years"
-        value={formData.experience_years || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, experience_years: e.target.value })
-        }
+        type="text"
+        label="Company Address"
+        placeholder="Enter Company Address"
+        name="address"
         fullWidth
-        required
+        // required
       />
 
       <TextField
         select
-        label="Partner"
-        name="partner_id"
-        value={formData.partner_id || ""}
+        label="is_driver"
+        name="is_driver"
+        value={formData.is_driver}
         onChange={(e) =>
-          setFormData({ ...formData, partner_id: e.target.value })
+          setFormData({ ...formData, is_driver: e.target.value })
         }
         fullWidth
         required
       >
-        {partners.map((p) => (
-          <MenuItem key={p.id} value={p.id}>
-            {p.name}
-          </MenuItem>
-        ))}
+        <MenuItem value={1}>True</MenuItem>
+        <MenuItem value={0}>False</MenuItem>
       </TextField>
+
+      <TextField
+        select
+        label="is_individual"
+        name="is_individual"
+        value={formData.is_individual}
+        onChange={(e) =>
+          setFormData({ ...formData, is_individual: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        <MenuItem value={1}>True</MenuItem>
+        <MenuItem value={0}>False</MenuItem>
+      </TextField>
+
+      {Number(formData.is_driver) === 1 && (
+        <>
+          <TextField
+            type="text"
+            label="License Number"
+            name="license_number"
+            value={formData.license_number}
+            onChange={(e) =>
+              setFormData({ ...formData, license_number: e.target.value })
+            }
+            fullWidth
+            required
+          />
+
+          <TextField
+            type="number"
+            label="Experience (years)"
+            name="experience_years"
+            value={formData.experience_years}
+            onChange={(e) =>
+              setFormData({ ...formData, experience_years: e.target.value })
+            }
+            fullWidth
+            required
+          />
+        </>
+      )}
 
       {/* <TextField
         select
@@ -439,7 +471,7 @@ const Drivers = () => {
     </>
   );
 
-  const driverFormContentEdit = (
+  const partnerFormContentEdit = (
     <>
       <TextField
         label="Name"
@@ -494,53 +526,110 @@ const Drivers = () => {
       </Box>
 
       <TextField
-        label="License Number"
-        placeholder="Enter license number"
-        name="license_number"
-        value={formData.license_number || ""}
+        type="text"
+        label="Company Name"
+        placeholder="Enter Company Name"
+        name="company_name"
+        defaultValue={formData.company_name || ""}
         onChange={(e) =>
-          setFormData({ ...formData, license_number: e.target.value })
+          setFormData({ ...formData, company_name: e.target.value })
         }
         fullWidth
-        required
       />
 
       <TextField
-        label="Experience Years"
-        placeholder="Enter experience years"
-        name="experience_years"
-        value={formData.experience_years || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, experience_years: e.target.value })
-        }
+        type="text"
+        label="Company Address"
+        placeholder="Enter Company Address"
+        name="address"
+        defaultValue={formData.address || ""}
+        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
         fullWidth
-        required
+        // required
       />
 
       <TextField
         select
-        label="Partner"
-        name="partner_id"
-        value={formData.partner_id || ""}
+        label="is_driver"
+        name="is_driver"
+        value={formData.is_driver}
         onChange={(e) =>
-          setFormData({ ...formData, partner_id: e.target.value })
+          setFormData({ ...formData, is_driver: e.target.value })
         }
         fullWidth
         required
       >
-        {partners.map((p) => (
-          <MenuItem key={p.id} value={p.id}>
-            {p.name}
-          </MenuItem>
-        ))}
+        <MenuItem value={1}>True</MenuItem>
+        <MenuItem value={0}>False</MenuItem>
       </TextField>
+
+      <TextField
+        select
+        label="is_individual"
+        name="is_individual"
+        value={formData.is_individual}
+        onChange={(e) =>
+          setFormData({ ...formData, is_individual: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        <MenuItem value={1}>True</MenuItem>
+        <MenuItem value={0}>False</MenuItem>
+      </TextField>
+
+      {Number(formData.is_driver) === 1 && (
+        <>
+          <TextField
+            type="text"
+            label="License Number"
+            name="license_number"
+            value={formData.license_number || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, license_number: e.target.value })
+            }
+            fullWidth
+            required
+          />
+
+          <TextField
+            type="number"
+            label="Experience (years)"
+            name="experience_years"
+            value={formData.experience_years || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, experience_years: e.target.value })
+            }
+            fullWidth
+            required
+          />
+        </>
+      )}
+
+      {/* <TextField
+      select
+      label="Substation"
+      name="substation_id"
+      value={formData.substation_id || ""}
+      onChange={(e) =>
+        setFormData({ ...formData, substation_id: e.target.value })
+      }
+      fullWidth
+      required
+    >
+      {substation.map((sub) => (
+        <MenuItem key={sub.id} value={sub.id}>
+          {sub.name}
+        </MenuItem>
+      ))}
+    </TextField> */}
     </>
   );
 
   return (
     <DashboardLayout
-      pageTitle="Drivers"
-      add="Add Driver"
+      pageTitle="Partners"
+      add="Add Partner"
       toggleDrawer={toggleDrawer}
       drawerOpen={drawerOpen}
       submitLoading={submitLoading}
@@ -555,9 +644,9 @@ const Drivers = () => {
           open={drawerOpen}
           toggleDrawer={toggleDrawer}
           formContent={
-            drawerOpen === "add" ? driverFormContent : driverFormContentEdit
+            drawerOpen === "add" ? partnerFormContent : partnerFormContentEdit
           }
-          add={drawerOpen === "add" ? "Add Driver" : "Edit Driver"}
+          add={drawerOpen === "add" ? "Add Partner" : "Edit Partner"}
           handleSubmit={handleSubmit}
           loading={submitLoading}
           formData={drawerOpen !== "add" && formData}
@@ -590,4 +679,4 @@ const Drivers = () => {
   );
 };
 
-export default Drivers;
+export default Partners;

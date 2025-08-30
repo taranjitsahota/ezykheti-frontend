@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   Cpu,
   Tractor,
+  CalendarX,
   Truck,
   CalendarDays,
   CalendarCheck2,
@@ -98,6 +99,70 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
       roles: ["superadmin", "admin"],
     },
     {
+      to: "/partners",
+      icon: <Share2 />,
+      label: "Partners",
+      roles: ["superadmin", "admin"],
+    },
+    {
+      to: "/drivers",
+      icon: <SteeringWheelIcon />,
+      label: "Drivers",
+      roles: ["superadmin", "admin"],
+    },
+
+    {
+      to: "/tractors",
+      icon: <Tractor />,
+      label: "Tractors",
+      roles: ["superadmin"],
+    },
+
+    {
+      to: "/equipment-type",
+      icon: <CalendarX />,
+      label: "Equipment Types",
+      roles: ["superadmin"],
+    },
+    {
+      to: "/equipment-unit",
+      icon: <CalendarX />,
+      label: "Equipment Units",
+      roles: ["superadmin"],
+    },
+    {
+      to: "/partner-area-coverage",
+      icon: <CalendarX />,
+      label: "Partner Area Coverage",
+      roles: ["superadmin"],
+    },
+
+    {
+      to: "/partner-unavailability",
+      icon: <CalendarX />,
+      label: "Partner Unavailabilties",
+      roles: ["superadmin"],
+    },
+    {
+      to: "/driver-unavailability",
+      icon: <CalendarX />,
+      label: "Driver Unavailabilties",
+      roles: ["superadmin"],
+    },
+
+    {
+      to: "/tractor-unavailability",
+      icon: <CalendarX />,
+      label: "Tractor Unavailabilties",
+      roles: ["superadmin"],
+    },
+    {
+      to: "/equipment-unavailability",
+      icon: <CalendarX />,
+      label: "Equipment Unavailabilties",
+      roles: ["superadmin"],
+    },
+    {
       to: "/service-areas",
       icon: <LocateFixed />,
       label: "Service Areas",
@@ -151,16 +216,11 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
       label: "Admins",
       roles: ["superadmin"],
     },
+
     {
-      to: "/drivers",
-      icon: <SteeringWheelIcon />,
-      label: "Drivers",
-      roles: ["superadmin", "admin"],
-    },
-    {
-      to: "/users",
+      to: "/farmers",
       icon: <Users />,
-      label: "Users",
+      label: "farmers",
       roles: ["superadmin", "admin"],
     },
   ];
@@ -172,7 +232,7 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
     <aside
       ref={sidebarRef}
       className={`
-    w-28 md:w-55 h-screen flex flex-col
+    w-28 md:w-60 h-screen flex flex-col
     fixed admin-wrapper bg-[var(--sidebar-bg-color)] border-r border-[var(--border-bg-color)]
     transform transition-transform duration-300 ease-in-out z-30
     ${isOpen ? "translate-x-0" : "-translate-x-full"}

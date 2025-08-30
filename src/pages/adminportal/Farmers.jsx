@@ -15,7 +15,7 @@ import Anchor from "../../components/adminportal/Anchor";
 import ConfirmModal from "../../components/adminportal/ConfirmModal";
 import { countryCodes } from "../../data/countryCodes";
 
-const Users = () => {
+const Farmers = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const [showConfirm, setShowConfirm] = useState(false);
@@ -42,7 +42,7 @@ const Users = () => {
       });
 
       if (response.success) {
-        toast.success("User deleted successfully!");
+        toast.success("Farmer deleted successfully!");
         handleAdminList(); // Refresh list of admins or any data
       } else {
         toast.error(response.message || "Failed to delete.");
@@ -86,8 +86,8 @@ const Users = () => {
       if (response.success) {
         toast.success(
           isEditMode
-            ? "User updated successfully!"
-            : "User created successfully!"
+            ? "Farmer updated successfully!"
+            : "Farmer created successfully!"
         );
         setDrawerOpen("");
         setIsEditMode(false);
@@ -188,7 +188,7 @@ const Users = () => {
       if (response.success) {
         setRows(response.data || []);
       } else {
-        toast.error(response.message || "Failed to fetch users.");
+        toast.error(response.message || "Failed to fetch farmers.");
       }
     } catch (error) {
       const msg =
@@ -414,8 +414,8 @@ const Users = () => {
 
   return (
     <DashboardLayout
-      pageTitle="Users"
-      add="Add User"
+      pageTitle="Farmers"
+      add="Add Farmer"
       toggleDrawer={toggleDrawer}
       drawerOpen={drawerOpen}
       submitLoading={submitLoading}
@@ -432,7 +432,7 @@ const Users = () => {
           formContent={
             drawerOpen === "add" ? userFormContent : userFormContentEdit
           }
-          add={drawerOpen === "add" ? "Add User" : "Edit User"}
+          add={drawerOpen === "add" ? "Add Farmer" : "Edit Farmer"}
           handleSubmit={handleSubmit}
           loading={submitLoading}
           formData={drawerOpen !== "add" && formData}
@@ -465,4 +465,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Farmers;

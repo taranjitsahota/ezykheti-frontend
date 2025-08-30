@@ -5,6 +5,7 @@ import BasicTable from "../../components/adminportal/BasicTable";
 import { apiRequest } from "../../utils/apiService";
 import { toast } from "react-toastify";
 import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {
@@ -12,59 +13,131 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
-  Box,
   Button,
   Typography,
 } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent } from "@mui/material";
 import { Eye, EyeOff } from "lucide-react";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
-import { Dialog, DialogTitle, DialogContent } from "@mui/material";
 import Anchor from "../../components/adminportal/Anchor";
 import ConfirmModal from "../../components/adminportal/ConfirmModal";
+import { countryCodes } from "../../data/countryCodes";
+import Equipment from "./Equipment";
 
-const Equipment = () => {
+const EquipmentType = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-
-  const [isEditMode, setIsEditMode] = useState(false);
-  // const [substation, setSubstation] = useState([]);
   const [services, setServices] = useState([]);
+  const [equipment, setEquipment] = useState([]);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({});
+  const [previewImage, setPreviewImage] = useState(null);
 
-  // const [previewImage, setPreviewImage] = useState(null);
+  const handleImagePreview = (url) => {
+    setPreviewImage(url);
+  };
 
-  // const handleImagePreview = (url) => {
-  //   setPreviewImage(url);
-  // };
+  const toggleDrawer = (value) => {
+    if (value === "add") {
+      setIsEditMode(false); // ✅ ensure it's add mode
+      setFormData({}); // ✅ reset form
+    }
+    setDrawerOpen(value);
+  };
 
-  // useEffect(() => {
-  //   const fetchSubstation = async () => {
-  //     try {
-  //       const response = await apiRequest({
-  //         url: `/substations`,
-  //         method: "get",
-  //       });
+  const handleDelete = async () => {
+    if (!deleteId) return; // Ensure deleteId is available
 
-  //       if (response.success) {
-  //         setSubstation(response.data);
-  //       } else {
-  //         toast.error(response.message || "Failed to fetch substations.");
-  //       }
-  //     } catch (error) {
-  //       const msg =
-  //         error?.response?.data?.message || "Failed to fetch substations.";
-  //       toast.error(msg);
-  //     }
-  //   };
+    try {
+      const response = await apiRequest({
+        url: `/equipment-types/${deleteId}`, // Dynamic URL using deleteId
+        method: "delete",
+      });
 
-  //   fetchSubstation();
-  // }, []);
+      if (response.success) {
+        toast.success("Equipment Type deleted successfully!");
+        handleAdminList(); // Refresh list of admins or any data
+      } else {
+        toast.error(response.message || "Failed to delete.");
+      }
+    } catch (error) {
+      const msg = error?.response?.data?.message || "Something went wrong.";
+      toast.error(msg);
+    }
+  };
+
+  const handleSubmit = async (formdata) => {
+    if (!formData.image) {
+      toast.error("Equipment image is required.");
+      return;
+    }
+
+    const formDataToSend = new FormData();
+
+    formDataToSend.append("equipment_id", formdata.equipment_id || "");
+    formDataToSend.append(
+      "price_per_kanal",
+      formdata.price_per_kanal?.toString() || "0"
+    );
+    formDataToSend.append("service_id", formdata.service_id?.toString() || "0");
+    formDataToSend.append("min_kanal", formdata.min_kanal?.toString() || "0");
+    formDataToSend.append(
+      "minutes_per_kanal",
+      formdata.minutes_per_kanal?.toString() || "0"
+    );
+    formDataToSend.append("image", formdata.image);
+    formDataToSend.append(
+      "is_self_propelled",
+      Number(formdata.is_self_propelled).toString()
+    );
+    formDataToSend.append(
+      "requires_tractor",
+      Number(formdata.requires_tractor).toString()
+    );
+
+    if (isEditMode) {
+      formDataToSend.append("_method", "PUT");
+    }
+
+    try {
+      setSubmitLoading(true);
+
+      const response = await apiRequest({
+        url: isEditMode
+          ? `/equipment-types/${formData.id}` // replace with your actual edit API URL
+          : "/equipment-types",
+        method: "post",
+        data: formDataToSend,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.success) {
+        toast.success(
+          isEditMode
+            ? "Equipment Type updated successfully!"
+            : "Equipment Type created successfully!"
+        );
+        setDrawerOpen("");
+        setIsEditMode(false);
+        handleAdminList();
+      } else {
+        toast.error(response.message || "Failed to submit.");
+      }
+    } catch (error) {
+      const msg = error?.response?.data?.message || "Something went wrong.";
+      toast.error(msg);
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchServices = async () => {
+    const fetchservices = async () => {
       try {
         const response = await apiRequest({
           url: `/services`,
@@ -83,127 +156,38 @@ const Equipment = () => {
       }
     };
 
-    fetchServices();
+    fetchservices();
   }, []);
 
-  const toggleDrawer = (value) => {
-    if (value === "add") {
-      setIsEditMode(false); // ✅ ensure it's add mode
-      setFormData({}); // ✅ reset form
+  const fetchEquipmentByService = async (serviceId) => {
+    if (!serviceId) {
+      setEquipment([]);
+      return;
     }
-    setDrawerOpen(value);
-  };
-
-  // const handleStatusToggle = async (id, currentStatus) => {
-  //   const newStatus = currentStatus ? 0 : 1;
-
-  //   try {
-  //     const response = await apiRequest({
-  //       url: `/equipments/${id}`, // Use `id` passed to the function
-  //       method: "put",
-  //       data: {
-  //         // is_enabled: newStatus, // Send the toggled status
-  //       },
-  //     });
-
-  //     if (response.success) {
-  //       toast.success("Equipment status updated successfully!");
-  //       handleAdminList(); // Refresh the list or rows
-  //     } else {
-  //       toast.error(response.message || "Failed to update status.");
-  //     }
-  //   } catch (error) {
-  //     const msg = error?.response?.data?.message || "Something went wrong.";
-  //     toast.error(msg);
-  //   }
-  // };
-
-  const handleDelete = async () => {
-    if (!deleteId) return; // Ensure deleteId is available
-
     try {
       const response = await apiRequest({
-        url: `/equipments/${deleteId}`, // Dynamic URL using deleteId
-        method: "delete",
+        url: `/equipment-by-service-id/${serviceId}`,
+        method: "get",
       });
 
-      if (response.success) {
-        toast.success("Equipment deleted successfully!");
-        handleAdminList(); // Refresh list of admins or any data
+      if (response.success ?? response.status) {
+        setEquipment(Array.isArray(response.data) ? response.data : []);
       } else {
-        toast.error(response.message || "Failed to delete.");
+        toast.error(response.message || "Failed to fetch equipments.");
+        setEquipment([]);
       }
     } catch (error) {
       const msg = error?.response?.data?.message || "Something went wrong.";
       toast.error(msg);
+      setEquipment([]);
     }
   };
 
-  const handleSubmit = async (formdata) => {
-    // if (!formData.image) {
-    //   toast.error("Equipment image is required.");
-    //   return;
-    // }
-    const formDataToSend = new FormData();
-
-    // Append all fields — must be strings/numbers/booleans
-    formDataToSend.append("name", formdata.name || "");
-    // formDataToSend.append(
-    //   "price_per_kanal",
-    //   formdata.price_per_kanal?.toString() || "0"
-    // );
-    formDataToSend.append("service_id", formdata.service_id?.toString() || "0");
-    // formDataToSend.append("min_kanal", formdata.min_kanal?.toString() || "0");
-    // formDataToSend.append(
-    //   "minutes_per_kanal",
-    //   formdata.minutes_per_kanal?.toString() || "0"
-    // );
-    // formDataToSend.append("inventory", formdata.inventory?.toString() || "0");
-    // formDataToSend.append(
-    //   "substation_id",
-    //   formdata.substation_id?.toString() || "0"
-    // );
-    // formDataToSend.append("is_enabled", Number(formdata.is_enabled).toString());
-    // formDataToSend.append("image", formdata.image);
-
-    if (isEditMode) {
-      formDataToSend.append("_method", "PUT");
+  useEffect(() => {
+    if (formData.service_id) {
+      fetchEquipmentByService(formData.service_id);
     }
-
-    try {
-      setSubmitLoading(true);
-
-      const response = await apiRequest({
-        url: isEditMode ? `/equipments/${formData.id}` : "/equipments",
-        method: "post",
-        data: formDataToSend,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      if (response.success) {
-        toast.success(
-          isEditMode
-            ? "Equipment updated successfully!"
-            : "Equipment created successfully!"
-        );
-        setDrawerOpen("");
-        setIsEditMode(false);
-        handleAdminList();
-      } else {
-        toast.error(response.message || "Failed to submit.");
-      }
-    } catch (error) {
-      const msg = error?.response?.data?.message || "Something went wrong.";
-      toast.error(msg);
-    } finally {
-      setSubmitLoading(false);
-    }
-  };
-
-  //   const [showPassword, setShowPassword] = useState(false);
-  //   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  }, [formData.service_id]);
 
   const [rows, setRows] = React.useState([]);
 
@@ -219,53 +203,37 @@ const Equipment = () => {
     {
       field: "serial",
       headerName: "S.No.",
-      width: 60,
+      width: 80,
       sortable: false,
     },
-    { field: "name", headerName: "Name", width: 150 },
+    { field: "equipment_name", headerName: "Equipment Name", width: 150 },
     { field: "service_name", headerName: "Service Name", width: 150 },
-    // {
-    //   field: "image",
-    //   headerName: "Image",
-    //   width: 120,
-    //   renderCell: (params) => (
-    //     <div className="flex items-center justify-center w-full">
-    //       <img
-    //         src={params.row.image || "/default.jpg"}
-    //         alt="preview"
-    //         className="w-10 h-10 rounded-full object-cover cursor-pointer"
-    //         onClick={() => handleImagePreview(params.row.image)}
-    //       />
-    //     </div>
-    //   ),
-    // },
+    { field: "requires_tractor", headerName: "Requires Tractor", width: 150 },
+    { field: "is_self_propelled", headerName: "Is Self Propelled", width: 200 },
+    {
+      field: "minutes_per_kanal",
+      headerName: "Default Minutes Per Kanal",
+      width: 200,
+    },
+    {
+      field: "image",
+      headerName: "Image",
+      width: 120,
+      renderCell: (params) => (
+        <div className="flex items-center justify-center w-full">
+          <img
+            src={params.row.image || "/default.jpg"}
+            alt="preview"
+            className="w-10 h-10 rounded-full object-cover cursor-pointer"
+            onClick={() => handleImagePreview(params.row.image)}
+          />
+        </div>
+      ),
+    },
 
-    // { field: "price_per_kanal", headerName: "Price Per Kanal", width: 150 },
-    // { field: "min_kanal", headerName: "Min Kanal", width: 150 },
-    // { field: "minutes_per_kanal", headerName: "Minutes Per Kanal", width: 150 },
-    // { field: "inventory", headerName: "Inventory", width: 150 },
-    // { field: "substation_name", headerName: "Substation", width: 150 },
-    // {
-    //   field: "is_enabled",
-    //   headerName: "Status",
-    //   width: 180,
-    //   renderCell: (params) => {
-    //     const isEnabled = params.row.is_enabled === 1;
-
-    //     return (
-    //       <label className="relative inline-flex items-center cursor-pointer w-16">
-    //         <input
-    //           type="checkbox"
-    //           className="sr-only peer"
-    //           checked={isEnabled}
-    //           onChange={() => handleStatusToggle(params.row.id, isEnabled)}
-    //         />
-    //         <div className="w-11 h-6 bg-gray-400 peer-checked:bg-green-600 rounded-full peer-focus:ring-2 peer-focus:ring-green-500 transition-colors duration-300 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5" />
-    //       </label>
-    //     );
-    //   },
-    // },
-
+    { field: "price_per_kanal", headerName: "Price Per Kanal", width: 150 },
+    { field: "min_kanal", headerName: "Min Kanal", width: 150 },
+    { field: "minutes_per_kanal", headerName: "Minutes Per Kanal", width: 150 },
     {
       field: "action",
       headerName: "Action Button",
@@ -275,7 +243,8 @@ const Equipment = () => {
           <button
             onClick={() => {
               setIsEditMode(true);
-              setFormData(params.row); // row = your current row data
+              const row = params.row;
+              setFormData(row);
               toggleDrawer(true); // open anchor
             }}
             className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
@@ -301,14 +270,14 @@ const Equipment = () => {
     setLoading(true);
     try {
       const response = await apiRequest({
-        url: "/equipments",
+        url: "/equipment-types",
         method: "get",
       });
 
       if (response.success) {
         setRows(response.data || []);
       } else {
-        toast.error(response.message || "Failed to fetch admins.");
+        toast.error(response.message || "Failed to fetch equipment types.");
       }
     } catch (error) {
       const msg =
@@ -326,55 +295,31 @@ const Equipment = () => {
     handleAdminList();
   }, []);
 
-  // const equipmentsByService = {
-  //   Cultivation: [
-  //     "Super Seeder (7 feet)",
-  //     "Rotavator (8/10 feet)",
-  //     "Cultivator",
-  //     "Potato Planter",
-  //     "Pneumatic Planter",
-  //     "Automatic Paddy Planter",
-  //     "Trencher",
-  //     "Automatic Boom Sprayer",
-  //     "Drone Sprayer",
-  //   ],
-  //   Harvesting: [
-  //     "Wheat Combine Harvester",
-  //     "Paddy Combine Harvester",
-  //     "Sugarcane Harvester",
-  //     "Automatic Potato Digger & Grader",
-  //     "Pneumatic Planter",
-  //   ],
-  //   Transportation: [
-  //     "Trolley Bed (5 feet high)",
-  //     "PTO Trolley for Sugarcane",
-  //     "Tata 207 or UTE",
-  //     "Additional Mileage Charge",
-  //   ],
-  // };
-
-  // const selectedService = services.find((s) => s.id === formData.service_id);
-
-  // const equipments = selectedService
-  //   ? equipmentsByService[selectedService.name] || []
-  //   : [];
-
-  const equipmentFormContent = (
+  const equipmentTypeFormContent = (
     <>
       <TextField
         select
-        label="Select Service"
+        label="Service"
         name="service_id"
-        value={formData.service_id || ""}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            service_id: Number(e.target.value),
-            // equipment_id: "",
-          })
-        }
         fullWidth
         required
+        value={formData.service_id || ""}
+        onChange={(e) => {
+          const serviceId = e.target.value;
+          setFormData((prev) => ({
+            ...prev,
+            service_id: serviceId,
+            equipment_id: "", // reset equipment
+          }));
+          // const substationId = formData.substation_id || null;
+          // Pass correct substation_id (either from state or fallback)
+          if (serviceId) {
+            fetchEquipmentByService(serviceId);
+          } else {
+            // if superadmin hasn't chosen service yet, clear equipments
+            setEquipment([]);
+          }
+        }}
         margin="normal"
       >
         {services.map((service) => (
@@ -385,33 +330,74 @@ const Equipment = () => {
       </TextField>
 
       <TextField
-        type="text"
-        label="Enter Equipment"
-        name="name"
-        value={formData.name || ""}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            name: e.target.value,
-          })
-        }
+        select
+        label="Equipment"
+        name="equipment_id"
         fullWidth
         required
-        margin="normal"
+        value={formData.equipment_id || ""}
+        onChange={(e) => {
+          setFormData({ ...formData, equipment_id: e.target.value });
+        }}
         disabled={!formData.service_id}
+        margin="normal"
       >
-        {/* {equipments.length > 0 ? (
-          equipments.map((name) => (
-            <MenuItem key={name} value={name}>
-              {name}
+        {equipment.length > 0 ? (
+          equipment.map((equip) => (
+            <MenuItem key={equip.id} value={equip.id}>
+              {equip.name}
             </MenuItem>
           ))
         ) : (
-          <MenuItem disabled>No equipment found</MenuItem>
-        )} */}
+          <MenuItem>No equipment found for the selected service</MenuItem>
+        )}
       </TextField>
 
-      {/* <TextField
+      <TextField
+        select
+        label="Requires Tractor"
+        name="requires_tractor"
+        value={formData.requires_tractor}
+        onChange={(e) =>
+          setFormData({ ...formData, requires_tractor: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        <MenuItem value={1}>True</MenuItem>
+        <MenuItem value={0}>False</MenuItem>
+      </TextField>
+
+      <TextField
+        select
+        label="Self Propelled"
+        name="is_self_propelled"
+        value={formData.is_self_propelled}
+        onChange={(e) =>
+          setFormData({ ...formData, is_self_propelled: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        <MenuItem value={1}>True</MenuItem>
+        <MenuItem value={0}>False</MenuItem>
+      </TextField>
+
+      <TextField
+        label="Minutes Per Kanal"
+        name="minutes_per_kanal"
+        type="text"
+        placeholder="Enter default minutes per kanal"
+        value={formData.minutes_per_kanal || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, minutes_per_kanal: e.target.value })
+        }
+        fullWidth
+        required
+        InputLabelProps={{ shrink: true }}
+      />
+
+      <TextField
         label="Price Per Kanal"
         placeholder="Enter price per kanal"
         name="price_per_kanal"
@@ -438,15 +424,6 @@ const Equipment = () => {
         fullWidth
         required
         variant="standard"
-      />
-
-      <TextField
-        placeholder="Enter Inventory"
-        label="Inventory"
-        name="inventory"
-        type="number"
-        fullWidth
-        required
       />
 
       <Typography variant="subtitle1" gutterBottom>
@@ -483,7 +460,6 @@ const Equipment = () => {
           </Typography>
         )}
 
-
         {formData.imagePreview && (
           <Box mt={2}>
             <img
@@ -495,91 +471,136 @@ const Equipment = () => {
         )}
       </Box>
 
-      <TextField
-        select
-        label="Substation"
-        name="substation_id"
-        value={formData.substation_id || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, substation_id: e.target.value })
-        }
-        fullWidth
-        required
-      >
-        {substation.map((sub) => (
-          <MenuItem key={sub.id} value={sub.id}>
-            {sub.name}
-          </MenuItem>
-        ))}
-      </TextField> */}
-
       {/* <TextField
         select
         label="Status"
-        name="is_enabled"
+        name="status"
+        value={formData.status || "active"} // default "active"
+        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
         fullWidth
         required
-        defaultValue="1" // or true / false
       >
-        <MenuItem value={1}>True</MenuItem>
-        <MenuItem value={0}>False</MenuItem>
+        <MenuItem value="active">Active</MenuItem>
+        <MenuItem value="maintenance">Maintenance</MenuItem>
+        <MenuItem value="retired">Retired</MenuItem>
       </TextField> */}
     </>
   );
 
-  const equipmentFormContentEdit = (
+  const equipmentTypeFormContentEdit = (
     <>
+      {/* Service Selection */}
       <TextField
         select
-        label="Select Service"
+        label="Service"
         name="service_id"
-        value={formData.service_id || ""}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            service_id: Number(e.target.value),
-            // name: "", // reset equipment when service changes
-          })
-        }
         fullWidth
         required
+        value={formData.service_id || ""}
+        onChange={(e) => {
+          const serviceId = e.target.value;
+          setFormData((prev) => ({
+            ...prev,
+            service_id: serviceId,
+            equipment_id: "", // reset equipment
+          }));
+          if (serviceId) {
+            fetchEquipmentByService(serviceId);
+          } else {
+            setEquipment([]);
+          }
+        }}
         margin="normal"
       >
-        {services.map((service) => (
-          <MenuItem key={service.id} value={service.id}>
-            {service.name}
-          </MenuItem>
-        ))}
+        {services.length > 0 ? (
+          services.map((s) => (
+            <MenuItem key={s.id} value={s.id}>
+              {s.name}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disabled>No services found</MenuItem>
+        )}
       </TextField>
 
+      {/* Equipment Selection */}
       <TextField
-        type="text"
-        label="Enter Equipment"
-        name="name"
-        value={formData.name || ""}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            name: e.target.value,
-          })
-        }
+        select
+        label="Equipment"
+        name="equipment_type_id"
         fullWidth
         required
-        margin="normal"
+        value={formData.equipment_type_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, equipment_type_id: e.target.value })
+        }
         // disabled={!formData.service_id}
+        margin="normal"
       >
-        {/* {equipments.length > 0 ? (
-          equipments.map((name) => (
-            <MenuItem key={name} value={name}>
-              {name}
+        {equipment.length > 0 ? (
+          equipment.map((eq) => (
+            <MenuItem key={eq.id} value={eq.id}>
+              {eq.name}
             </MenuItem>
           ))
         ) : (
           <MenuItem disabled>No equipment found</MenuItem>
-        )} */}
+        )}
       </TextField>
 
-      {/* <TextField
+      {/* Requires Tractor */}
+      <TextField
+        select
+        label="Requires Tractor"
+        name="requires_tractor"
+        value={formData.requires_tractor}
+        onChange={(e) =>
+          setFormData({ ...formData, requires_tractor: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        <MenuItem value={1}>True</MenuItem>
+        <MenuItem value={0}>False</MenuItem>
+      </TextField>
+
+      {/* Self Propelled */}
+      <TextField
+        select
+        label="Self Propelled"
+        name="is_self_propelled"
+        value={formData.is_self_propelled}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            is_self_propelled: e.target.value,
+          })
+        }
+        fullWidth
+        required
+      >
+        <MenuItem value={1}>True</MenuItem>
+        <MenuItem value={0}>False</MenuItem>
+      </TextField>
+
+      <TextField
+        label="Minutes Per Kanal"
+        name="minutes_per_kanal"
+        type="text"
+        placeholder="Enter default minutes per kanal"
+        value={formData.minutes_per_kanal || ""}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            minutes_per_kanal: e.target.value,
+          })
+        }
+        fullWidth
+        required
+        InputLabelProps={{ shrink: true }}
+      />
+
+      <TextField
         label="Price Per Kanal"
         placeholder="Enter price per kanal"
         name="price_per_kanal"
@@ -590,6 +611,7 @@ const Equipment = () => {
         fullWidth
         required
       />
+
       <TextField
         placeholder="Enter Min Kanal"
         label="Min Kanal"
@@ -601,6 +623,7 @@ const Equipment = () => {
         fullWidth
         required
       />
+
       <TextField
         placeholder="Enter Minutes Per Kanal"
         label="Minutes Per Kanal"
@@ -612,35 +635,6 @@ const Equipment = () => {
         fullWidth
         required
       />
-      <TextField
-        placeholder="Enter Inventory"
-        label="Inventory"
-        name="inventory"
-        defaultValue={formData.inventory || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, inventory: e.target.value })
-        }
-        fullWidth
-        required
-      />
-
-      <TextField
-        select
-        label="Substation"
-        name="substation_id"
-        value={formData.substation_id || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, substation_id: e.target.value })
-        }
-        fullWidth
-        required
-      >
-        {substation.map((sub) => (
-          <MenuItem key={sub.id} value={sub.id}>
-            {sub.name}
-          </MenuItem>
-        ))}
-      </TextField>
 
       <Box mt={4} mb={4}>
         <input
@@ -685,29 +679,14 @@ const Equipment = () => {
             </>
           )}
         </label>
-      </Box> */}
-
-      {/* <TextField
-        select
-        label="Status"
-        name="is_enabled"
-        value={Number(formData.is_enabled)}
-        onChange={(e) =>
-          setFormData({ ...formData, is_enabled: Number(e.target.value) })
-        }
-        fullWidth
-        required
-      >
-        <MenuItem value={1}>True</MenuItem>
-        <MenuItem value={0}>False</MenuItem>
-      </TextField> */}
+      </Box>
     </>
   );
 
   return (
     <DashboardLayout
-      pageTitle="Equipments"
-      add="Add Equipment"
+      pageTitle="Equipment Type"
+      add="Add Equipment Type"
       toggleDrawer={toggleDrawer}
       drawerOpen={drawerOpen}
       submitLoading={submitLoading}
@@ -723,17 +702,19 @@ const Equipment = () => {
           toggleDrawer={toggleDrawer}
           formContent={
             drawerOpen === "add"
-              ? equipmentFormContent
-              : equipmentFormContentEdit
+              ? equipmentTypeFormContent
+              : equipmentTypeFormContentEdit
           }
-          add={drawerOpen === "add" ? "Add Equipment" : "Edit Equipment"}
+          add={
+            drawerOpen === "add" ? "Add Equipment Type" : "Edit Equipment Type"
+          }
           handleSubmit={handleSubmit}
           loading={submitLoading}
           formData={drawerOpen !== "add" && formData}
           isEdit={drawerOpen !== "add" && isEditMode}
         />
-        <BasicTable rows={rowsWithSerial} columns={columns} loading={loading} />
-        {/* <Dialog
+
+        <Dialog
           open={!!previewImage}
           onClose={() => setPreviewImage(null)}
           maxWidth="sm"
@@ -747,7 +728,7 @@ const Equipment = () => {
               className="max-w-full max-h-[400px] rounded"
             />
           </DialogContent>
-        </Dialog> */}
+        </Dialog>
 
         <div>
           <ConfirmModal
@@ -768,9 +749,11 @@ const Equipment = () => {
             ]}
           />
         </div>
+
+        <BasicTable rows={rowsWithSerial} columns={columns} loading={loading} />
       </div>
     </DashboardLayout>
   );
 };
 
-export default Equipment;
+export default EquipmentType;

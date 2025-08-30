@@ -18,6 +18,7 @@ import BusinessTimings from "./pages/adminportal/BusinessTimings";
 import Crops from "./pages/adminportal/Crops";
 import Dashboard from "./pages/adminportal/Dashboard";
 import Drivers from "./pages/adminportal/Drivers";
+import Partners from "./pages/adminportal/Partners";
 import ForgotPassword from "./pages/adminportal/ForgotPassword";
 import InterestedDashboard from "./pages/adminportal/InterestedDashboard";
 import InterestedDashboardEmail from "./pages/adminportal/InterestedDashboardEmail";
@@ -25,14 +26,21 @@ import Login from "./pages/adminportal/Login";
 import Bookings from "./pages/adminportal/Bookings";
 import Profile from "./pages/adminportal/Profile";
 import Equipment from "./pages/adminportal/Equipment";
+import EquipmentType from "./pages/adminportal/EquipmentType";
+import EquipmentUnit from "./pages/adminportal/EquipmentUnits";
+import EquipmentUnavailability from "./pages/adminportal/EquipmentUnavailablity";
 import Register from "./pages/adminportal/Register";
 import ResetPassword from "./pages/adminportal/ResetPassword";
 import SendOTP from "./pages/adminportal/SendOtp";
 import Services from "./pages/adminportal/Services";
 import ServiceAreas from "./pages/adminportal/ServiceAreas";
-import Users from "./pages/adminportal/Users";
+import Farmers from "./pages/adminportal/Farmers";
 import VerifyOTP from "./pages/adminportal/VerifyOtp";
-
+import DriverUnavailability from "./pages/adminportal/DriverUnavailability";
+import PartnerUnavailability from "./pages/adminportal/PartnerUnavailability";
+import PartnerAreaCoverge from "./pages/adminportal/PartnerAreaCoverage";
+import Tractors from "./pages/adminportal/Tractors";
+import TractorUnavailability from "./pages/adminportal/TractorUnavailability";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useEffect, Suspense } from "react";
@@ -100,6 +108,9 @@ function App() {
   const protectedRoutes = [
     { path: "/admins", element: <Admins /> },
     { path: "/equipments", element: <Equipment /> },
+    { path: "/equipment-type", element: <EquipmentType /> },
+    { path: "/equipment-unit", element: <EquipmentUnit /> },
+    { path: "/equipment-unavailability", element: <EquipmentUnavailability /> },
     { path: "/areas", element: <Areas /> },
     { path: "/substations", element: <Substations /> },
     { path: "/assign-bookings", element: <AssignBookings /> },
@@ -108,21 +119,29 @@ function App() {
     { path: "/crops", element: <Crops /> },
     { path: "/dashboard", element: <Dashboard /> },
     { path: "/drivers", element: <Drivers /> },
+    { path: "/partners", element: <Partners /> },
     { path: "/interested-users", element: <InterestedDashboard /> },
     { path: "/interested-users-email", element: <InterestedDashboardEmail /> },
     { path: "/bookings", element: <Bookings /> },
     { path: "/services", element: <Services /> },
     { path: "/service-areas", element: <ServiceAreas /> },
-    { path: "/users", element: <Users /> },
+    { path: "/farmers", element: <Farmers /> },
     { path: "/profile", element: <Profile /> },
+    { path: "/partner-unavailability", element: <PartnerUnavailability /> },
+    { path: "/driver-unavailability", element: <DriverUnavailability /> },
+    { path: "/partner-area-coverage", element: <PartnerAreaCoverge /> },
+    { path: "/tractors", element: <Tractors /> },
+    { path: "/tractor-unavailability", element: <TractorUnavailability /> },
   ];
 
   const showHeaderFooter = showHeaderFooterRoutes.includes(location.pathname);
+  const isProtected = protectedRoutes.some((r) => r.path === location.pathname);
 
   return (
     <>
       <ToastContainer />
-      <ComingSoonNotice />
+      {!isProtected && <ComingSoonNotice />}
+
       <Suspense fallback={<div>Loading...</div>}>
         {showHeaderFooter && <Navbar />}
         <Routes>
@@ -131,8 +150,8 @@ function App() {
           <Route path="/service" element={<Service />} />
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} /> 
-          <Route path="/refund-policy" element={<RefundPolicy />} /> 
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/admin" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -146,7 +165,6 @@ function App() {
               element={<ProtectedRoute>{element}</ProtectedRoute>}
             />
           ))}
-          
         </Routes>
         {showHeaderFooter && <Footer />}
       </Suspense>

@@ -31,6 +31,7 @@ const Dashboard = () => {
   const [subscriptions, setSubscriptions] = useState(null);
   const [revenue, setRevenue] = useState(null);
   const [drivers, setDrivers] = useState(null);
+  const [partners, setPartners] = useState(null);
   const [farmers, setFarmers] = useState(null);
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -120,6 +121,7 @@ const Dashboard = () => {
           bookings,
           subscriptions,
           revenue,
+          partners,
           drivers,
           farmers,
           locations,
@@ -129,6 +131,7 @@ const Dashboard = () => {
         setSubscriptions(subscriptions);
         setRevenue(revenue);
         setDrivers(drivers);
+        setPartners(partners);
         setFarmers(farmers);
         setLocations(Array.isArray(locations) ? locations : []);
       } else {
@@ -176,6 +179,13 @@ const Dashboard = () => {
           {/* Two small boxes stacked vertically */}
           <div className="col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
             {/* Bottom Left Box */}
+            <div className="bg-white rounded-xl p-6 shadow">
+              <p className="text-sm text-gray-500">Total Partners</p>
+              <h2 className="text-2xl font-semibold mt-2">
+                <h2>{fallback(partners)}</h2>
+              </h2>
+            </div>
+
             <div className="bg-white rounded-xl p-6 shadow">
               <p className="text-sm text-gray-500">Total Drivers</p>
               <h2 className="text-2xl font-semibold mt-2">
