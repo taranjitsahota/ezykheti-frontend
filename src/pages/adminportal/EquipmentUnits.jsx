@@ -26,7 +26,7 @@ const EquipmentUnits = () => {
   const [partners, setPartners] = useState([]);
   const [equipmentTypes, setEquipmentType] = useState([]);
   const [substations, setSubstations] = useState([]);
-  const [tractors, setTractors] = useState([]);
+  // const [tractors, setTractors] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({});
   const toggleDrawer = (value) => {
@@ -63,7 +63,7 @@ const EquipmentUnits = () => {
       partner_id: formdata.partner_id,
       equipment_type_id: formdata.equipment_type_id,
       substation_id: formdata.substation_id,
-      tractor_id: formdata.tractor_id,
+      // tractor_id: formdata.tractor_id,
       status: formdata.status,
     };
 
@@ -80,7 +80,7 @@ const EquipmentUnits = () => {
               partner_id: formData.partner_id,
               equipment_type_id: formData.equipment_type_id,
               substation_id: formData.substation_id,
-              tractor_id: formData.tractor_id,
+              // tractor_id: formData.tractor_id,
               status: formData.status,
             }
           : data,
@@ -170,28 +170,28 @@ const EquipmentUnits = () => {
     // fetchTractors();
   }, []);
 
-  const fetchTractors = async (partnerId) => {
-    if (!partnerId) {
-      setTractors([]);
-      return;
-    }
+  // const fetchTractors = async (partnerId) => {
+  //   if (!partnerId) {
+  //     setTractors([]);
+  //     return;
+  //   }
 
-    try {
-      const response = await apiRequest({
-        url: `/tractor-by-partner/${partnerId}`,
-        method: "get",
-      });
+  //   try {
+  //     const response = await apiRequest({
+  //       url: `/tractor-by-partner/${partnerId}`,
+  //       method: "get",
+  //     });
 
-      if (response.success) {
-        setTractors(response.data);
-      } else {
-        toast.error(response.message || "Failed to fetch tractors.");
-      }
-    } catch (error) {
-      const msg = error?.response?.data?.message || "Failed to fetch tractors.";
-      toast.error(msg);
-    }
-  };
+  //     if (response.success) {
+  //       setTractors(response.data);
+  //     } else {
+  //       toast.error(response.message || "Failed to fetch tractors.");
+  //     }
+  //   } catch (error) {
+  //     const msg = error?.response?.data?.message || "Failed to fetch tractors.";
+  //     toast.error(msg);
+  //   }
+  // };
 
   const [rows, setRows] = React.useState([]);
 
@@ -213,7 +213,7 @@ const EquipmentUnits = () => {
     { field: "user_name", headerName: "Partner Name", width: 150 },
     { field: "equipment_type_name", headerName: "Equipment Name", width: 150 },
     { field: "substation_name", headerName: "Substation Name", width: 150 },
-    { field: "tractor_name", headerName: "Tractor Name", width: 150 },
+    // { field: "tractor_name", headerName: "Tractor Name", width: 150 },
     { field: "serial_no", headerName: "Serial Number", width: 200 },
     { field: "status", headerName: "Status", width: 150 },
     {
@@ -295,11 +295,11 @@ const EquipmentUnits = () => {
     handleAdminList();
   }, []);
 
-    useEffect(() => {
-      if (formData.partner_id) {
-        fetchTractors(formData.partner_id);
-      }
-    }, [formData.partner_id]);
+    // useEffect(() => {
+    //   if (formData.partner_id) {
+    //     fetchTractors(formData.partner_id);
+    //   }
+    // }, [formData.partner_id]);
 
   const equipmentunitFormContent = (
     <>
@@ -357,7 +357,7 @@ const EquipmentUnits = () => {
         )}
       </TextField>
 
-      <TextField
+      {/* <TextField
         label="Tractor Name"
         select
         name="tractor_id"
@@ -378,7 +378,7 @@ const EquipmentUnits = () => {
         ) : (
           <MenuItem disabled>No tractors found</MenuItem>
         )}
-      </TextField>
+      </TextField> */}
 
       <TextField
         select
@@ -468,7 +468,7 @@ const EquipmentUnits = () => {
       </TextField>
 
       {/* Tractor */}
-      <TextField
+      {/* <TextField
         select
         label="Tractor Name"
         name="tractor_id"
@@ -488,7 +488,7 @@ const EquipmentUnits = () => {
         ) : (
           <MenuItem disabled>No tractors found</MenuItem>
         )}
-      </TextField>
+      </TextField> */}
 
       {/* Substation */}
       <TextField
