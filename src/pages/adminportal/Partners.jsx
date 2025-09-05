@@ -68,6 +68,15 @@ const Partners = () => {
   };
 
   const handleSubmit = async (formdata) => {
+    if (!formdata.country_code) {
+      toast.error("Please select a country code.");
+      return;
+    }
+
+    if (!formdata.phone) {
+      toast.error("Please enter a phone number.");
+      return;
+    }
     const buildCleanPhone = (code, number) =>
       (code + number).replace(/\s+/g, "").replace(/^\+/, "");
 
@@ -176,8 +185,8 @@ const Partners = () => {
     { field: "name", headerName: "Name", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
     { field: "phone", headerName: "Contact", width: 150 },
-    { field: "company_name", headerName: "Company Name", width: 150 },
-    { field: "address", headerName: "Address", width: 150 },
+    { field: "company_name", headerName: "Company Name", width: 150, renderCell: (params) => params.value || "-" },
+    { field: "address", headerName: "Address", width: 150, renderCell: (params) => params.value || "-" },
     { field: "is_driver", headerName: "Is Driver", width: 150 },
     { field: "is_individual", headerName: "Is Individual", width: 150 },
     // { field: "substation", headerName: "Substation", width: 150 },
@@ -657,7 +666,7 @@ const Partners = () => {
           <ConfirmModal
             show={showConfirm}
             onClose={() => setShowConfirm(false)}
-            message="Do you really want to delete this item?"
+            message = "🚨 WARNING: Deleting this partner will erase ALL their associated data forever. This action is irreversible. Are you absolutely sure?"
             buttons={[
               {
                 label: "Delete",

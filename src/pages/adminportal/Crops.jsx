@@ -31,29 +31,29 @@ const Crops = () => {
     setDrawerOpen(value);
   };
 
-  const handleStatusToggle = async (id, currentStatus) => {
-    const newStatus = currentStatus ? 0 : 1;
+  // const handleStatusToggle = async (id, currentStatus) => {
+  //   const newStatus = currentStatus ? 0 : 1;
 
-    try {
-      const response = await apiRequest({
-        url: `/crops/${id}`, // Use `id` passed to the function
-        method: "put",
-        data: {
-          is_enabled: newStatus, // Send the toggled status
-        },
-      });
+  //   try {
+  //     const response = await apiRequest({
+  //       url: `/crops/${id}`, // Use `id` passed to the function
+  //       method: "put",
+  //       data: {
+  //         is_enabled: newStatus, // Send the toggled status
+  //       },
+  //     });
 
-      if (response.success) {
-        toast.success("Crop status updated successfully!");
-        handleAdminList(); // Refresh the list or rows
-      } else {
-        toast.error(response.message || "Failed to update status.");
-      }
-    } catch (error) {
-      const msg = error?.response?.data?.message || "Something went wrong.";
-      toast.error(msg);
-    }
-  };
+  //     if (response.success) {
+  //       toast.success("Crop status updated successfully!");
+  //       handleAdminList(); // Refresh the list or rows
+  //     } else {
+  //       toast.error(response.message || "Failed to update status.");
+  //     }
+  //   } catch (error) {
+  //     const msg = error?.response?.data?.message || "Something went wrong.";
+  //     toast.error(msg);
+  //   }
+  // };
 
   const handleDelete = async () => {
     if (!deleteId) return; // Ensure deleteId is available
@@ -79,7 +79,7 @@ const Crops = () => {
   const handleSubmit = async (formdata) => {
     const data = {
       name: formdata?.name,
-      is_enabled: formdata?.is_enabled,
+      // is_enabled: formdata?.is_enabled,
     };
 
     try {
@@ -93,7 +93,7 @@ const Crops = () => {
         data: isEditMode
           ? {
               name: formData.name,
-              is_enabled: formData.is_enabled,
+              // is_enabled: formData.is_enabled,
             }
           : data,
       });
@@ -118,9 +118,6 @@ const Crops = () => {
     }
   };
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const [rows, setRows] = React.useState([]);
 
   const rowsWithSerial = rows.map((row, index) => ({
@@ -140,26 +137,26 @@ const Crops = () => {
     },
     { field: "name", headerName: "Name", width: 150 },
 
-    {
-      field: "is_enabled",
-      headerName: "Status",
-      width: 180,
-      renderCell: (params) => {
-        const isEnabled = params.row.is_enabled === 1;
+    // {
+    //   field: "is_enabled",
+    //   headerName: "Status",
+    //   width: 180,
+    //   renderCell: (params) => {
+    //     const isEnabled = params.row.is_enabled === 1;
 
-        return (
-          <label className="relative inline-flex items-center cursor-pointer w-16">
-            <input
-              type="checkbox"
-              className="sr-only peer"
-              checked={isEnabled}
-              onChange={() => handleStatusToggle(params.row.id, isEnabled)}
-            />
-            <div className="w-11 h-6 bg-gray-400 peer-checked:bg-green-600 rounded-full peer-focus:ring-2 peer-focus:ring-green-500 transition-colors duration-300 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5" />
-          </label>
-        );
-      },
-    },
+    //     return (
+    //       <label className="relative inline-flex items-center cursor-pointer w-16">
+    //         <input
+    //           type="checkbox"
+    //           className="sr-only peer"
+    //           checked={isEnabled}
+    //           onChange={() => handleStatusToggle(params.row.id, isEnabled)}
+    //         />
+    //         <div className="w-11 h-6 bg-gray-400 peer-checked:bg-green-600 rounded-full peer-focus:ring-2 peer-focus:ring-green-500 transition-colors duration-300 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5" />
+    //       </label>
+    //     );
+    //   },
+    // },
     {
       field: "action",
       headerName: "Action Button",
@@ -220,16 +217,50 @@ const Crops = () => {
     handleAdminList();
   }, []);
 
+  const crops = [
+    "Wheat",
+    "Rice",
+    "Maize",
+    "Sugarcane",
+    "Cotton",
+    "Pulses",
+    "Barley",
+    "Jowar",
+    "Bajra",
+    "Ragi",
+    "Mustard",
+    "Groundnut",
+    "Soybean",
+    "Tea",
+    "Coffee",
+    "Rubber",
+    "Jute",
+    "Banana",
+    "Mango",
+    "Potato",
+    "Onion",
+    "Tomato",
+    "Chili",
+    "Sunflower",
+  ];
+
   const cropFormContent = (
     <>
-      <TextField
-        label="Name"
-        placeholder="Enter name"
-        name="name"
-        fullWidth
-        required
-      />
-      <TextField
+      <TextField 
+      select 
+      label="Crop" 
+      name="name" 
+      fullWidth 
+      required
+      >
+        {crops.map((crop) => (
+          <MenuItem key={crop} value={crop}>
+            {crop}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      {/* <TextField
         select
         label="Status"
         name="is_enabled"
@@ -239,7 +270,7 @@ const Crops = () => {
       >
         <MenuItem value={1}>True</MenuItem>
         <MenuItem value={0}>False</MenuItem>
-      </TextField>
+      </TextField> */}
     </>
   );
 
@@ -254,7 +285,7 @@ const Crops = () => {
         fullWidth
         required
       />
-      <TextField
+      {/* <TextField
         select
         label="Status"
         name="is_enabled"
@@ -267,7 +298,7 @@ const Crops = () => {
       >
         <MenuItem value={1}>True</MenuItem>
         <MenuItem value={0}>False</MenuItem>
-      </TextField>
+      </TextField> */}
     </>
   );
 

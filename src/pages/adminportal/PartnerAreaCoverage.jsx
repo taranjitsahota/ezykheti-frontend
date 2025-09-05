@@ -157,18 +157,18 @@ const PartnerAreaCoverage = () => {
     {
       field: "serial",
       headerName: "S.No.",
-      width: 80,
+      width: 70,
       sortable: false,
     },
     { field: "user_name", headerName: "Partner Name", width: 150 },
-    { field: "area_name", headerName: "Area", width: 150 },
+    { field: "area_name", headerName: "Area", flex: 1, minWidth: 380 },
     // { field: "label", headerName: "Equipment Type", width: 200 },
     // { field: "is_enabled", headerName: "Status", width: 150 },
 
     {
       field: "is_enabled",
       headerName: "Status",
-      width: 180,
+      width: 100,
       renderCell: (params) => {
         const isEnabled = params.row.is_enabled === 1;
 

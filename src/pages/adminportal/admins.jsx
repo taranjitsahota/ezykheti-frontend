@@ -54,6 +54,15 @@ const Admins = () => {
   };
 
   const handleSubmit = async (formdata) => {
+    if (!formdata.country_code) {
+      toast.error("Please select a country code.");
+      return;
+    }
+
+    if (!formdata.phone) {
+      toast.error("Please enter a phone number.");
+      return;
+    }
     const buildCleanPhone = (code, number) =>
       (code + number).replace(/\s+/g, "").replace(/^\+/, "");
 
