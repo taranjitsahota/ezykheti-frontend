@@ -115,52 +115,52 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
       to: "/tractors",
       icon: <Tractor />,
       label: "Tractors",
-      roles: ["superadmin"],
+      roles: ["superadmin", "admin"],
     },
 
     {
       to: "/equipment-type",
       icon: <CalendarX />,
       label: "Equipment Types",
-      roles: ["superadmin"],
+      roles: ["superadmin", "admin"],
     },
     {
       to: "/equipment-unit",
       icon: <CalendarX />,
       label: "Equipment Units",
-      roles: ["superadmin"],
+      roles: ["superadmin", "admin"],
     },
     {
       to: "/partner-area-coverage",
       icon: <CalendarX />,
       label: "Partner Area Coverage",
-      roles: ["superadmin"],
+      roles: ["superadmin", "admin"],
     },
 
     {
       to: "/partner-unavailability",
       icon: <CalendarX />,
       label: "Partner Unavailabilties",
-      roles: ["superadmin"],
+      roles: ["superadmin", "admin"],
     },
     {
       to: "/driver-unavailability",
       icon: <CalendarX />,
       label: "Driver Unavailabilties",
-      roles: ["superadmin"],
+      roles: ["superadmin", "admin"],
     },
 
     {
       to: "/tractor-unavailability",
       icon: <CalendarX />,
       label: "Tractor Unavailabilties",
-      roles: ["superadmin"],
+      roles: ["superadmin", "admin"],
     },
     {
       to: "/equipment-unavailability",
       icon: <CalendarX />,
       label: "Equipment Unavailabilties",
-      roles: ["superadmin"],
+      roles: ["superadmin", "admin"],
     },
     {
       to: "/service-areas",
@@ -184,7 +184,7 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
       to: "/assign-bookings",
       icon: <UserCheck />,
       label: "Assign Bookings",
-      roles: ["superadmin"],
+      roles: ["superadmin", "admin"],
     },
     {
       to: "/subscriptions",

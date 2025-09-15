@@ -55,11 +55,33 @@ const EquipmentUnavailablity = () => {
   };
 
   const handleSubmit = async (formdata) => {
+    let start_at, end_at;
+
+    if (formData.leave_type === "single_day") {
+      // full day leave
+      start_at = `${formData.date} 06:00:00`;
+      end_at = `${formData.date} 22:00:00`;
+    } else if (formData.leave_type === "shift") {
+      if (formData.shift === "first") {
+        start_at = `${formData.date} 06:00:00`;
+        end_at = `${formData.date} 13:00:00`;
+      } else {
+        start_at = `${formData.date} 13:00:00`;
+        end_at = `${formData.date} 22:00:00`;
+      }
+    } else if (formData.leave_type === "long_leave") {
+      start_at = `${formData.start_date} 06:00:00`;
+      end_at = `${formData.end_date} 22:00:00`;
+    }
+
     const data = {
-      unit_id: formdata.unit_id,
-      start_at: formdata.start_at,
-      end_at: formdata.end_at,
-      reason: formdata.reason,
+      partner_id: formData.partner_id,
+      unit_id: formData.unit_id,
+      reason: formData.reason,
+      leave_type: formData.leave_type,
+      shift: formData.shift,
+      start_at,
+      end_at,
     };
 
     try {
@@ -153,6 +175,18 @@ const EquipmentUnavailablity = () => {
     serial: index + 1, // add serial field
   }));
 
+  const getLeaveTypeLabel = (row) => {
+    if (row.leave_type === "single_day") return "Full Day Leave";
+    if (row.leave_type === "long_leave") return "Long Leave";
+
+    if (row.leave_type === "shift") {
+      if (row.shift === "first") return "First Half Leave (6 AM – 1 PM)";
+      if (row.shift === "second") return "Second Half Leave (1 PM – 10 PM)";
+    }
+
+    return "-";
+  };
+
   const [loading, setLoading] = React.useState(false);
   const [drawerOpen, setDrawerOpen] = useState("");
 
@@ -160,21 +194,31 @@ const EquipmentUnavailablity = () => {
     {
       field: "serial",
       headerName: "S.No.",
-      width: 80,
+      width: 0,
       sortable: false,
+      flex: 1,
+      minWidth: 1,
     },
     { field: "partner_name", headerName: "Partner Name", width: 150 },
-    { field: "tractor_name", headerName: "Tractor Name", width: 150 },
     {
       field: "equipment_type_name",
       headerName: "Equipment Type Name",
       width: 150,
     },
-    { field: "substation_name", headerName: "Substation Name", width: 150 },
+    { field: "substation_name", headerName: "Substation Name", width: 1 , flex: 1,
+      minWidth: 2 },
 
     { field: "serial_no", headerName: "Serial No", width: 200 },
     { field: "start_at", headerName: "Start At", width: 150 },
     { field: "end_at", headerName: "End At", width: 150 },
+    {
+      field: "leave_type",
+      headerName: "Leave Type",
+      width: 200,
+      renderCell: (params) => getLeaveTypeLabel(params.row),
+      flex: 1,
+      minWidth: 230,
+    },
     { field: "reason", headerName: "Reason", width: 150 },
     {
       field: "action",
@@ -316,27 +360,88 @@ const EquipmentUnavailablity = () => {
         )}
       </TextField>
 
+      {/* Leave Type */}
       <TextField
-        label="Start Date"
-        name="start_at"
-        type="date"
-        value={formData.start_at || ""}
-        onChange={(e) => setFormData({ ...formData, start_at: e.target.value })}
+        select
+        label="Leave Type"
+        value={formData.leave_type || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, leave_type: e.target.value })
+        }
         fullWidth
         required
-        InputLabelProps={{ shrink: true }}
-      />
+      >
+        <MenuItem value="single_day">Single Day</MenuItem>
+        <MenuItem value="shift">Single Day (Shift)</MenuItem>
+        <MenuItem value="long_leave">Long Leave (Date Range)</MenuItem>
+      </TextField>
 
-      <TextField
-        label="End At"
-        name="end_at"
-        type="date"
-        value={formData.end_at || ""}
-        onChange={(e) => setFormData({ ...formData, end_at: e.target.value })}
-        fullWidth
-        required
-        InputLabelProps={{ shrink: true }}
-      />
+      {/* Conditional Fields */}
+      {formData.leave_type === "single_day" && (
+        <TextField
+          type="date"
+          label="Date"
+          value={formData.date || ""}
+          onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+          fullWidth
+          required
+          InputLabelProps={{ shrink: true }}
+        />
+      )}
+
+      {formData.leave_type === "shift" && (
+        <>
+          <TextField
+            type="date"
+            label="Date"
+            value={formData.date || ""}
+            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            select
+            label="Shift"
+            value={formData.shift || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, shift: e.target.value })
+            }
+            fullWidth
+            required
+          >
+            <MenuItem value="first">First Half (6AM – 1PM)</MenuItem>
+            <MenuItem value="second">Second Half (1PM – 10PM)</MenuItem>
+          </TextField>
+        </>
+      )}
+
+      {formData.leave_type === "long_leave" && (
+        <>
+          <TextField
+            type="date"
+            label="Start Date"
+            value={formData.start_date || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, start_date: e.target.value })
+            }
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            type="date"
+            label="End Date"
+            value={formData.end_date || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, end_date: e.target.value })
+            }
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+        </>
+      )}
 
       <TextField
         label="Reason"

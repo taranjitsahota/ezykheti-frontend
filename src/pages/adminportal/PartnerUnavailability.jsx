@@ -190,7 +190,7 @@ const PartnerUnavailability = () => {
       headerName: "Leave Type",
       width: 200,
       renderCell: (params) => getLeaveTypeLabel(params.row),
-      flex: 1, minWidth: 380
+      flex: 1, minWidth: 280
     },
     { field: "reason", headerName: "Reason", width: 150 },
     {
