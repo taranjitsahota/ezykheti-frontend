@@ -33,7 +33,6 @@ import Register from "./pages/adminportal/Register";
 import ResetPassword from "./pages/adminportal/ResetPassword";
 import SendOTP from "./pages/adminportal/SendOtp";
 import Services from "./pages/adminportal/Services";
-import ServiceAreas from "./pages/adminportal/ServiceAreas";
 import Farmers from "./pages/adminportal/Farmers";
 import VerifyOTP from "./pages/adminportal/VerifyOtp";
 import DriverUnavailability from "./pages/adminportal/DriverUnavailability";
@@ -124,7 +123,6 @@ function App() {
     { path: "/interested-users-email", element: <InterestedDashboardEmail /> },
     { path: "/bookings", element: <Bookings /> },
     { path: "/services", element: <Services /> },
-    { path: "/service-areas", element: <ServiceAreas /> },
     { path: "/farmers", element: <Farmers /> },
     { path: "/profile", element: <Profile /> },
     { path: "/partner-unavailability", element: <PartnerUnavailability /> },

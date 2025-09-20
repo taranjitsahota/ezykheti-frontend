@@ -76,7 +76,7 @@ const Drivers = () => {
       experience_years: formdata?.experience_years,
       license_number: formdata?.license_number,
       partner_id: formdata?.partner_id,
-      // substation_id: formdata?.substation_id,
+      status: formdata?.status,
     };
 
     try {
@@ -95,7 +95,7 @@ const Drivers = () => {
               license_number: formData.license_number,
               experience_years: formData.experience_years,
               partner_id: formData.partner_id,
-              // substation_id: formData.substation_id,
+              status: formdata?.status,
             }
           : data,
       });
@@ -423,9 +423,23 @@ const Drivers = () => {
       >
         {partners.map((p) => (
           <MenuItem key={p.id} value={p.id}>
-            {p.name}{" "}({p.phone})
+            {p.name} ({p.phone})
           </MenuItem>
         ))}
+      </TextField>
+
+      <TextField
+        select
+        label="Status"
+        name="status"
+        value={formData.status || "active"}
+        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+        fullWidth
+        required
+      >
+        <MenuItem value="active">Active</MenuItem>
+        <MenuItem value="inactive">Inactive</MenuItem>
+        <MenuItem value="suspended">Suspended</MenuItem>
       </TextField>
 
       {/* <TextField
@@ -542,6 +556,19 @@ const Drivers = () => {
             {p.name}
           </MenuItem>
         ))}
+      </TextField>
+      <TextField
+        select
+        label="Status"
+        name="status"
+        value={formData.status || "active"}
+        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+        fullWidth
+        required
+      >
+        <MenuItem value="active">Active</MenuItem>
+        <MenuItem value="inactive">Inactive</MenuItem>
+        <MenuItem value="suspended">Suspended</MenuItem>
       </TextField>
     </>
   );

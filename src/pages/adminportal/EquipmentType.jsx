@@ -527,7 +527,7 @@ const EquipmentType = () => {
       <TextField
         select
         label="Equipment"
-        name="equipment_type_id"
+        name="equipment_id"
         fullWidth
         required
         value={formData.equipment_type_id || ""}

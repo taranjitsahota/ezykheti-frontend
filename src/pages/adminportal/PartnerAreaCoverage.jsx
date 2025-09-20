@@ -15,6 +15,8 @@ import IconButton from "@mui/material/IconButton";
 import Anchor from "../../components/adminportal/Anchor";
 import ConfirmModal from "../../components/adminportal/ConfirmModal";
 import { countryCodes } from "../../data/countryCodes";
+import Autocomplete from "@mui/material/Autocomplete";
+import Chip from "@mui/material/Chip";
 
 const PartnerAreaCoverage = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -26,9 +28,12 @@ const PartnerAreaCoverage = () => {
   const [equipment, setEquipment] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({});
+  const [selectedAreas, setSelectedAreas] = useState([]);
+
   const toggleDrawer = (value) => {
     if (value === "add") {
       setIsEditMode(false); // ✅ ensure it's add mode
+      setSelectedAreas([]);
       setFormData({}); // ✅ reset form
     }
     setDrawerOpen(value);
@@ -55,10 +60,15 @@ const PartnerAreaCoverage = () => {
     }
   };
 
+  const areaOptions = areas.map((a) => ({
+    id: a.id,
+    label: `${a.state_name} - ${a.district_name} - ${a.tehsil_name} - ${a.village_name}`,
+  }));
+
   const handleSubmit = async (formdata) => {
     const data = {
       partner_id: formdata.partner_id,
-      area_id: formdata.area_id,
+      areas: selectedAreas.map((a) => a.id),
       // equipment_type_id: formdata.equipment_type_id,
       is_enabled: formdata.is_enabled,
     };
@@ -84,11 +94,12 @@ const PartnerAreaCoverage = () => {
       if (response.success) {
         toast.success(
           isEditMode
-            ? "Tractor updated successfully!"
-            : "Tractor created successfully!"
+            ? "Partner area coverage updated successfully!"
+            : "Partner area coverage created successfully!"
         );
         setDrawerOpen("");
         setIsEditMode(false);
+        setSelectedAreas([]);
         handleAdminList();
       } else {
         toast.error(response.message || "Failed to submit.");
@@ -260,29 +271,28 @@ const PartnerAreaCoverage = () => {
   };
 
   const handleStatusToggle = async (id, currentStatus) => {
-      const newStatus = currentStatus ? 0 : 1;
-  
-      try {
-        const response = await apiRequest({
-          url: `/partner-area-coverage/${id}`, // Use `id` passed to the function
-          method: "put",
-          data: {
-            is_enabled: newStatus, // Send the toggled status
-          },
-        });
-  
-        if (response.success) {
-          toast.success("Partner area coverage status updated successfully!");
-          handleAdminList(); // Refresh the list or rows
-        } else {
-          toast.error(response.message || "Failed to update status.");
-        }
-      } catch (error) {
-        const msg = error?.response?.data?.message || "Something went wrong.";
-        toast.error(msg);
+    const newStatus = currentStatus ? 0 : 1;
+
+    try {
+      const response = await apiRequest({
+        url: `/partner-area-coverage/${id}`, // Use `id` passed to the function
+        method: "put",
+        data: {
+          is_enabled: newStatus, // Send the toggled status
+        },
+      });
+
+      if (response.success) {
+        toast.success("Partner area coverage status updated successfully!");
+        handleAdminList(); // Refresh the list or rows
+      } else {
+        toast.error(response.message || "Failed to update status.");
       }
-    };
-  
+    } catch (error) {
+      const msg = error?.response?.data?.message || "Something went wrong.";
+      toast.error(msg);
+    }
+  };
 
   const handleAdminList = async () => {
     setLoading(true);
@@ -338,6 +348,7 @@ const PartnerAreaCoverage = () => {
         }}
         fullWidth
         required
+        sx={{ mb: 1 }} 
       >
         {partners.length > 0 ? (
           partners.map((p) => (
@@ -374,7 +385,7 @@ const PartnerAreaCoverage = () => {
         )}
       </TextField> */}
 
-      <TextField
+      {/* <TextField
         select
         label="Area"
         name="area_id"
@@ -393,7 +404,61 @@ const PartnerAreaCoverage = () => {
         ) : (
           <MenuItem disabled>No Areas found</MenuItem>
         )}
-      </TextField>
+      </TextField> */}
+
+      <Autocomplete
+        multiple
+        options={areaOptions}
+        getOptionLabel={(option) => option.label}
+        value={selectedAreas}
+        onChange={(event, value) => {
+          setSelectedAreas(value);
+          // if you want to also set formData.area_id for backward compatibility:
+          setFormData({
+            ...formData,
+            area_id: value.length ? value[0].id : "",
+          });
+        }}
+        disableCloseOnSelect
+        fullWidth
+        sx={{ mb: 2 }}
+        renderOption={(props, option, { selected }) => (
+          <li {...props}>
+            <Checkbox
+              style={{ marginRight: 8 }}
+              checked={selected}
+              // don't control the checkbox directly here — Autocomplete handles state
+            />
+            {option.label}
+          </li>
+        )}
+        renderTags={(value, getTagProps) => {
+          // show compact "N selected" chip when many are chosen
+          if (value.length > 3) {
+            return [<Chip key="count" label={`${value.length} selected`} />];
+          }
+          return value.map((option, index) => (
+            <Chip
+              label={option.label}
+              {...getTagProps({ index })}
+              key={option.id}
+            />
+          ));
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Areas"
+            placeholder="Search & select areas"
+            // required
+            variant="outlined"
+            InputProps={{
+              ...params.InputProps,
+              style: { backgroundColor: "#fff", paddingTop: 8, paddingBottom: 8 }, // force white background
+            }}
+          />
+        )}
+      />
 
       {/* <TextField
         label="Tractor Name"

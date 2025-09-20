@@ -163,12 +163,6 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
       roles: ["superadmin", "admin"],
     },
     {
-      to: "/service-areas",
-      icon: <LocateFixed />,
-      label: "Service Areas",
-      roles: ["superadmin", "admin"],
-    },
-    {
       to: "/crops",
       icon: <Sprout />,
       label: "Crops",

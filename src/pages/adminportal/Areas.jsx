@@ -14,6 +14,8 @@ import IconButton from "@mui/material/IconButton";
 import { Dialog, DialogTitle, DialogContent } from "@mui/material";
 import Anchor from "../../components/adminportal/Anchor";
 import ConfirmModal from "../../components/adminportal/ConfirmModal";
+import Autocomplete from "@mui/material/Autocomplete";
+import Chip from "@mui/material/Chip";
 
 const Areas = () => {
   const [states, setStates] = useState([]);
@@ -26,7 +28,7 @@ const Areas = () => {
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedTehsil, setSelectedTehsil] = useState("");
 
-  const [selectedVillage, setSelectedVillage] = useState("");
+  const [selectedVillage, setSelectedVillage] = useState([]);
 
   const handleDrawerClose = () => {
     setDrawerOpen("");
@@ -125,7 +127,7 @@ const Areas = () => {
 
     if (selectedTehsil) {
       fetchVillages();
-      setSelectedVillage("");
+      setSelectedVillage([]);
     }
   }, [selectedTehsil]);
 
@@ -181,9 +183,14 @@ const Areas = () => {
       url: `/location/villages/${row.tehsil_id}`,
       method: "get",
     });
-    if (villageRes.success) setVillages(villageRes.data);
-
-    setSelectedVillage(row.village_id);
+    if (villageRes.success) {
+      setVillages(villageRes.data);
+      setSelectedVillage(
+        villageRes.data.map((v) => ({ id: v.id, label: v.name }))
+      );
+    } else {
+      setSelectedVillage([]);
+    }
   };
 
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -259,7 +266,8 @@ const Areas = () => {
       state_id: selectedState,
       district_id: selectedDistrict,
       tehsil_id: selectedTehsil,
-      village_id: selectedVillage,
+      // village_id: selectedVillage,
+      village_ids: selectedVillage.map((v) => v.id),
       substation_id: formdata?.substation_id,
       // is_enabled: formdata?.is_enabled,
     };
@@ -448,7 +456,7 @@ const Areas = () => {
         ))}
       </TextField>
 
-      <TextField
+      {/* <TextField
         select
         label="Village"
         fullWidth
@@ -463,7 +471,52 @@ const Areas = () => {
             {village.name}
           </MenuItem>
         ))}
-      </TextField>
+      </TextField> */}
+
+      <Autocomplete
+        multiple
+        options={villages.map((v) => ({ id: v.id, label: v.name }))}
+        getOptionLabel={(option) => option.label}
+        value={selectedVillage} // array of selected villages
+        onChange={(event, value) => setSelectedVillage(value)}
+        disableCloseOnSelect
+        fullWidth
+        renderOption={(props, option, { selected }) => (
+          <li {...props}>
+            <Checkbox style={{ marginRight: 8 }} checked={selected} />
+            {option.label}
+          </li>
+        )}
+        renderTags={(value, getTagProps) =>
+          value.length > 3
+            ? [<Chip key="count" label={`${value.length} selected`} />]
+            : value.map((option, index) => (
+                <Chip
+                  label={option.label}
+                  {...getTagProps({ index })}
+                  key={option.id}
+                />
+              ))
+        }
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Villages"
+            placeholder="Select villages"
+            // required
+            variant="outlined"
+            InputProps={{
+              ...params.InputProps,
+              style: {
+                backgroundColor: "#fff",
+                paddingTop: 8,
+                paddingBottom: 8,
+              },
+            }}
+          />
+        )}
+        sx={{ mt: 2, mb: 2 }}
+      />
 
       <TextField
         select

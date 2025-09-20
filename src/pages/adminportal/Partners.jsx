@@ -587,7 +587,7 @@ const Partners = () => {
         <MenuItem value={0}>False</MenuItem>
       </TextField>
 
-      {Number(formData.is_driver) === 1 && (
+      {/* {Number(formData.is_driver) === 1 && (
         <>
           <TextField
             type="text"
@@ -613,7 +613,7 @@ const Partners = () => {
             required
           />
         </>
-      )}
+      )} */}
 
       {/* <TextField
       select

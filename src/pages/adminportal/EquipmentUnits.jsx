@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { Select, MenuItem, InputLabel, FormControl } from "@mui/material";
+import { Select, MenuItem, InputLabel, FormControl, Button } from "@mui/material";
 import { Eye, EyeOff } from "lucide-react";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
@@ -29,9 +29,31 @@ const EquipmentUnits = () => {
   // const [tractors, setTractors] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({});
+
+  const [equipments, setEquipments] = useState([
+    { equipment_type_id: "", quantity: 1 },
+  ]);
+
+  const handleEquipmentChange = (index, field, value) => {
+    const updated = [...equipments];
+    updated[index][field] = value;
+    setEquipments(updated);
+  };
+
+  const addEquipmentRow = () => {
+    setEquipments([...equipments, { equipment_type_id: "", quantity: 1 }]);
+  };
+
+  const removeEquipmentRow = (index) => {
+    const updated = [...equipments];
+    updated.splice(index, 1);
+    setEquipments(updated);
+  };
+
   const toggleDrawer = (value) => {
     if (value === "add") {
       setIsEditMode(false); // ✅ ensure it's add mode
+      setEquipments([{ equipment_type_id: "", quantity: 1 }]);
       setFormData({}); // ✅ reset form
     }
     setDrawerOpen(value);
@@ -61,7 +83,7 @@ const EquipmentUnits = () => {
   const handleSubmit = async (formdata) => {
     const data = {
       partner_id: formdata.partner_id,
-      equipment_type_id: formdata.equipment_type_id,
+      equipments: equipments,
       substation_id: formdata.substation_id,
       // tractor_id: formdata.tractor_id,
       status: formdata.status,
@@ -295,11 +317,11 @@ const EquipmentUnits = () => {
     handleAdminList();
   }, []);
 
-    // useEffect(() => {
-    //   if (formData.partner_id) {
-    //     fetchTractors(formData.partner_id);
-    //   }
-    // }, [formData.partner_id]);
+  // useEffect(() => {
+  //   if (formData.partner_id) {
+  //     fetchTractors(formData.partner_id);
+  //   }
+  // }, [formData.partner_id]);
 
   const equipmentunitFormContent = (
     <>
@@ -335,27 +357,45 @@ const EquipmentUnits = () => {
         )}
       </TextField>
 
-      <TextField
-        select
-        label="Equipment Type"
-        name="equipment_type_id"
-        value={formData.equipment_type_id || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, equipment_type_id: e.target.value })
-        }
-        fullWidth
-        required
-      >
-        {equipmentTypes.length > 0 ? (
-          equipmentTypes.map((p) => (
-            <MenuItem key={p.id} value={p.id}>
-              {p.equipment_name}
-            </MenuItem>
-          ))
-        ) : (
-          <MenuItem disabled>No equipment types found</MenuItem>
-        )}
-      </TextField>
+      {equipments.map((eq, index) => (
+        <Box key={index} display="flex" gap={2}>
+          <TextField
+            select
+            label="Equipment Type"
+            value={eq.equipment_type_id}
+            onChange={(e) =>
+              handleEquipmentChange(index, "equipment_type_id", e.target.value)
+            }
+            fullWidth
+          >
+            {equipmentTypes.map((p) => (
+              <MenuItem key={p.id} value={p.id}>
+                {p.equipment_name}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <TextField
+            type="number"
+            label="Quantity"
+            value={eq.quantity}
+            onChange={(e) =>
+              handleEquipmentChange(index, "quantity", e.target.value)
+            }
+            inputProps={{ min: 1 }}
+            style={{ width: "120px" }}
+          />
+
+          <Button
+            onClick={() => removeEquipmentRow(index)}
+            disabled={equipments.length === 1}
+          >
+            -
+          </Button>
+        </Box>
+      ))}
+
+      <Button onClick={addEquipmentRow}>+ Add Equipment</Button>
 
       {/* <TextField
         label="Tractor Name"
