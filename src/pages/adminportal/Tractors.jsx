@@ -340,7 +340,7 @@ const Tractors = () => {
         )}
       </TextField>
 
-      <TextField
+      {/* <TextField
         label="Tractor Name"
         name="name"
         type="text"
@@ -350,7 +350,22 @@ const Tractors = () => {
         fullWidth
         required
         InputLabelProps={{ shrink: true }}
-      />
+      /> */}
+       <TextField
+        select
+        label="Tractor Name"
+        name="name"
+        value={formData.name || ""}
+        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        fullWidth
+        required
+      >
+        {tractorCompanies.map((company) => (
+          <MenuItem key={company} value={company}>
+            {company}
+          </MenuItem>
+        ))}
+      </TextField>
 
       <TextField
         label="Registration No"

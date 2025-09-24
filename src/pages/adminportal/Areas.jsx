@@ -16,8 +16,11 @@ import Anchor from "../../components/adminportal/Anchor";
 import ConfirmModal from "../../components/adminportal/ConfirmModal";
 import Autocomplete from "@mui/material/Autocomplete";
 import Chip from "@mui/material/Chip";
+import Paper from "@mui/material/Paper";
 
 const Areas = () => {
+   const [isEditMode, setIsEditMode] = useState(false);
+  const [formData, setFormData] = useState({});
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [tehsils, setTehsils] = useState([]);
@@ -33,6 +36,7 @@ const Areas = () => {
   const handleDrawerClose = () => {
     setDrawerOpen("");
     setIsEditMode(false);
+    setSelectedState("");
     setFormData(null);
   };
 
@@ -117,6 +121,9 @@ const Areas = () => {
         });
         if (response.success) {
           setVillages(response.data);
+          if (!isEditMode) {
+            setSelectedVillage([]);
+          }
         } else {
           toast.error(response.message || "Failed to fetch villages.");
         }
@@ -127,9 +134,9 @@ const Areas = () => {
 
     if (selectedTehsil) {
       fetchVillages();
-      setSelectedVillage([]);
+      // setSelectedVillage([]);
     }
-  }, [selectedTehsil]);
+  }, [selectedTehsil, isEditMode]);
 
   useEffect(() => {
     const fetchSubstation = async () => {
@@ -185,22 +192,15 @@ const Areas = () => {
     });
     if (villageRes.success) {
       setVillages(villageRes.data);
-      setSelectedVillage(
-        villageRes.data.map((v) => ({ id: v.id, label: v.name }))
-      );
+     setSelectedVillage(row.village_id);
     } else {
       setSelectedVillage([]);
     }
   };
 
   const [submitLoading, setSubmitLoading] = useState(false);
-
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [formData, setFormData] = useState({});
-
   const [previewImage, setPreviewImage] = useState(null);
 
   const handleImagePreview = (url) => {
@@ -210,6 +210,7 @@ const Areas = () => {
     if (value === "add") {
       setIsEditMode(false); // ✅ ensure it's add mode
       setFormData({}); // ✅ reset form
+      setSelectedState("");
       setSelectedDistrict("");
       setSelectedTehsil("");
       setSelectedVillage("");
@@ -266,10 +267,9 @@ const Areas = () => {
       state_id: selectedState,
       district_id: selectedDistrict,
       tehsil_id: selectedTehsil,
-      // village_id: selectedVillage,
-      village_ids: selectedVillage.map((v) => v.id),
+      village_id: isEditMode ? selectedVillage : null, // single id for edit
+      village_ids: !isEditMode ? selectedVillage.map((v) => v.id) : null, // array for add
       substation_id: formdata?.substation_id,
-      // is_enabled: formdata?.is_enabled,
     };
 
     try {
@@ -477,12 +477,17 @@ const Areas = () => {
         multiple
         options={villages.map((v) => ({ id: v.id, label: v.name }))}
         getOptionLabel={(option) => option.label}
-        value={selectedVillage} // array of selected villages
+        value={selectedVillage}
         onChange={(event, value) => setSelectedVillage(value)}
         disableCloseOnSelect
         fullWidth
         renderOption={(props, option, { selected }) => (
-          <li {...props}>
+          <li
+            {...props}
+            style={{
+              backgroundColor: props["aria-selected"] ? "#e0e0e0" : "#fff", // white by default
+            }}
+          >
             <Checkbox style={{ marginRight: 8 }} checked={selected} />
             {option.label}
           </li>
@@ -503,7 +508,6 @@ const Areas = () => {
             {...params}
             label="Villages"
             placeholder="Select villages"
-            // required
             variant="outlined"
             InputProps={{
               ...params.InputProps,
@@ -512,6 +516,15 @@ const Areas = () => {
                 paddingTop: 8,
                 paddingBottom: 8,
               },
+            }}
+          />
+        )}
+        PopperComponent={(props) => (
+          <Paper
+            {...props}
+            style={{
+              backgroundColor: "#fff", // ✅ dropdown background white
+              color: "#000",
             }}
           />
         )}

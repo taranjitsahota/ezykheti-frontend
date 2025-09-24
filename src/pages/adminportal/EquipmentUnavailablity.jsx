@@ -205,8 +205,8 @@ const EquipmentUnavailablity = () => {
       headerName: "Equipment Type Name",
       width: 150,
     },
-    { field: "substation_name", headerName: "Substation Name", width: 1 , flex: 1,
-      minWidth: 2 },
+    // { field: "substation_name", headerName: "Substation Name", width: 1 , flex: 1,
+    //   minWidth: 2 },
 
     { field: "serial_no", headerName: "Serial No", width: 200 },
     { field: "start_at", headerName: "Start At", width: 150 },

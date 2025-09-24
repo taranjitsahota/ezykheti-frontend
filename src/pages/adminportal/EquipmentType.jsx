@@ -89,10 +89,10 @@ const EquipmentType = () => {
       formdata.minutes_per_kanal?.toString() || "0"
     );
     formDataToSend.append("image", formdata.image);
-    formDataToSend.append(
-      "is_self_propelled",
-      Number(formdata.is_self_propelled).toString()
-    );
+    // formDataToSend.append(
+    //   "is_self_propelled",
+    //   Number(formdata.is_self_propelled).toString()
+    // );
     formDataToSend.append(
       "requires_tractor",
       Number(formdata.requires_tractor).toString()
@@ -209,12 +209,12 @@ const EquipmentType = () => {
     { field: "equipment_name", headerName: "Equipment Name", width: 150 },
     { field: "service_name", headerName: "Service Name", width: 150 },
     { field: "requires_tractor", headerName: "Requires Tractor", width: 150 },
-    { field: "is_self_propelled", headerName: "Is Self Propelled", width: 200 },
-    {
-      field: "minutes_per_kanal",
-      headerName: "Default Minutes Per Kanal",
-      width: 200,
-    },
+    // { field: "is_self_propelled", headerName: "Is Self Propelled", width: 200 },
+    // {
+    //   field: "minutes_per_kanal",
+    //   headerName: "Default Minutes Per Kanal",
+    //   width: 200,
+    // },
     {
       field: "image",
       headerName: "Image",
@@ -368,7 +368,7 @@ const EquipmentType = () => {
         <MenuItem value={0}>False</MenuItem>
       </TextField>
 
-      <TextField
+      {/* <TextField
         select
         label="Self Propelled"
         name="is_self_propelled"
@@ -381,9 +381,9 @@ const EquipmentType = () => {
       >
         <MenuItem value={1}>True</MenuItem>
         <MenuItem value={0}>False</MenuItem>
-      </TextField>
+      </TextField> */}
 
-      <TextField
+      {/* <TextField
         label="Minutes Per Kanal"
         name="minutes_per_kanal"
         type="text"
@@ -395,7 +395,7 @@ const EquipmentType = () => {
         fullWidth
         required
         InputLabelProps={{ shrink: true }}
-      />
+      /> */}
 
       <TextField
         label="Price Per Kanal"
@@ -565,7 +565,7 @@ const EquipmentType = () => {
       </TextField>
 
       {/* Self Propelled */}
-      <TextField
+      {/* <TextField
         select
         label="Self Propelled"
         name="is_self_propelled"
@@ -581,7 +581,7 @@ const EquipmentType = () => {
       >
         <MenuItem value={1}>True</MenuItem>
         <MenuItem value={0}>False</MenuItem>
-      </TextField>
+      </TextField> */}
 
       <TextField
         label="Minutes Per Kanal"
@@ -624,7 +624,7 @@ const EquipmentType = () => {
         required
       />
 
-      <TextField
+      {/* <TextField
         placeholder="Enter Minutes Per Kanal"
         label="Minutes Per Kanal"
         name="minutes_per_kanal"
@@ -634,7 +634,7 @@ const EquipmentType = () => {
         }
         fullWidth
         required
-      />
+      /> */}
 
       <Box mt={4} mb={4}>
         <input

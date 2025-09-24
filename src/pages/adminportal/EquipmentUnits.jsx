@@ -8,7 +8,13 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { Select, MenuItem, InputLabel, FormControl, Button } from "@mui/material";
+import {
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Button,
+} from "@mui/material";
 import { Eye, EyeOff } from "lucide-react";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
@@ -25,7 +31,7 @@ const EquipmentUnits = () => {
   const [deleteId, setDeleteId] = useState(null);
   const [partners, setPartners] = useState([]);
   const [equipmentTypes, setEquipmentType] = useState([]);
-  const [substations, setSubstations] = useState([]);
+  // const [substations, setSubstations] = useState([]);
   // const [tractors, setTractors] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({});
@@ -84,7 +90,7 @@ const EquipmentUnits = () => {
     const data = {
       partner_id: formdata.partner_id,
       equipments: equipments,
-      substation_id: formdata.substation_id,
+      // substation_id: formdata.substation_id,
       // tractor_id: formdata.tractor_id,
       status: formdata.status,
     };
@@ -101,7 +107,7 @@ const EquipmentUnits = () => {
           ? {
               partner_id: formData.partner_id,
               equipment_type_id: formData.equipment_type_id,
-              substation_id: formData.substation_id,
+              // substation_id: formData.substation_id,
               // tractor_id: formData.tractor_id,
               status: formData.status,
             }
@@ -167,28 +173,28 @@ const EquipmentUnits = () => {
       }
     };
 
-    const fetchSubstations = async () => {
-      try {
-        const response = await apiRequest({
-          url: `/substations`,
-          method: "get",
-        });
+    // const fetchSubstations = async () => {
+    //   try {
+    //     const response = await apiRequest({
+    //       url: `/substations`,
+    //       method: "get",
+    //     });
 
-        if (response.success) {
-          setSubstations(response.data);
-        } else {
-          toast.error(response.message || "Failed to fetch substations.");
-        }
-      } catch (error) {
-        const msg =
-          error?.response?.data?.message || "Failed to fetch substations.";
-        toast.error(msg);
-      }
-    };
+    //     if (response.success) {
+    //       setSubstations(response.data);
+    //     } else {
+    //       toast.error(response.message || "Failed to fetch substations.");
+    //     }
+    //   } catch (error) {
+    //     const msg =
+    //       error?.response?.data?.message || "Failed to fetch substations.";
+    //     toast.error(msg);
+    //   }
+    // };
 
     fetchPartners();
     fetchEquipmentType();
-    fetchSubstations();
+    // fetchSubstations();
     // fetchTractors();
   }, []);
 
@@ -234,7 +240,7 @@ const EquipmentUnits = () => {
     },
     { field: "user_name", headerName: "Partner Name", width: 150 },
     { field: "equipment_type_name", headerName: "Equipment Name", width: 150 },
-    { field: "substation_name", headerName: "Substation Name", width: 150 },
+    // { field: "substation_name", headerName: "Substation Name", width: 150 },
     // { field: "tractor_name", headerName: "Tractor Name", width: 150 },
     { field: "serial_no", headerName: "Serial Number", width: 200 },
     { field: "status", headerName: "Status", width: 150 },
@@ -358,7 +364,14 @@ const EquipmentUnits = () => {
       </TextField>
 
       {equipments.map((eq, index) => (
-        <Box key={index} display="flex" gap={2}>
+        <Box
+          key={index}
+          display="flex"
+          gap={2}
+          alignItems="center"
+          sx={{ mb: 2 }}
+        >
+          {/* Equipment Type Dropdown - fixed wide */}
           <TextField
             select
             label="Equipment Type"
@@ -366,7 +379,17 @@ const EquipmentUnits = () => {
             onChange={(e) =>
               handleEquipmentChange(index, "equipment_type_id", e.target.value)
             }
-            fullWidth
+            sx={{ flex: 1, minWidth: "250px" }} // ⬅️ fixed min width
+            SelectProps={{
+              MenuProps: {
+                PaperProps: {
+                  sx: {
+                    backgroundColor: "#fff !important", // ⬅️ force white
+                    color: "#000", // text black
+                  },
+                },
+              },
+            }}
           >
             {equipmentTypes.map((p) => (
               <MenuItem key={p.id} value={p.id}>
@@ -375,27 +398,46 @@ const EquipmentUnits = () => {
             ))}
           </TextField>
 
+          {/* Quantity Input - small fixed */}
           <TextField
             type="number"
-            label="Quantity"
+            label="Qty"
             value={eq.quantity}
             onChange={(e) =>
               handleEquipmentChange(index, "quantity", e.target.value)
             }
             inputProps={{ min: 1 }}
-            style={{ width: "120px" }}
+            sx={{ width: "100px" }}
           />
 
+          {/* Remove Button - styled */}
           <Button
+            variant="outlined"
+            color="error"
             onClick={() => removeEquipmentRow(index)}
             disabled={equipments.length === 1}
+            sx={{
+              minWidth: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              border: "2px solid red",
+              color: "red",
+              fontWeight: "bold",
+              "&:hover": { bgcolor: "rgba(255,0,0,0.1)" },
+            }}
           >
-            -
+            –
           </Button>
         </Box>
       ))}
 
-      <Button onClick={addEquipmentRow}>+ Add Equipment</Button>
+      <Button
+        variant="outlined"
+        onClick={addEquipmentRow}
+        sx={{ mt: 1, borderStyle: "dashed" }}
+      >
+        + Add Equipment
+      </Button>
 
       {/* <TextField
         label="Tractor Name"
@@ -420,7 +462,7 @@ const EquipmentUnits = () => {
         )}
       </TextField> */}
 
-      <TextField
+      {/* <TextField
         select
         label="Substation Name"
         name="substation_id"
@@ -441,7 +483,7 @@ const EquipmentUnits = () => {
         ) : (
           <MenuItem disabled>No substations found</MenuItem>
         )}
-      </TextField>
+      </TextField> */}
 
       <TextField
         select
@@ -531,7 +573,7 @@ const EquipmentUnits = () => {
       </TextField> */}
 
       {/* Substation */}
-      <TextField
+      {/* <TextField
         select
         label="Substation Name"
         name="substation_id"
@@ -551,7 +593,7 @@ const EquipmentUnits = () => {
         ) : (
           <MenuItem disabled>No substations found</MenuItem>
         )}
-      </TextField>
+      </TextField> */}
 
       {/* Status */}
       <TextField

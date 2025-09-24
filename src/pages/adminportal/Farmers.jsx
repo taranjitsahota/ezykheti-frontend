@@ -238,7 +238,7 @@ const Farmers = () => {
           select
           label="Code"
           name="country_code"
-          value={formData.country_code || ""}
+          value={formData.country_code || "91"}
           onChange={(e) =>
             setFormData({ ...formData, country_code: e.target.value })
           }

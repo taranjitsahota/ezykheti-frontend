@@ -21,7 +21,7 @@ const Partners = () => {
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-
+  const [originalIsDriver, setOriginalIsDriver] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -37,6 +37,12 @@ const Partners = () => {
     license_number: "",
     experience_years: "",
   });
+
+  useEffect(() => {
+    if (formData?.id) {
+      setOriginalIsDriver(Number(formData.is_driver)); // 0 or 1
+    }
+  }, [formData?.id]);
 
   const toggleDrawer = (value) => {
     if (value === "add") {
@@ -185,9 +191,25 @@ const Partners = () => {
     { field: "name", headerName: "Name", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
     { field: "phone", headerName: "Contact", width: 150 },
-    { field: "company_name", headerName: "Company Name", width: 150, renderCell: (params) => params.value || "-" },
-    { field: "address", headerName: "Address", width: 150, renderCell: (params) => params.value || "-" },
-    { field: "is_driver", headerName: "Is Driver", width: 150 },
+    {
+      field: "company_name",
+      headerName: "Company Name",
+      width: 150,
+      renderCell: (params) => params.value || "-",
+    },
+    {
+      field: "address",
+      headerName: "Address",
+      width: 150,
+      renderCell: (params) => params.value || "-",
+    },
+    {
+      field: "is_driver",
+      headerName: "Is Driver",
+      width: 150,
+      renderCell: (params) => (params.value === 1 ? "Yes" : "No"),
+    },
+
     { field: "is_individual", headerName: "Is Individual", width: 150 },
     // { field: "substation", headerName: "Substation", width: 150 },
 
@@ -293,7 +315,7 @@ const Partners = () => {
           select
           label="Code"
           name="country_code"
-          value={formData.country_code || ""}
+          value={formData.country_code || "91"}
           onChange={(e) =>
             setFormData({ ...formData, country_code: e.target.value })
           }
@@ -404,7 +426,7 @@ const Partners = () => {
 
       <TextField
         select
-        label="is_driver"
+        label="Driver"
         name="is_driver"
         value={formData.is_driver}
         onChange={(e) =>
@@ -413,8 +435,8 @@ const Partners = () => {
         fullWidth
         required
       >
-        <MenuItem value={1}>True</MenuItem>
-        <MenuItem value={0}>False</MenuItem>
+        <MenuItem value={1}>Yes</MenuItem>
+        <MenuItem value={0}>No</MenuItem>
       </TextField>
 
       <TextField
@@ -559,7 +581,7 @@ const Partners = () => {
 
       <TextField
         select
-        label="is_driver"
+        label="Driver"
         name="is_driver"
         value={formData.is_driver}
         onChange={(e) =>
@@ -568,8 +590,8 @@ const Partners = () => {
         fullWidth
         required
       >
-        <MenuItem value={1}>True</MenuItem>
-        <MenuItem value={0}>False</MenuItem>
+        <MenuItem value={1}>Yes</MenuItem>
+        <MenuItem value={0}>No</MenuItem>
       </TextField>
 
       <TextField
@@ -587,7 +609,7 @@ const Partners = () => {
         <MenuItem value={0}>False</MenuItem>
       </TextField>
 
-      {/* {Number(formData.is_driver) === 1 && (
+      {originalIsDriver === 0 && Number(formData.is_driver) === 1 && (
         <>
           <TextField
             type="text"
@@ -598,7 +620,7 @@ const Partners = () => {
               setFormData({ ...formData, license_number: e.target.value })
             }
             fullWidth
-            required
+            // required
           />
 
           <TextField
@@ -610,10 +632,10 @@ const Partners = () => {
               setFormData({ ...formData, experience_years: e.target.value })
             }
             fullWidth
-            required
+            // required
           />
         </>
-      )} */}
+      )}
 
       {/* <TextField
       select
@@ -666,7 +688,7 @@ const Partners = () => {
           <ConfirmModal
             show={showConfirm}
             onClose={() => setShowConfirm(false)}
-            message = "🚨 WARNING: Deleting this partner will erase ALL their associated data forever. This action is irreversible. Are you absolutely sure?"
+            message="🚨 WARNING: Deleting this partner will erase ALL their associated data forever. This action is irreversible. Are you absolutely sure?"
             buttons={[
               {
                 label: "Delete",
