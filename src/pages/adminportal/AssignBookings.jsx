@@ -460,77 +460,97 @@ const AssignBookings = () => {
       </Grid>
       {/* Right Block: Assign Partner */}
       {/* <Grid item xs={12} sm={6}> */}
-        <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, mt: 4 }}>
-          Assign Partner
-        </Typography>
+      <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, mt: 4 }}>
+        Assign Partner
+      </Typography>
 
-        <TextField
-          select
-          fullWidth
-          name="partner_id"
-          value={formData?.partner_id || ""}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, partner_id: e.target.value }))
-          }
-        >
-          <MenuItem value="">Select available partner</MenuItem>
-          {partners.map((partner) => (
+      <TextField
+        select
+        fullWidth
+        name="partner_id"
+        value={formData?.partner_id || ""}
+        onChange={(e) =>
+          setFormData((prev) => ({ ...prev, partner_id: e.target.value }))
+        }
+      >
+        {partners.length === 0 ? (
+          <MenuItem value="" disabled>
+            No partners found
+          </MenuItem>
+        ) : (
+          partners.map((partner) => (
             <MenuItem key={partner.id} value={partner.id}>
               {partner.name}
             </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          select
-          fullWidth
-          name="driver_id"
-          value={formData?.driver_id || ""}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, driver_id: e.target.value }))
-          }
-        >
-          <MenuItem value="">Select available driver</MenuItem>
-          {drivers.map((driver) => (
+          ))
+        )}
+      </TextField>
+      <TextField
+        select
+        fullWidth
+        name="driver_id"
+        value={formData?.driver_id || ""}
+        onChange={(e) =>
+          setFormData((prev) => ({ ...prev, driver_id: e.target.value }))
+        }
+      >
+        {drivers.length === 0 ? (
+          <MenuItem value="" disabled>
+            No drivers found
+          </MenuItem>
+        ) : (
+          drivers.map((driver) => (
             <MenuItem key={driver.id} value={driver.id}>
               {driver.driver_name}
             </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          select
-          fullWidth
-          name="equipment_unit_id"
-          value={formData?.equipment_unit_id || ""}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              equipment_unit_id: e.target.value,
-            }))
-          }
-        >
-          <MenuItem value="">Select available Equipment</MenuItem>
-          {equipmentUnits.map((equipment) => (
+          ))
+        )}
+      </TextField>
+      <TextField
+        select
+        fullWidth
+        name="equipment_unit_id"
+        value={formData?.equipment_unit_id || ""}
+        onChange={(e) =>
+          setFormData((prev) => ({
+            ...prev,
+            equipment_unit_id: e.target.value,
+          }))
+        }
+      >
+        {equipmentUnits.length === 0 ? (
+          <MenuItem value="" disabled>
+            No equipments found
+          </MenuItem>
+        ) : (
+          equipmentUnits.map((equipment) => (
             <MenuItem key={equipment.id} value={equipment.id}>
               {equipment.label}
             </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          select
-          fullWidth
-          name="tractor_id"
-          value={formData?.tractor_id || ""}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, tractor_id: e.target.value }))
-          }
-        >
-          <MenuItem value="">Select available tractor</MenuItem>
-          {tractors.map((tractor) => (
+          ))
+        )}
+      </TextField>
+      <TextField
+        select
+        fullWidth
+        name="tractor_id"
+        value={formData?.tractor_id || ""}
+        onChange={(e) =>
+          setFormData((prev) => ({ ...prev, tractor_id: e.target.value }))
+        }
+      >
+        {equipmentUnits.length === 0 ? (
+          <MenuItem value="" disabled>
+            No tractors found
+          </MenuItem>
+        ) : (
+          tractors.map((tractor) => (
             <MenuItem key={tractor.id} value={tractor.id}>
               {tractor.name}
             </MenuItem>
-          ))}
-        </TextField>
+          ))
+        )}
+      </TextField>
       {/* </Grid> */}
       <input
         type="hidden"
