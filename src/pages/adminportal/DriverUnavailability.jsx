@@ -79,14 +79,9 @@ const DriverUnavailability = () => {
       driver_id: formData.driver_id,
       reason: formData.reason,
       leave_type: formData.leave_type,
-      shift: formData.shift,
+      shift: formData.shift || null,
       start_at,
       end_at,
-
-      // start_at: formdata.start_at,
-      // end_at: formdata.end_at,
-      // is_enabled: formdata.is_enabled,
-      // reason: formdata.reason,
     };
 
     try {
@@ -97,14 +92,7 @@ const DriverUnavailability = () => {
           ? `/driver-unavailabilities/${formData.id}` // replace with your actual edit API URL
           : "/driver-unavailabilities",
         method: isEditMode ? "put" : "post",
-        data: isEditMode
-          ? {
-              start_at: formData.start_at,
-              end_at: formData.end_at,
-              is_enabled: formData.is_enabled,
-              reason: formData.reason,
-            }
-          : data,
+        data,
       });
 
       if (response.success) {
@@ -162,21 +150,34 @@ const DriverUnavailability = () => {
 
         if (response.success) {
           setDrivers(response.data);
+          setFormData((prev) => {
+            const driverExists = response.data.some(
+              (d) => d.id === prev.driver_id
+            );
+            return {
+              ...prev,
+              driver_id: driverExists ? prev.driver_id : "",
+            };
+          });
         } else {
           toast.error(response.message || "Failed to fetch drivers.");
+          setDrivers([]);
+          setFormData((prev) => ({ ...prev, driver_id: "" }));
         }
       } catch (error) {
         const msg =
           error?.response?.data?.message || "Failed to fetch drivers.";
         toast.error(msg);
+        setDrivers([]);
+        setFormData((prev) => ({ ...prev, driver_id: "" }));
       }
     };
 
-    setDrivers([]);
-    setFormData((prev) => ({ ...prev, driver_id: "" }));
-
     if (formData.partner_id) {
       fetchDrivers(formData.partner_id);
+    } else {
+      setDrivers([]);
+      setFormData((prev) => ({ ...prev, driver_id: "" }));
     }
   }, [formData.partner_id]);
 
@@ -233,24 +234,17 @@ const DriverUnavailability = () => {
               setIsEditMode(true);
               const row = params.row;
 
-              // Try to split phone
-              const matchedCode = countryCodes.find((c) =>
-                row.phone?.startsWith(c.code)
-              );
+              setFormData({
+                ...row,
+                date:
+                  row.leave_type === "single_day" || row.leave_type === "shift"
+                    ? row.start_at
+                    : "",
+                start_date: row.leave_type === "long_leave" ? row.start_at : "",
+                end_date: row.leave_type === "long_leave" ? row.end_at : "",
+                shift: row.leave_type === "shift" ? row.shift : "",
+              });
 
-              if (matchedCode) {
-                setFormData({
-                  ...row,
-                  country_code: matchedCode.code,
-                  phone: row.phone.slice(matchedCode.code.length),
-                });
-              } else {
-                setFormData({
-                  ...row,
-                  country_code: "",
-                  phone: row.phone,
-                });
-              }
               toggleDrawer(true); // open anchor
             }}
             className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
@@ -450,17 +444,17 @@ const DriverUnavailability = () => {
     <>
       <TextField
         select
-        label="Driver"
-        name="driver_id"
-        value={formData.driver_id || ""}
+        label="Partner"
+        name="partner_id"
+        value={formData.partner_id || ""}
         onChange={(e) =>
-          setFormData({ ...formData, driver_id: e.target.value })
+          setFormData({ ...formData, partner_id: e.target.value })
         }
         fullWidth
         required
       >
-        {drivers.length > 0 ? (
-          drivers.map((p) => (
+        {partners.length > 0 ? (
+          partners.map((p) => (
             <MenuItem key={p.id} value={p.id}>
               {p.name}
             </MenuItem>
@@ -471,26 +465,109 @@ const DriverUnavailability = () => {
       </TextField>
 
       <TextField
-        label="Start At"
-        name="start_at"
-        type="date"
-        value={formData.start_at || ""}
-        onChange={(e) => setFormData({ ...formData, start_at: e.target.value })}
+        select
+        label="Driver"
+        name="driver_id"
+        value={formData.driver_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, driver_id: e.target.value })
+        }
         fullWidth
         required
-        InputLabelProps={{ shrink: true }}
-      />
+      >
+        {drivers.length > 0 ? (
+          drivers.map((d) => (
+            <MenuItem key={d.id} value={d.id}>
+              {d.driver_name}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disabled>No drivers found</MenuItem>
+        )}
+      </TextField>
 
+      {/* Leave Type */}
       <TextField
-        label="End At"
-        name="end_at"
-        type="date"
-        value={formData.end_at || ""}
-        onChange={(e) => setFormData({ ...formData, end_at: e.target.value })}
+        select
+        label="Leave Type"
+        value={formData.leave_type || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, leave_type: e.target.value })
+        }
         fullWidth
         required
-        InputLabelProps={{ shrink: true }}
-      />
+      >
+        <MenuItem value="single_day">Single Day</MenuItem>
+        <MenuItem value="shift">Single Day (Shift)</MenuItem>
+        <MenuItem value="long_leave">Long Leave (Date Range)</MenuItem>
+      </TextField>
+
+      {/* Conditional Fields */}
+      {formData.leave_type === "single_day" && (
+        <TextField
+          type="date"
+          label="Date"
+          value={formData.date || ""}
+          onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+          fullWidth
+          required
+          InputLabelProps={{ shrink: true }}
+        />
+      )}
+
+      {formData.leave_type === "shift" && (
+        <>
+          <TextField
+            type="date"
+            label="Date"
+            value={formData.date || ""}
+            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            select
+            label="Shift"
+            value={formData.shift || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, shift: e.target.value })
+            }
+            fullWidth
+            required
+          >
+            <MenuItem value="first">First Half (6AM – 1PM)</MenuItem>
+            <MenuItem value="second">Second Half (1PM – 10PM)</MenuItem>
+          </TextField>
+        </>
+      )}
+
+      {formData.leave_type === "long_leave" && (
+        <>
+          <TextField
+            type="date"
+            label="Start Date"
+            value={formData.start_date || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, start_date: e.target.value })
+            }
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            type="date"
+            label="End Date"
+            value={formData.end_date || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, end_date: e.target.value })
+            }
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+        </>
+      )}
 
       <TextField
         label="Reason"

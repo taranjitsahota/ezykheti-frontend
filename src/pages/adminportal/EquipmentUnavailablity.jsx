@@ -79,7 +79,7 @@ const EquipmentUnavailablity = () => {
       unit_id: formData.unit_id,
       reason: formData.reason,
       leave_type: formData.leave_type,
-      shift: formData.shift,
+      shift: formData.shift || null,
       start_at,
       end_at,
     };
@@ -92,13 +92,7 @@ const EquipmentUnavailablity = () => {
           ? `/equipment-unavailabilities/${formData.id}` // replace with your actual edit API URL
           : "/equipment-unavailabilities",
         method: isEditMode ? "put" : "post",
-        data: isEditMode
-          ? {
-              start_at: formData.start_at,
-              end_at: formData.end_at,
-              reason: formData.reason,
-            }
-          : data,
+        data,
       });
 
       if (response.success) {
@@ -231,24 +225,17 @@ const EquipmentUnavailablity = () => {
               setIsEditMode(true);
               const row = params.row;
 
-              // Try to split phone
-              const matchedCode = countryCodes.find((c) =>
-                row.phone?.startsWith(c.code)
-              );
+              setFormData({
+                ...row,
+                date:
+                  row.leave_type === "single_day" || row.leave_type === "shift"
+                    ? row.start_at
+                    : "",
+                start_date: row.leave_type === "long_leave" ? row.start_at : "",
+                end_date: row.leave_type === "long_leave" ? row.end_at : "",
+                shift: row.leave_type === "shift" ? row.shift : "",
+              });
 
-              if (matchedCode) {
-                setFormData({
-                  ...row,
-                  country_code: matchedCode.code,
-                  phone: row.phone.slice(matchedCode.code.length),
-                });
-              } else {
-                setFormData({
-                  ...row,
-                  country_code: "",
-                  phone: row.phone,
-                });
-              }
               toggleDrawer(true); // open anchor
             }}
             className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
@@ -469,17 +456,17 @@ const EquipmentUnavailablity = () => {
           setFormData((prev) => ({
             ...prev,
             partner_id: partnerId,
-            equipment_id: "", // reset equipment on change
+            equipment_id: "", // reset equipment
           }));
           if (partnerId) {
             fetchEquipmentByPartner(partnerId);
           } else {
+            // if superadmin hasn't chosen service yet, clear equipments
             setEquipment([]);
           }
         }}
         fullWidth
         required
-        disabled // 👈 if you don’t want to allow editing partner in edit mode
       >
         {partners.length > 0 ? (
           partners.map((p) => (
@@ -502,7 +489,7 @@ const EquipmentUnavailablity = () => {
         onChange={(e) => {
           setFormData({ ...formData, unit_id: e.target.value });
         }}
-        disabled={!formData.partner_id} // or `disabled` if not editable
+        disabled={!formData.partner_id}
         margin="normal"
       >
         {equipment.length > 0 ? (
@@ -512,33 +499,92 @@ const EquipmentUnavailablity = () => {
             </MenuItem>
           ))
         ) : (
-          <MenuItem disabled>
-            No equipment found for the selected partner
-          </MenuItem>
+          <MenuItem>No equipment found for the selected partner</MenuItem>
         )}
       </TextField>
 
+      {/* Leave Type */}
       <TextField
-        label="Start Date"
-        name="start_at"
-        type="date"
-        value={formData.start_at || ""}
-        onChange={(e) => setFormData({ ...formData, start_at: e.target.value })}
+        select
+        label="Leave Type"
+        value={formData.leave_type || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, leave_type: e.target.value })
+        }
         fullWidth
         required
-        InputLabelProps={{ shrink: true }}
-      />
+      >
+        <MenuItem value="single_day">Single Day</MenuItem>
+        <MenuItem value="shift">Single Day (Shift)</MenuItem>
+        <MenuItem value="long_leave">Long Leave (Date Range)</MenuItem>
+      </TextField>
 
-      <TextField
-        label="End At"
-        name="end_at"
-        type="date"
-        value={formData.end_at || ""}
-        onChange={(e) => setFormData({ ...formData, end_at: e.target.value })}
-        fullWidth
-        required
-        InputLabelProps={{ shrink: true }}
-      />
+      {/* Conditional Fields */}
+      {formData.leave_type === "single_day" && (
+        <TextField
+          type="date"
+          label="Date"
+          value={formData.date || ""}
+          onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+          fullWidth
+          required
+          InputLabelProps={{ shrink: true }}
+        />
+      )}
+
+      {formData.leave_type === "shift" && (
+        <>
+          <TextField
+            type="date"
+            label="Date"
+            value={formData.date || ""}
+            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            select
+            label="Shift"
+            value={formData.shift || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, shift: e.target.value })
+            }
+            fullWidth
+            required
+          >
+            <MenuItem value="first">First Half (6AM – 1PM)</MenuItem>
+            <MenuItem value="second">Second Half (1PM – 10PM)</MenuItem>
+          </TextField>
+        </>
+      )}
+
+      {formData.leave_type === "long_leave" && (
+        <>
+          <TextField
+            type="date"
+            label="Start Date"
+            value={formData.start_date || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, start_date: e.target.value })
+            }
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            type="date"
+            label="End Date"
+            value={formData.end_date || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, end_date: e.target.value })
+            }
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+        </>
+      )}
 
       <TextField
         label="Reason"

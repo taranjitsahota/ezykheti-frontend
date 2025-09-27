@@ -74,22 +74,13 @@ const PartnerUnavailability = () => {
     }
 
     const data = {
-      partner_id: formData.id,
+      partner_id: formData.id || formData.id,
       reason: formData.reason,
       leave_type: formData.leave_type,
-      shift: formData.shift,
+      shift: formData.shift || null,
       start_at,
       end_at,
     };
-
-    // const data = {
-    //   partner_id: formdata.id,
-    //   type: formdata.type,
-    //   half: formdata.half || null,
-    //   reason: formdata.reason,
-    //   start_at,
-    //   end_at,
-    // };
 
     try {
       setSubmitLoading(true);
@@ -99,14 +90,7 @@ const PartnerUnavailability = () => {
           ? `/partner-unavailabilities/${formData.id}` // replace with your actual edit API URL
           : "/partner-unavailabilities",
         method: isEditMode ? "put" : "post",
-        data: isEditMode
-          ? {
-              start_at: formData.start_at,
-              end_at: formData.end_at,
-              is_enabled: formData.is_enabled,
-              reason: formData.reason,
-            }
-          : data,
+        data,
       });
 
       if (response.success) {
@@ -190,7 +174,8 @@ const PartnerUnavailability = () => {
       headerName: "Leave Type",
       width: 200,
       renderCell: (params) => getLeaveTypeLabel(params.row),
-      flex: 1, minWidth: 280
+      flex: 1,
+      minWidth: 280,
     },
     { field: "reason", headerName: "Reason", width: 150 },
     {
@@ -204,24 +189,18 @@ const PartnerUnavailability = () => {
               setIsEditMode(true);
               const row = params.row;
 
-              // Try to split phone
-              const matchedCode = countryCodes.find((c) =>
-                row.phone?.startsWith(c.code)
-              );
+             
+              setFormData({
+                ...row,
+                date:
+                  row.leave_type === "single_day" || row.leave_type === "shift"
+                    ? row.start_at
+                    : "",
+                start_date: row.leave_type === "long_leave" ? row.start_at : "",
+                end_date: row.leave_type === "long_leave" ? row.end_at : "",
+                shift: row.leave_type === "shift" ? row.shift : "",
+              });
 
-              if (matchedCode) {
-                setFormData({
-                  ...row,
-                  country_code: matchedCode.code,
-                  phone: row.phone.slice(matchedCode.code.length),
-                });
-              } else {
-                setFormData({
-                  ...row,
-                  country_code: "",
-                  phone: row.phone,
-                });
-              }
               toggleDrawer(true); // open anchor
             }}
             className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
@@ -420,11 +399,9 @@ const PartnerUnavailability = () => {
       <TextField
         select
         label="Partner"
-        name="partner_id"
-        value={formData.partner_id || ""}
-        onChange={(e) =>
-          setFormData({ ...formData, partner_id: e.target.value })
-        }
+        name="id"
+        value={formData.id || ""}
+        onChange={(e) => setFormData({ ...formData, id: e.target.value })}
         fullWidth
         required
       >
@@ -439,8 +416,91 @@ const PartnerUnavailability = () => {
         )}
       </TextField>
 
+      {/* Leave Type */}
       <TextField
-        label="Start At"
+        select
+        label="Leave Type"
+        value={formData.leave_type || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, leave_type: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        <MenuItem value="single_day">Single Day</MenuItem>
+        <MenuItem value="shift">Single Day (Shift)</MenuItem>
+        <MenuItem value="long_leave">Long Leave (Date Range)</MenuItem>
+      </TextField>
+
+      {/* Conditional Fields */}
+      {formData.leave_type === "single_day" && (
+        <TextField
+          type="date"
+          label="Date"
+          value={formData.date || ""}
+          onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+          fullWidth
+          required
+          InputLabelProps={{ shrink: true }}
+        />
+      )}
+
+      {formData.leave_type === "shift" && (
+        <>
+          <TextField
+            type="date"
+            label="Date"
+            value={formData.date || ""}
+            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            select
+            label="Shift"
+            value={formData.shift || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, shift: e.target.value })
+            }
+            fullWidth
+            required
+          >
+            <MenuItem value="first">First Half (6AM – 1PM)</MenuItem>
+            <MenuItem value="second">Second Half (1PM – 10PM)</MenuItem>
+          </TextField>
+        </>
+      )}
+
+      {formData.leave_type === "long_leave" && (
+        <>
+          <TextField
+            type="date"
+            label="Start Date"
+            value={formData.start_date || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, start_date: e.target.value })
+            }
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            type="date"
+            label="End Date"
+            value={formData.end_date || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, end_date: e.target.value })
+            }
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+        </>
+      )}
+
+      {/* <TextField
+        label="Start Date"
         name="start_at"
         type="date"
         value={formData.start_at || ""}
@@ -459,7 +519,7 @@ const PartnerUnavailability = () => {
         fullWidth
         required
         InputLabelProps={{ shrink: true }}
-      />
+      /> */}
 
       <TextField
         label="Reason"

@@ -24,25 +24,68 @@ const AssignBookings = () => {
   const [rows, setRows] = React.useState([]);
 
   const [drivers, setDrivers] = useState([]);
+  const [partners, setPartners] = useState([]);
+  const [equipmentUnits, setEquipmentUnits] = useState([]);
+  const [tractors, setTractors] = useState([]);
 
   useEffect(() => {
-    const fetchDrivers = async () => {
+    const fetchPartners = async () => {
       try {
         const response = await apiRequest({
-          url: "/driver-list",
+          url: "/partners",
           method: "get",
         });
-        setDrivers(response.data);
+        if (response.success) {
+          setPartners(response.data);
+        } else {
+          console.error("Failed to fetch partners:", response.message);
+        }
       } catch (error) {
-        console.error("Failed to fetch drivers", error);
+        console.error("Failed to fetch partners", error);
       }
     };
 
-    fetchDrivers();
+    fetchPartners();
   }, []);
+
+  useEffect(() => {
+    if (!formData?.partner_id) return;
+
+    const fetchData = async () => {
+      try {
+        // 1. Fetch Drivers
+        const driverRes = await apiRequest({
+          url: `/driver-by-partner/${formData.partner_id}`,
+          method: "get",
+        });
+        if (driverRes.success) setDrivers(driverRes.data);
+
+        // 2. Fetch Tractors
+        const tractorRes = await apiRequest({
+          url: `/tractor-by-partner/${formData.partner_id}`,
+          method: "get",
+        });
+        if (tractorRes.success) setTractors(tractorRes.data);
+
+        // 3. Fetch Equipment Units
+        const equipmentRes = await apiRequest({
+          url: `/equipment-units-by-partner-id/${formData.partner_id}`,
+          method: "get",
+        });
+        if (equipmentRes.success) setEquipmentUnits(equipmentRes.data);
+      } catch (error) {
+        console.error("Error fetching partner-related data", error);
+      }
+    };
+
+    fetchData();
+  }, [formData?.partner_id]);
 
   const handleSubmit = async (formdata) => {
     const data = {
+      partner_id: formdata?.partner_id,
+      tractor_id: formdata?.tractor_id,
+      equipment_unit_id: formdata?.equipment_unit_id,
       driver_id: formdata?.driver_id,
       booking_id: formdata?.booking_id,
       admin_note: formdata?.admin_note,
@@ -51,13 +94,13 @@ const AssignBookings = () => {
     try {
       setSubmitLoading(true);
       const response = await apiRequest({
-        url: `/assign-driver`,
+        url: `/assign-booking`,
         method: "put",
         data: data,
       });
 
       if (response.success) {
-        toast.success("Driver Assigned successfully!");
+        toast.success("Booking Assigned successfully!");
         setDrawerOpen(false);
         setFormData({});
       } else {
@@ -249,8 +292,8 @@ const AssignBookings = () => {
       {/* PIN and Contact */}
       <div style={{ display: "flex", gap: "1rem" }}>
         <TextField
-          label="PIN Code"
-          value={formData?.pin_code || ""}
+          label="Email"
+          value={formData?.email || "--"}
           disabled
           style={{ flex: 1 }}
           margin="normal"
@@ -318,20 +361,60 @@ const AssignBookings = () => {
       </div>
       <div style={{ display: "flex", gap: "1rem" }}>
         <TextField
-          label="Start Date and Time"
+          label="Slot Date"
+          fullWidth
+          value={formData?.date || "-"}
+          margin="normal"
+          disabled
+        />
+        <TextField
+          label="Duration (Minutes)"
+          fullWidth
+          value={formData?.duration || ""}
+          margin="normal"
+          disabled
+        />
+      </div>
+      <div style={{ display: "flex", gap: "1rem" }}>
+        <TextField
+          label="Start Time"
           fullWidth
           value={formData?.start_time || ""}
           margin="normal"
           disabled
         />
         <TextField
-          label="End Date and Time"
+          label="End Time"
           fullWidth
           value={formData?.end_time || ""}
           margin="normal"
           disabled
         />
       </div>
+      <div style={{ display: "flex", gap: "1rem" }}>
+        <TextField
+          label="Area"
+          fullWidth
+          value={formData?.area || ""}
+          margin="normal"
+          disabled
+        />
+        <TextField
+          label="Substation"
+          fullWidth
+          value={formData?.substation || ""}
+          margin="normal"
+          disabled
+        />
+      </div>
+      <TextField
+        label="Booking Status"
+        fullWidth
+        value={formData?.booking_status || ""}
+        margin="normal"
+        disabled
+      />
+
       <TextField
         label="Notes"
         fullWidth
@@ -341,6 +424,7 @@ const AssignBookings = () => {
         multiline
         minRows={4}
       />
+
       {/* Section Title */}
       <Typography variant="h6" sx={{ fontWeight: 600, mt: 4, mb: 2 }}>
         Land Location
@@ -361,66 +445,141 @@ const AssignBookings = () => {
               color: "#222",
               whiteSpace: "nowrap",
             }}
+            onClick={() => {
+              if (formData?.lattitude && formData?.longitude) {
+                const url = `https://www.google.com/maps?q=${formData.lattitude},${formData.longitude}`;
+                window.open(url, "_blank");
+              } else {
+                alert("Location not available");
+              }
+            }}
           >
             View Full Map
           </Button>
         </Grid>
-
-        {/* Right Block: Assign Driver */}
-        <Grid item xs={12} sm={6}>
-          <Typography variant="subtitle1">Assign Driver</Typography>
-          <TextField
-            select
-            fullWidth
-            name="driver_id"
-            defaultValue={formData?.driver_id || ""}
-          >
-            <MenuItem value="">Select available driver</MenuItem>
-            {drivers.map((driver) => (
-              <MenuItem key={driver.id} value={driver.id}>
-                {driver.name}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
       </Grid>
-      <input type="hidden" name="booking_id" value={formData?.booking_id || formData?.id || ""} />
+      {/* Right Block: Assign Partner */}
+      {/* <Grid item xs={12} sm={6}> */}
+        <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, mt: 4 }}>
+          Assign Partner
+        </Typography>
 
+        <TextField
+          select
+          fullWidth
+          name="partner_id"
+          value={formData?.partner_id || ""}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, partner_id: e.target.value }))
+          }
+        >
+          <MenuItem value="">Select available partner</MenuItem>
+          {partners.map((partner) => (
+            <MenuItem key={partner.id} value={partner.id}>
+              {partner.name}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          fullWidth
+          name="driver_id"
+          value={formData?.driver_id || ""}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, driver_id: e.target.value }))
+          }
+        >
+          <MenuItem value="">Select available driver</MenuItem>
+          {drivers.map((driver) => (
+            <MenuItem key={driver.id} value={driver.id}>
+              {driver.driver_name}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          fullWidth
+          name="equipment_unit_id"
+          value={formData?.equipment_unit_id || ""}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              equipment_unit_id: e.target.value,
+            }))
+          }
+        >
+          <MenuItem value="">Select available Equipment</MenuItem>
+          {equipmentUnits.map((equipment) => (
+            <MenuItem key={equipment.id} value={equipment.id}>
+              {equipment.label}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          fullWidth
+          name="tractor_id"
+          value={formData?.tractor_id || ""}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, tractor_id: e.target.value }))
+          }
+        >
+          <MenuItem value="">Select available tractor</MenuItem>
+          {tractors.map((tractor) => (
+            <MenuItem key={tractor.id} value={tractor.id}>
+              {tractor.name}
+            </MenuItem>
+          ))}
+        </TextField>
+      {/* </Grid> */}
+      <input
+        type="hidden"
+        name="booking_id"
+        value={formData?.booking_id || formData?.id || ""}
+      />
 
       {/* Admin Notes */}
-      <TextField
-        fullWidth
-        name="admin_note"
-        placeholder="Enter any internal instructions to driver..."
-        margin="normal"
-        multiline
-        minRows={3}
-        defaultValue={formData?.admin_note || ""}
-      />
+      <Box sx={{ mt: 3 }}>
+        <TextField
+          fullWidth
+          name="admin_note"
+          label="Admin Notes"
+          placeholder="Enter any internal instructions to driver..."
+          multiline
+          minRows={3}
+          defaultValue={formData?.admin_note || ""}
+        />
+      </Box>
 
       {/* Payments */}
       <Typography variant="h6" sx={{ fontWeight: 600, mt: 4, mb: 2 }}>
         Payments
       </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <Typography>
-            Amount: <strong>₹{formData?.amount || "0"}</strong>
-          </Typography>
-        </Grid>
-        <Grid item xs={4}>
-          <Typography>
-            Mode: <strong>{formData?.mode || "N/A"}</strong>
-          </Typography>
-        </Grid>
-        <Grid item xs={4}>
-          <Typography>
-            Status: <strong>{formData?.status || "Pending"}</strong>
-          </Typography>
-        </Grid>
-      </Grid>
+
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          rowGap: 2,
+          columnGap: 3,
+        }}
+      >
+        <Typography>
+          Amount: <strong>₹{formData?.amount || "0"}</strong>
+        </Typography>
+        <Typography>
+          Mode: <strong>{formData?.payment_method || "N/A"}</strong>
+        </Typography>
+        <Typography>
+          Status: <strong>{formData?.payment_status || "Pending"}</strong>
+        </Typography>
+        <Typography>
+          Paid At: <strong>{formData?.paid_at || "-"}</strong>
+        </Typography>
+      </Box>
     </Box>
   );
+
   return (
     <DashboardLayout
       showAddButton={false}

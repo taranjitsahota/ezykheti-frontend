@@ -79,7 +79,7 @@ const TractorUnavailability = () => {
       tractor_id: formData.tractor_id,
       reason: formData.reason,
       leave_type: formData.leave_type,
-      shift: formData.shift,
+      shift: formData.shift || null,
       start_at,
       end_at,
     };
@@ -92,14 +92,7 @@ const TractorUnavailability = () => {
           ? `/tractor-unavailabilities/${formData.id}` // replace with your actual edit API URL
           : "/tractor-unavailabilities",
         method: isEditMode ? "put" : "post",
-        data: isEditMode
-          ? {
-              tractor_id: formData.tractor_id,
-              start_at: formData.start_at,
-              end_at: formData.end_at,
-              reason: formData.reason,
-            }
-          : data,
+        data,
       });
 
       if (response.success) {
@@ -147,8 +140,8 @@ const TractorUnavailability = () => {
 
   useEffect(() => {
     const fetchTractors = async (partner_id) => {
-      if (!partner_id)
-        return toast.error("Please select a partner to fetch tractors.");
+      if (!partner_id) return;
+
       try {
         const response = await apiRequest({
           url: `/tractor-by-partner/${partner_id}`,
@@ -157,21 +150,37 @@ const TractorUnavailability = () => {
 
         if (response.success) {
           setTractors(response.data);
+
+          // Keep current tractor_id if it exists in the new list
+          setFormData((prev) => {
+            const tractorExists = response.data.some(
+              (t) => t.id === prev.tractor_id
+            );
+            return {
+              ...prev,
+              tractor_id: tractorExists ? prev.tractor_id : "",
+            };
+          });
         } else {
           toast.error(response.message || "Failed to fetch tractors.");
+          setTractors([]);
+          setFormData((prev) => ({ ...prev, tractor_id: "" }));
         }
       } catch (error) {
         const msg =
           error?.response?.data?.message || "Failed to fetch tractors.";
         toast.error(msg);
+        setTractors([]);
+        setFormData((prev) => ({ ...prev, tractor_id: "" }));
       }
     };
 
-    setTractors([]);
-    setFormData((prev) => ({ ...prev, tractor_id: "" }));
-
     if (formData.partner_id) {
       fetchTractors(formData.partner_id);
+    } else {
+      // No partner selected, clear tractors
+      setTractors([]);
+      setFormData((prev) => ({ ...prev, tractor_id: "" }));
     }
   }, [formData.partner_id]);
 
@@ -228,24 +237,17 @@ const TractorUnavailability = () => {
               setIsEditMode(true);
               const row = params.row;
 
-              // Try to split phone
-              const matchedCode = countryCodes.find((c) =>
-                row.phone?.startsWith(c.code)
-              );
+              setFormData({
+                ...row,
+                date:
+                  row.leave_type === "single_day" || row.leave_type === "shift"
+                    ? row.start_at
+                    : "",
+                start_date: row.leave_type === "long_leave" ? row.start_at : "",
+                end_date: row.leave_type === "long_leave" ? row.end_at : "",
+                shift: row.leave_type === "shift" ? row.shift : "",
+              });
 
-              if (matchedCode) {
-                setFormData({
-                  ...row,
-                  country_code: matchedCode.code,
-                  phone: row.phone.slice(matchedCode.code.length),
-                });
-              } else {
-                setFormData({
-                  ...row,
-                  country_code: "",
-                  phone: row.phone,
-                });
-              }
               toggleDrawer(true); // open anchor
             }}
             className="bg-[#5D9C59] text-white px-3 py-1 rounded-full text-sm cursor-pointer"
@@ -445,6 +447,28 @@ const TractorUnavailability = () => {
     <>
       <TextField
         select
+        label="Partner"
+        name="partner_id"
+        value={formData.partner_id || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, partner_id: e.target.value })
+        }
+        fullWidth
+        required
+      >
+        {partners.length > 0 ? (
+          partners.map((p) => (
+            <MenuItem key={p.id} value={p.id}>
+              {p.name}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disabled>No partners found</MenuItem>
+        )}
+      </TextField>
+
+      <TextField
+        select
         label="Tractor"
         name="tractor_id"
         value={formData.tractor_id || ""}
@@ -465,27 +489,88 @@ const TractorUnavailability = () => {
         )}
       </TextField>
 
+      {/* Leave Type */}
       <TextField
-        label="Start At"
-        name="start_at"
-        type="date"
-        value={formData.start_at || ""}
-        onChange={(e) => setFormData({ ...formData, start_at: e.target.value })}
+        select
+        label="Leave Type"
+        value={formData.leave_type || ""}
+        onChange={(e) =>
+          setFormData({ ...formData, leave_type: e.target.value })
+        }
         fullWidth
         required
-        InputLabelProps={{ shrink: true }}
-      />
+      >
+        <MenuItem value="single_day">Single Day</MenuItem>
+        <MenuItem value="shift">Single Day (Shift)</MenuItem>
+        <MenuItem value="long_leave">Long Leave (Date Range)</MenuItem>
+      </TextField>
 
-      <TextField
-        label="End At"
-        name="end_at"
-        type="date"
-        value={formData.end_at || ""}
-        onChange={(e) => setFormData({ ...formData, end_at: e.target.value })}
-        fullWidth
-        required
-        InputLabelProps={{ shrink: true }}
-      />
+      {/* Conditional Fields */}
+      {formData.leave_type === "single_day" && (
+        <TextField
+          type="date"
+          label="Date"
+          value={formData.date || ""}
+          onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+          fullWidth
+          required
+          InputLabelProps={{ shrink: true }}
+        />
+      )}
+
+      {formData.leave_type === "shift" && (
+        <>
+          <TextField
+            type="date"
+            label="Date"
+            value={formData.date || ""}
+            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            select
+            label="Shift"
+            value={formData.shift || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, shift: e.target.value })
+            }
+            fullWidth
+            required
+          >
+            <MenuItem value="first">First Half (6AM – 1PM)</MenuItem>
+            <MenuItem value="second">Second Half (1PM – 10PM)</MenuItem>
+          </TextField>
+        </>
+      )}
+
+      {formData.leave_type === "long_leave" && (
+        <>
+          <TextField
+            type="date"
+            label="Start Date"
+            value={formData.start_date || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, start_date: e.target.value })
+            }
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            type="date"
+            label="End Date"
+            value={formData.end_date || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, end_date: e.target.value })
+            }
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+        </>
+      )}
 
       <TextField
         label="Reason"
