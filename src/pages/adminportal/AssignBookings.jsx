@@ -103,6 +103,7 @@ const AssignBookings = () => {
         toast.success("Booking Assigned successfully!");
         setDrawerOpen(false);
         setFormData({});
+        handleAdminList();
       } else {
         toast.error(response.message || "Failed to submit.");
       }
@@ -465,6 +466,7 @@ const AssignBookings = () => {
       </Typography>
 
       <TextField
+        label="Select Partner"
         select
         fullWidth
         name="partner_id"
@@ -486,6 +488,7 @@ const AssignBookings = () => {
         )}
       </TextField>
       <TextField
+        label="Select Driver"
         select
         fullWidth
         name="driver_id"
@@ -507,6 +510,7 @@ const AssignBookings = () => {
         )}
       </TextField>
       <TextField
+        label="Select Equipment"
         select
         fullWidth
         name="equipment_unit_id"
@@ -531,6 +535,7 @@ const AssignBookings = () => {
         )}
       </TextField>
       <TextField
+        label="Select Tractor"
         select
         fullWidth
         name="tractor_id"

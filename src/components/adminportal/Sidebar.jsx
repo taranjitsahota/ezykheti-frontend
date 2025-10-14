@@ -214,7 +214,7 @@ const Sidebar = ({ isOpen, sidebarRef, toggleSidebar }) => {
     {
       to: "/farmers",
       icon: <Users />,
-      label: "farmers",
+      label: "Farmers",
       roles: ["superadmin", "admin"],
     },
   ];

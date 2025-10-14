@@ -14,15 +14,37 @@ import {
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import Chip from "@mui/material/Chip";
 
 function CollapsibleRow({ row, index }) {
   const [open, setOpen] = useState(false);
+
+  const getStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case "confirmed":
+        return "success"; // green
+      case "completed":
+      case "paid":
+
+      case "pending":
+        return "warning"; // orange
+      case "cancelled":
+      case "failed":
+        return "error"; // red
+      default:
+        return "default"; // grey
+    }
+  };
 
   return (
     <>
       <TableRow>
         <TableCell>
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
@@ -31,6 +53,22 @@ function CollapsibleRow({ row, index }) {
         <TableCell>{row.address}</TableCell>
         <TableCell>{row.equipment_name}</TableCell>
         <TableCell>{row.date}</TableCell>
+        <TableCell>
+          <Chip
+            label={row.payment_status}
+            color={getStatusColor(row.payment_status)}
+            size="small"
+            sx={{ textTransform: "capitalize" }}
+          />
+        </TableCell>
+        <TableCell>
+          <Chip
+            label={row.booking_status}
+            color={getStatusColor(row.booking_status)}
+            size="small"
+            sx={{ textTransform: "capitalize" }}
+          />
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell colSpan={6} sx={{ paddingBottom: 0, paddingTop: 0 }}>
@@ -41,14 +79,30 @@ function CollapsibleRow({ row, index }) {
               </Typography>
               <Table size="small" sx={{ backgroundColor: "#ffffff" }}>
                 <TableBody>
-                  <TableRow><TableCell>Crop</TableCell><TableCell>{row.crop_name}</TableCell></TableRow>
-                  <TableRow><TableCell>Start Time</TableCell><TableCell>{row.start_time}</TableCell></TableRow>
-                  <TableRow><TableCell>End Time</TableCell><TableCell>{row.end_time}</TableCell></TableRow>
-                  <TableRow><TableCell>Duration</TableCell><TableCell>{row.duration}</TableCell></TableRow>
-                  <TableRow><TableCell>Amount</TableCell><TableCell>{row.amount}</TableCell></TableRow>
-                  <TableRow><TableCell>Payment Status</TableCell><TableCell>{row.payment_status}</TableCell></TableRow>
-                  <TableRow><TableCell>Booking Status</TableCell><TableCell>{row.booking_status}</TableCell></TableRow>
-                  <TableRow><TableCell>Requested Date</TableCell><TableCell>{row.created_at}</TableCell></TableRow>
+                  <TableRow>
+                    <TableCell>Crop</TableCell>
+                    <TableCell>{row.crop_name}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Start Time</TableCell>
+                    <TableCell>{row.start_time}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>End Time</TableCell>
+                    <TableCell>{row.end_time}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Duration</TableCell>
+                    <TableCell>{row.duration}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Amount</TableCell>
+                    <TableCell>{row.amount}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Requested Date</TableCell>
+                    <TableCell>{row.created_at}</TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </Box>
@@ -81,6 +135,8 @@ const CollapsibleBookingTable = ({ rows }) => {
             <TableCell>Address</TableCell>
             <TableCell>Equipment</TableCell>
             <TableCell>Booking Date</TableCell>
+            <TableCell>Booking Status</TableCell>
+            <TableCell>Payment Status</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
