@@ -14,6 +14,7 @@ import Anchor from "../../components/adminportal/Anchor";
 import ConfirmModal from "../../components/adminportal/ConfirmModal";
 import { Box, Typography, TextField, Grid, Button } from "@mui/material";
 import MapIcon from "@mui/icons-material/Map";
+import Chip from "@mui/material/Chip";
 
 const AssignBookings = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -27,6 +28,23 @@ const AssignBookings = () => {
   const [partners, setPartners] = useState([]);
   const [equipmentUnits, setEquipmentUnits] = useState([]);
   const [tractors, setTractors] = useState([]);
+
+  const getStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case "confirmed":
+        return "success"; // green
+      case "completed":
+      case "paid":
+        return "success"; // green
+      case "pending":
+        return "warning"; // orange
+      case "cancelled":
+      case "failed":
+        return "error"; // red
+      default:
+        return "default"; // grey
+    }
+  };
 
   useEffect(() => {
     const fetchPartners = async () => {
@@ -140,8 +158,33 @@ const AssignBookings = () => {
     // { field: "duration", headerName: "Duration", width: 150 },
     // { field: "amount", headerName: "Amount", width: 150 },
     // { field: "status", headerName: "Payment Status", width: 150 },
-    // { field: "booking_status", headerName: "Booking Status", width: 150 },
     { field: "created_at", headerName: "Requested Date", width: 150 },
+    {
+      field: "booking_status",
+      headerName: "Booking Status",
+      width: 150,
+      renderCell: (params) => (
+        <Chip
+          label={params.value || "Unknown"}
+          color={getStatusColor(params.value)}
+          size="small"
+          sx={{ textTransform: "capitalize" }}
+        />
+      ),
+    },
+    {
+      field: "payment_status",
+      headerName: "Payment Status",
+      width: 150,
+      renderCell: (params) => (
+        <Chip
+          label={params.value || "Unknown"}
+          color={getStatusColor(params.value)}
+          size="small"
+          sx={{ textTransform: "capitalize" }}
+        />
+      ),
+    },
   ];
 
   const handleAdminList = async () => {

@@ -8,6 +8,7 @@ import Pricing from "./pages/website/Pricing";
 import PrivacyPolicy from "./pages/website/PrivacyPolicy";
 import RefundPolicy from "./pages/website/RefundPolicy";
 import ComingSoonNotice from "./components/ComingSoonNotice";
+import TermsAndConditions from "./pages/website/TermsAndConditions";
 
 import Admins from "./pages/adminportal/admins";
 import Areas from "./pages/adminportal/Areas";
@@ -156,6 +157,7 @@ function App() {
           <Route path="/send-otp" element={<SendOTP />} />
           <Route path="/verify-otp" element={<VerifyOTP />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/terms" element={<TermsAndConditions />} />
           {protectedRoutes.map(({ path, element }) => (
             <Route
               key={path}
